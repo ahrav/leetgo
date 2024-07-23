@@ -55,3 +55,16 @@ func IntToRoman(number int) string {
 
 	return res.String()
 }
+
+func TwoSum(nums []int, target int) []int {
+	m := make(map[int]int)
+
+	for idx, num := range nums {
+		if val, ok := m[target-num]; ok {
+			return []int{val, idx}
+		}
+		m[num] = idx
+	}
+
+	return nil
+}

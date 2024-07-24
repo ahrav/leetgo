@@ -121,3 +121,54 @@ func MinEatingSpeed(piles []int, h int) int {
 
 	return minV
 }
+
+func CountGroups(related []string) int {
+	visited := make([]bool, len(related))
+
+	var dfs func(int)
+	dfs = func(user int) {
+		visited[user] = true
+		for idx := range related {
+			if related[user][idx] == '1' && !visited[idx] {
+				dfs(idx)
+			}
+		}
+	}
+
+	var groups int
+
+	for idx := range related {
+		if !visited[idx] {
+			dfs(idx)
+			groups++
+		}
+	}
+
+	return groups
+}
+
+func RomanToInteger(s string) int {
+	numerals := map[byte]int{
+		'M': 1000,
+		'D': 500,
+		'C': 100,
+		'L': 50,
+		'X': 10,
+		'V': 5,
+		'I': 1,
+	}
+
+	var total, prev int
+
+	for i := len(s) - 1; i >= 0; i-- {
+		curr, _ := numerals[s[i]]
+		if curr < prev {
+			total -= curr
+		} else {
+			total += curr
+		}
+		prev = curr
+	}
+
+	return total
+}

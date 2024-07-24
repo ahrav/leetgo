@@ -245,3 +245,80 @@ func BenchmarkMinEatingSpeed(b *testing.B) {
 		_ = MinEatingSpeed([]int{3, 6, 7, 11}, 8)
 	}
 }
+
+func TestCountGroups(t *testing.T) {
+	tests := []struct {
+		name     string
+		related  []string
+		expected int
+	}{
+		{
+			name:     "Example 1",
+			related:  []string{"110", "110", "001"},
+			expected: 2,
+		},
+		{
+			name:     "Example 2",
+			related:  []string{"110", "110", "011"},
+			expected: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := CountGroups(tt.related)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkCountGroups(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CountGroups([]string{"110", "110", "001"})
+	}
+}
+
+func TestRomanToInteger(t *testing.T) {
+	tests := []struct {
+		name     string
+		roman    string
+		expected int
+	}{
+		{
+			name:     "Example 1",
+			roman:    "III",
+			expected: 3,
+		},
+		{
+			name:     "Example 2",
+			roman:    "IV",
+			expected: 4,
+		},
+		{
+			name:     "Example 3",
+			roman:    "IX",
+			expected: 9,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := RomanToInteger(tt.roman)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkRomanToInteger(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = RomanToInteger("III")
+	}
+}

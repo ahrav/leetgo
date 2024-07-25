@@ -1,6 +1,7 @@
 package leetgo
 
 import (
+	"math"
 	"strings"
 )
 
@@ -171,4 +172,59 @@ func RomanToInteger(s string) int {
 	}
 
 	return total
+}
+
+func FindMedianSortedArrays(nums1, nums2 []int) float64 {
+	if len(nums2) < len(nums1) {
+		nums1, nums2 = nums2, nums1
+	}
+
+	len1, len2 := len(nums1), len(nums2)
+	left, right := 0, len1
+
+	for left <= right {
+		partX := (left + right + 1) / 2
+		partY := ((len1 + len2 + 1) / 2) - partX
+
+		var maxPartLeftX, minPartRightX int
+		if partX == 0 {
+			maxPartLeftX = math.MinInt64
+		} else {
+			maxPartLeftX = nums1[partX-1]
+		}
+
+		if partX == len1 {
+			minPartRightX = math.MaxInt64
+		} else {
+			minPartRightX = nums1[partX]
+		}
+
+		var maxPartLeftY, minPartRightY int
+		if partY == 0 {
+			maxPartLeftY = math.MinInt64
+		} else {
+			maxPartLeftY = nums2[partY-1]
+		}
+
+		if partY == len2 {
+			minPartRightY = math.MaxInt64
+		} else {
+			minPartRightY = nums2[partY]
+		}
+
+		if maxPartLeftX <= minPartRightX && maxPartLeftX <= minPartRightY {
+			if (len1+len2)%2 == 0 {
+				return (float64(max(maxPartLeftX, maxPartLeftY)) + float64(min(minPartRightX, minPartRightY))) / float64(2)
+			}
+			return float64(max(maxPartLeftY, maxPartLeftX))
+		}
+
+		if maxPartLeftX > maxPartLeftY {
+			right = partX - 1
+		} else {
+			left = partX + 1
+		}
+	}
+
+	return 0.0
 }

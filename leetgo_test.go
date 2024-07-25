@@ -322,3 +322,60 @@ func BenchmarkRomanToInteger(b *testing.B) {
 		_ = RomanToInteger("III")
 	}
 }
+
+func TestFindMedianSortedArrays(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums1    []int
+		nums2    []int
+		expected float64
+	}{
+		{
+			name:     "Example 1",
+			nums1:    []int{1, 3},
+			nums2:    []int{2},
+			expected: 2.0,
+		},
+		{
+			name:     "Example 2",
+			nums1:    []int{1, 2},
+			nums2:    []int{3, 4},
+			expected: 2.5,
+		},
+		{
+			name:     "Example 3",
+			nums1:    []int{0, 0},
+			nums2:    []int{0, 0},
+			expected: 0.0,
+		},
+		{
+			name:     "Example 4",
+			nums1:    []int{},
+			nums2:    []int{1},
+			expected: 1.0,
+		},
+		{
+			name:     "Example 5",
+			nums1:    []int{2},
+			nums2:    []int{},
+			expected: 2.0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := FindMedianSortedArrays(tt.nums1, tt.nums2)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkFindMedianSortedArrays(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = FindMedianSortedArrays([]int{1, 3}, []int{2})
+	}
+}

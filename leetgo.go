@@ -2,6 +2,7 @@ package leetgo
 
 import (
 	"math"
+	"sort"
 	"strings"
 )
 
@@ -227,4 +228,45 @@ func FindMedianSortedArrays(nums1, nums2 []int) float64 {
 	}
 
 	return 0.0
+}
+
+func MinimumDifference(nums []int) int {
+	const threshold = 4
+	if len(nums) <= threshold {
+		return 0
+	}
+
+	top, bottom := make([]int, threshold), make([]int, threshold)
+	copy(top, nums[:threshold])
+	copy(bottom, nums[:threshold])
+
+	sort.Ints(top)
+	sort.Ints(bottom)
+
+	for _, num := range nums[threshold:] {
+		if num < bottom[3] {
+			bottom[3] = num
+			for i := 3; i > 0; i-- {
+				if bottom[i] < bottom[i-1] {
+					bottom[i], bottom[i-1] = bottom[i-1], bottom[i]
+				}
+			}
+		}
+
+		if num > top[0] {
+			top[0] = num
+			for i := 0; i < 3; i++ {
+				if top[i] > top[i+1] {
+					top[i], top[i+1] = top[i+1], top[i]
+				}
+			}
+		}
+	}
+
+	return min(
+		top[0]-bottom[0],
+		top[1]-bottom[1],
+		top[2]-bottom[2],
+		top[3]-bottom[3],
+	)
 }

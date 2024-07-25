@@ -379,3 +379,44 @@ func BenchmarkFindMedianSortedArrays(b *testing.B) {
 		_ = FindMedianSortedArrays([]int{1, 3}, []int{2})
 	}
 }
+
+func TestMinimumDifference(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "Example 1",
+			nums:     []int{90},
+			expected: 0,
+		},
+		{
+			name:     "Example 2",
+			nums:     []int{9, 4, 1, 7},
+			expected: 0,
+		},
+		{
+			name:     "Example 3",
+			nums:     []int{6, 6, 0, 1, 1, 4, 6},
+			expected: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MinimumDifference(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinimumDifference(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MinimumDifference([]int{6, 6, 0, 1, 1, 4, 6})
+	}
+}

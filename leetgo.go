@@ -377,3 +377,161 @@ func AddTwoNumbers(l1, l2 *ListNode) *ListNode {
 
 	return head.Next
 }
+
+func GroupAnagrams(strs []string) [][]string {
+	m := make(map[[26]int][]string)
+
+	for _, str := range strs {
+		count := [26]int{}
+		for _, char := range str {
+			count[char-'a']++
+		}
+
+		m[count] = append(m[count], str)
+	}
+
+	res := make([][]string, 0, len(m))
+	for _, val := range m {
+		res = append(res, val)
+	}
+
+	return res
+}
+
+func MaxProfit(prices []int) int {
+	maxProfit, minBuyPrice := 0, prices[0]
+
+	for _, price := range prices[1:] {
+		if price < minBuyPrice {
+			minBuyPrice = price
+		} else if price-minBuyPrice > maxProfit {
+			maxProfit = price - minBuyPrice
+		}
+	}
+
+	return maxProfit
+}
+
+type DoubleLinkNode struct {
+	Key  int
+	Val  int
+	Next *DoubleLinkNode
+	Prev *DoubleLinkNode
+}
+type DoublyLinkedList struct {
+	head *DoubleLinkNode
+	tail *DoubleLinkNode
+	size int
+}
+
+func (dll *DoublyLinkedList) RemoveNode(item *DoubleLinkNode) {
+	if item == dll.head {
+		dll.head = item.Next
+	}
+	if item == dll.tail {
+		dll.tail = item.Prev
+	}
+
+	if item.Prev != nil {
+		item.Prev.Next = item.Next
+	}
+	if item.Next != nil {
+		item.Next.Prev = item.Prev
+	}
+	item.Prev = nil
+	item.Next = nil
+	dll.size--
+
+	if dll.size == 0 {
+		dll.head = nil
+		dll.tail = nil
+	}
+}
+
+func (dll *DoublyLinkedList) AddToHead(item *DoubleLinkNode) {
+	item.Prev = nil
+	item.Next = dll.head
+
+	if dll.head == nil {
+		dll.tail = item
+	} else {
+		dll.head.Prev = item
+	}
+
+	dll.head = item
+	dll.size++
+}
+
+func (dll *DoublyLinkedList) RemoveTail() *DoubleLinkNode {
+	prevTail := dll.tail
+	dll.tail = prevTail.Prev
+
+	if dll.tail == nil {
+		dll.head = nil
+	} else {
+		dll.tail.Next = nil
+	}
+
+	prevTail.Prev = nil
+	prevTail.Next = nil
+	dll.size--
+
+	return prevTail
+}
+
+type LRUCache struct {
+	lut    map[int]*DoubleLinkNode
+	lst    *DoublyLinkedList
+	cap    int
+	size   int
+	isFull bool
+}
+
+func Constructor(capacity int) LRUCache {
+	cache := LRUCache{
+		lut: make(map[int]*DoubleLinkNode, capacity),
+		lst: new(DoublyLinkedList),
+		cap: 5,
+	}
+
+	return cache
+}
+
+func (c *LRUCache) Get(key int) int {
+	node, exists := c.lut[key]
+	if !exists {
+		return -1
+	}
+
+	c.lst.RemoveNode(node)
+	c.lst.AddToHead(node)
+	return node.Val
+}
+
+func (c *LRUCache) Put(key, value int) {
+	if node, exists := c.lut[key]; exists {
+		c.lst.RemoveNode(node)
+		c.lst.AddToHead(node)
+		if node.Val != value {
+			node.Val = value
+			c.lut[key] = node
+		}
+		return
+	}
+
+	node := &DoubleLinkNode{Val: value, Key: key}
+	if !c.isFull {
+		c.size++
+		if c.size == c.cap {
+			c.isFull = true
+		}
+	} else {
+		prev := c.lst.RemoveTail()
+		delete(c.lut, prev.Key)
+	}
+
+	c.lst.AddToHead(node)
+	c.lut[key] = node
+
+	return
+}

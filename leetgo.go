@@ -270,3 +270,110 @@ func MinimumDifference(nums []int) int {
 		top[3]-bottom[3],
 	)
 }
+
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+func AddTwoNumbersLong(l1 *ListNode, l2 *ListNode) *ListNode {
+	var head *ListNode
+	addToTail := func(node *ListNode) {
+		if head == nil {
+			head = node
+			return
+		}
+
+		curr := head
+		for curr != nil && curr.Next != nil {
+			curr = curr.Next
+		}
+		curr.Next = node
+		return
+	}
+
+	var carry bool
+	l1Curr, l2Curr := l1, l2
+	for l1Curr != nil && l2Curr != nil {
+		sum := l1Curr.Val + l2Curr.Val
+		if carry {
+			sum += 1
+		}
+
+		if sum >= 10 {
+			carry = true
+		} else {
+			carry = false
+		}
+
+		sum = sum % 10
+		addToTail(&ListNode{Val: sum})
+		l1Curr = l1Curr.Next
+		l2Curr = l2Curr.Next
+	}
+
+	for l1Curr != nil {
+		sum := l1Curr.Val
+		if carry {
+			sum += 1
+		}
+
+		if sum >= 10 {
+			carry = true
+		} else {
+			carry = false
+		}
+
+		sum = sum % 10
+		addToTail(&ListNode{Val: sum})
+		l1Curr = l1Curr.Next
+	}
+
+	for l2Curr != nil {
+		sum := l2Curr.Val
+		if carry {
+			sum += 1
+		}
+
+		if sum >= 10 {
+			carry = true
+		} else {
+			carry = false
+		}
+
+		sum = sum % 10
+		addToTail(&ListNode{Val: sum})
+		l2Curr = l2Curr.Next
+	}
+
+	if carry {
+		addToTail(&ListNode{Val: 1})
+	}
+
+	return head
+}
+
+func AddTwoNumbers(l1, l2 *ListNode) *ListNode {
+	head := new(ListNode)
+	curr := head
+	var carry int8
+
+	for l1 != nil || l2 != nil || carry != 0 {
+		sum := carry
+		if l1 != nil {
+			sum += int8(l1.Val)
+			l1 = l1.Next
+		}
+
+		if l2 != nil {
+			sum += int8(l2.Val)
+			l2 = l2.Next
+		}
+
+		carry = sum / 10
+		curr.Next = &ListNode{Val: int(sum % 10)}
+		curr = curr.Next
+	}
+
+	return head.Next
+}

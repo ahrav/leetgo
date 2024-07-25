@@ -420,3 +420,42 @@ func BenchmarkMinimumDifference(b *testing.B) {
 		_ = MinimumDifference([]int{6, 6, 0, 1, 1, 4, 6})
 	}
 }
+
+func TestAddTwoNumbers(t *testing.T) {
+	tests := []struct {
+		name     string
+		l1       *ListNode
+		l2       *ListNode
+		expected *ListNode
+	}{
+		{
+			name:     "Example 1",
+			l1:       &ListNode{Val: 2, Next: &ListNode{Val: 4, Next: &ListNode{Val: 3}}},
+			l2:       &ListNode{Val: 5, Next: &ListNode{Val: 6, Next: &ListNode{Val: 4}}},
+			expected: &ListNode{Val: 7, Next: &ListNode{Val: 0, Next: &ListNode{Val: 8}}},
+		},
+		{
+			name:     "Example 2",
+			l1:       &ListNode{Val: 0},
+			l2:       &ListNode{Val: 0},
+			expected: &ListNode{Val: 0},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := AddTwoNumbers(tt.l1, tt.l2)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkAddTwoNumbers(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = AddTwoNumbers(&ListNode{Val: 2, Next: &ListNode{Val: 4, Next: &ListNode{Val: 3}}}, &ListNode{Val: 5, Next: &ListNode{Val: 6, Next: &ListNode{Val: 4}}})
+	}
+}

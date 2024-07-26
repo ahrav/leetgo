@@ -617,3 +617,41 @@ func BenchmarkNumIslands(b *testing.B) {
 		})
 	}
 }
+
+func TestIsPalindromeSList(t *testing.T) {
+	tests := []struct {
+		name     string
+		head     *ListNode
+		expected bool
+	}{
+		{
+			name:     "Example 1",
+			head:     &ListNode{Val: 1, Next: &ListNode{Val: 2, Next: &ListNode{Val: 2, Next: &ListNode{Val: 1}}}},
+			expected: true,
+		},
+		{
+			name:     "Example 2",
+			head:     &ListNode{Val: 1, Next: &ListNode{Val: 2}},
+			expected: false,
+		},
+		{
+			name:     "Example 3",
+			head:     &ListNode{Val: 1},
+			expected: true,
+		},
+		{
+			name:     "Example 4",
+			head:     &ListNode{Val: 1, Next: &ListNode{Val: 0, Next: &ListNode{Val: 0}}},
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := IsPalindromeSList(tt.head)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}

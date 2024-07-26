@@ -276,6 +276,47 @@ type ListNode struct {
 	Next *ListNode
 }
 
+func ReverseSList(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+
+	var prev *ListNode
+	curr := head
+	for curr != nil {
+		next := curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = next
+	}
+
+	return prev
+}
+
+func IsPalindromeSList(head *ListNode) bool {
+	if head.Next == nil {
+		return true
+	}
+
+	slow, mid, fast := head, head, head.Next
+	for fast != nil && fast.Next != nil {
+		mid = mid.Next
+		fast = fast.Next.Next
+	}
+
+	mid = ReverseSList(mid.Next)
+
+	for mid != nil {
+		if mid.Val != slow.Val {
+			return false
+		}
+		mid = mid.Next
+		slow = slow.Next
+	}
+
+	return true
+}
+
 func AddTwoNumbersLong(l1 *ListNode, l2 *ListNode) *ListNode {
 	var head *ListNode
 	addToTail := func(node *ListNode) {
@@ -638,10 +679,13 @@ func (g *AdjListGraph) DFS(start int) {
 
 func NumIslands(grid [][]byte) int {
 	rows, cols := len(grid), len(grid[0])
+	if rows == 0 && cols == 0 {
+		return 0
+	}
 
 	var dfs func(int, int)
 	dfs = func(i, j int) {
-		if i < 0 || i >= rows || j < 0 || j >= cols || grid[i][j] != '1' {
+		if i < 0 || i >= rows || j < 0 || j >= cols || grid[i][j] == '0' {
 			return
 		}
 
@@ -652,15 +696,15 @@ func NumIslands(grid [][]byte) int {
 		dfs(i, j-1)
 	}
 
-	var groups int
+	var count int
 	for i := range grid {
 		for j := range grid[i] {
 			if grid[i][j] == '1' {
 				dfs(i, j)
-				groups++
+				count++
 			}
 		}
 	}
 
-	return groups
+	return count
 }

@@ -535,3 +535,132 @@ func (c *LRUCache) Put(key, value int) {
 
 	return
 }
+
+type MatrixGraph struct {
+	vertices int
+	matrix   [][]int
+}
+
+func (g *MatrixGraph) AddEdge(v, w int) {
+	g.matrix[v][w] = 1
+	g.matrix[w][v] = 1
+}
+
+func (g *MatrixGraph) BFS(start int) {
+	visited := make([]bool, g.vertices)
+	queue := []int{start}
+
+	for len(queue) > 0 {
+		curr := queue[0]
+		queue = queue[1:]
+
+		if !visited[curr] {
+			visited[curr] = true
+
+			for i := 0; i < g.vertices; i++ {
+				if g.matrix[curr][i] == 1 && !visited[i] {
+					queue = append(queue, i)
+				}
+			}
+		}
+	}
+}
+
+func (g *MatrixGraph) DFS(start int) {
+	visited := make([]bool, g.vertices)
+
+	var dfs func(int)
+	dfs = func(v int) {
+		if visited[v] {
+			return
+		}
+
+		visited[v] = true
+		for i := 0; i < g.vertices; i++ {
+			if g.matrix[v][i] == 1 && !visited[i] {
+				dfs(i)
+			}
+		}
+	}
+
+	dfs(start)
+}
+
+type AdjListGraph struct {
+	vertices int
+	adjList  map[int][]int
+}
+
+func (g *AdjListGraph) AddEdge(v, w int) {
+	g.adjList[v] = append(g.adjList[v], w)
+	g.adjList[w] = append(g.adjList[w], v)
+}
+
+func (g *AdjListGraph) BFS(start int) {
+	visited := make(map[int]bool, g.vertices)
+	queue := []int{start}
+
+	for len(queue) > 0 {
+		curr := queue[0]
+		queue = queue[1:]
+
+		if !visited[curr] {
+			visited[curr] = true
+
+			for _, neighbor := range g.adjList[curr] {
+				if !visited[neighbor] {
+					queue = append(queue, neighbor)
+				}
+			}
+		}
+	}
+}
+
+func (g *AdjListGraph) DFS(start int) {
+	visited := make(map[int]bool, g.vertices)
+
+	var dfs func(int)
+	dfs = func(v int) {
+		if visited[v] {
+			return
+		}
+
+		visited[v] = true
+		for _, neighbor := range g.adjList[v] {
+			if !visited[neighbor] {
+				dfs(neighbor)
+			}
+		}
+	}
+
+	dfs(start)
+}
+
+func NumIslands(grid [][]byte) int {
+	rows, cols := len(grid), len(grid[0])
+
+	var dfs func(int, int)
+	dfs = func(i, j int) {
+		if i < 0 || i >= rows || j < 0 || j >= cols || grid[i][j] != '1' {
+			return
+		}
+
+		grid[i][j] = '0'
+		dfs(i+1, j)
+		dfs(i-1, j)
+		dfs(i, j+1)
+		dfs(i, j-1)
+	}
+
+	var groups int
+	for i := range grid {
+		for j := range grid[i] {
+			if grid[i][j] == '1' {
+				dfs(i, j)
+				groups++
+			}
+		}
+	}
+
+	return groups
+}

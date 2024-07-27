@@ -2,6 +2,7 @@ package leetgo
 
 import (
 	"math"
+	"math/rand"
 	"sort"
 	"strings"
 )
@@ -528,7 +529,7 @@ type LRUCache struct {
 	isFull bool
 }
 
-func Constructor(capacity int) LRUCache {
+func LRUCacheConstructor(capacity int) LRUCache {
 	cache := LRUCache{
 		lut: make(map[int]*DoubleLinkNode, capacity),
 		lst: new(DoublyLinkedList),
@@ -806,3 +807,43 @@ func IsAnagram(s, t string) bool {
 
 	return true
 }
+
+func RandomizedSetConstructor() RandomizedSet {
+	return RandomizedSet{lut: make(map[int]int), vals: make([]int, 0)}
+}
+
+type RandomizedSet struct {
+	lut  map[int]int
+	vals []int
+}
+
+func (s *RandomizedSet) Insert(val int) bool {
+	if _, ok := s.lut[val]; ok {
+		return false
+	}
+
+	s.lut[val] = len(s.vals)
+	s.vals = append(s.vals, val)
+
+	return true
+}
+
+func (s *RandomizedSet) Remove(val int) bool {
+	idx, ok := s.lut[val]
+	if !ok {
+		return false
+	}
+
+	lastIdx := len(s.vals) - 1
+	lastVal := s.vals[lastIdx]
+
+	s.vals[idx] = lastVal
+	s.lut[lastVal] = idx
+
+	s.vals = s.vals[:lastIdx]
+	delete(s.lut, val)
+
+	return true
+}
+
+func (s *RandomizedSet) GetRandom() int { return s.vals[rand.Intn(len(s.vals))] }

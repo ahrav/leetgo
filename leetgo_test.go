@@ -655,3 +655,89 @@ func TestIsPalindromeSList(t *testing.T) {
 		})
 	}
 }
+
+func TestLowestCommonAncestor(t *testing.T) {
+	tests := []struct {
+		name     string
+		root     *TreeNode
+		p, q     *TreeNode
+		expected *TreeNode
+	}{
+		{
+			name: "LCA of 5 and 1",
+			root: &TreeNode{
+				Val: 6,
+				Left: &TreeNode{
+					Val:  2,
+					Left: &TreeNode{Val: 0},
+					Right: &TreeNode{
+						Val:   4,
+						Left:  &TreeNode{Val: 3},
+						Right: &TreeNode{Val: 5},
+					},
+				},
+				Right: &TreeNode{
+					Val:   8,
+					Left:  &TreeNode{Val: 7},
+					Right: &TreeNode{Val: 9},
+				},
+			},
+			p:        &TreeNode{Val: 5},
+			q:        &TreeNode{Val: 1},
+			expected: &TreeNode{Val: 2},
+		},
+		{
+			name: "LCA of 2 and 4",
+			root: &TreeNode{
+				Val: 6,
+				Left: &TreeNode{
+					Val:  2,
+					Left: &TreeNode{Val: 0},
+					Right: &TreeNode{
+						Val:   4,
+						Left:  &TreeNode{Val: 3},
+						Right: &TreeNode{Val: 5},
+					},
+				},
+				Right: &TreeNode{
+					Val:   8,
+					Left:  &TreeNode{Val: 7},
+					Right: &TreeNode{Val: 9},
+				},
+			},
+			p:        &TreeNode{Val: 2},
+			q:        &TreeNode{Val: 4},
+			expected: &TreeNode{Val: 2},
+		},
+		{
+			name: "LCA of 7 and 9",
+			root: &TreeNode{
+				Val: 6,
+				Left: &TreeNode{
+					Val:  2,
+					Left: &TreeNode{Val: 0},
+					Right: &TreeNode{
+						Val:   4,
+						Left:  &TreeNode{Val: 3},
+						Right: &TreeNode{Val: 5},
+					},
+				},
+				Right: &TreeNode{
+					Val:   8,
+					Left:  &TreeNode{Val: 7},
+					Right: &TreeNode{Val: 9},
+				},
+			},
+			p:        &TreeNode{Val: 7},
+			q:        &TreeNode{Val: 9},
+			expected: &TreeNode{Val: 8},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := LowestCommonAncestor(tt.root, tt.p, tt.q)
+			assert.Equal(t, tt.expected.Val, actual.Val)
+		})
+	}
+}

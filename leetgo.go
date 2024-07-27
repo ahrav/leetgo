@@ -708,3 +708,63 @@ func NumIslands(grid [][]byte) int {
 
 	return count
 }
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func TreeBFS(root *TreeNode) {
+	if root == nil {
+		return
+	}
+
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		curr := queue[0]
+		queue = queue[1:]
+
+		if curr.Left != nil {
+			queue = append(queue, curr.Left)
+		}
+
+		if curr.Right != nil {
+			queue = append(queue, curr.Right)
+		}
+	}
+}
+
+func TreeDFS(root *TreeNode) {
+	if root == nil {
+		return
+	}
+
+	var dfs func(node *TreeNode)
+	dfs = func(node *TreeNode) {
+		if node.Left != nil {
+			dfs(node.Left)
+		}
+
+		if node.Right != nil {
+			dfs(node.Right)
+		}
+	}
+
+	dfs(root)
+}
+
+func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	curr := root
+	for curr != nil {
+		if p.Val < curr.Val && q.Val < curr.Val {
+			curr = curr.Left
+		} else if p.Val > curr.Val && q.Val > curr.Val {
+			curr = curr.Right
+		} else {
+			return curr
+		}
+	}
+
+	return nil
+}

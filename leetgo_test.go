@@ -741,3 +741,42 @@ func TestLowestCommonAncestor(t *testing.T) {
 		})
 	}
 }
+
+func TestProductExceptSelf(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected []int
+	}{
+		{
+			name:     "Example 1",
+			nums:     []int{1, 2, 3, 4},
+			expected: []int{24, 12, 8, 6},
+		},
+		{
+			name:     "Example 2",
+			nums:     []int{-1, 1, 0, -3, 3},
+			expected: []int{0, 0, 9, 0, 0},
+		},
+		{
+			name:     "Example 3",
+			nums:     []int{1, 2, 3, 4, 5},
+			expected: []int{120, 60, 40, 30, 24},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := ProductExceptSelf(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkProductExceptSelf(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = ProductExceptSelf([]int{1, 2, 3, 4})
+	}
+}

@@ -768,3 +768,21 @@ func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 
 	return nil
 }
+
+func ProductExceptSelf(nums []int) []int {
+	res := make([]int, 0, len(nums))
+
+	ptr := 1
+	for _, num := range nums {
+		res = append(res, ptr)
+		ptr *= num
+	}
+
+	ptr = 1
+	for i := len(nums) - 1; i >= 0; i-- {
+		res[i] *= ptr
+		ptr *= nums[i]
+	}
+
+	return res
+}

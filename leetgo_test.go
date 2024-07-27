@@ -780,3 +780,51 @@ func BenchmarkProductExceptSelf(b *testing.B) {
 		_ = ProductExceptSelf([]int{1, 2, 3, 4})
 	}
 }
+
+func TestIsAnagram(t *testing.T) {
+	tests := []struct {
+		name     string
+		s, t     string
+		expected bool
+	}{
+		{
+			name:     "Example 1",
+			s:        "anagram",
+			t:        "nagaram",
+			expected: true,
+		},
+		{
+			name:     "Example 2",
+			s:        "rat",
+			t:        "car",
+			expected: false,
+		},
+		{
+			name:     "Example 3",
+			s:        "a",
+			t:        "ab",
+			expected: false,
+		},
+		{
+			name:     "Example 4",
+			s:        "a",
+			t:        "a",
+			expected: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := IsAnagram(tt.s, tt.t)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkIsAnagram(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = IsAnagram("anagram", "nagaram")
+	}
+}

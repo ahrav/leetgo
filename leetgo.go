@@ -786,3 +786,23 @@ func ProductExceptSelf(nums []int) []int {
 
 	return res
 }
+
+func IsAnagram(s, t string) bool {
+	if len(s) != len(t) {
+		return false
+	}
+
+	var charCount [26]int
+	for i := 0; i < len(s); i++ {
+		charCount[s[i]-'a']++
+		charCount[t[i]-'a']--
+	}
+
+	for _, cnt := range charCount {
+		if cnt != 0 {
+			return false
+		}
+	}
+
+	return true
+}

@@ -828,3 +828,47 @@ func BenchmarkIsAnagram(b *testing.B) {
 		_ = IsAnagram("anagram", "nagaram")
 	}
 }
+
+func TestFizzBuzz(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected []string
+	}{
+		{
+			name:     "Example 1",
+			n:        15,
+			expected: []string{"1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz"},
+		},
+		{
+			name:     "Example 2",
+			n:        1,
+			expected: []string{"1"},
+		},
+		{
+			name:     "Example 3",
+			n:        3,
+			expected: []string{"1", "2", "Fizz"},
+		},
+		{
+			name:     "Example 4",
+			n:        5,
+			expected: []string{"1", "2", "Fizz", "4", "Buzz"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := FizzBuzz(tt.n)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkFizzBuzz(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = FizzBuzz(15)
+	}
+}

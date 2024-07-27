@@ -4,6 +4,7 @@ import (
 	"math"
 	"math/rand"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -847,3 +848,24 @@ func (s *RandomizedSet) Remove(val int) bool {
 }
 
 func (s *RandomizedSet) GetRandom() int { return s.vals[rand.Intn(len(s.vals))] }
+
+func FizzBuzz(n int) []string {
+	res := make([]string, n)
+
+	for i := 1; i <= n; i++ {
+		var str string
+		if i%3 == 0 {
+			str += "Fizz"
+		}
+		if i%5 == 0 {
+			str += "Buzz"
+		}
+		if str == "" {
+			str = strconv.Itoa(i)
+		}
+
+		res[i-1] = str
+	}
+
+	return res
+}

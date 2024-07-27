@@ -852,19 +852,28 @@ func (s *RandomizedSet) GetRandom() int { return s.vals[rand.Intn(len(s.vals))] 
 func FizzBuzz(n int) []string {
 	res := make([]string, n)
 
+	const (
+		fizzBuzz = "FizzBuzz"
+		fizz     = "Fizz"
+		buzz     = "Buzz"
+	)
+
 	for i := 1; i <= n; i++ {
-		var str string
-		if i%3 == 0 {
-			str += "Fizz"
-		}
-		if i%5 == 0 {
-			str += "Buzz"
-		}
-		if str == "" {
-			str = strconv.Itoa(i)
+		if i%15 == 0 {
+			res[i-1] = fizzBuzz
+			continue
 		}
 
-		res[i-1] = str
+		if i%3 == 0 {
+			res[i-1] = fizz
+			continue
+		}
+		if i%5 == 0 {
+			res[i-1] = buzz
+			continue
+		}
+
+		res[i-1] = strconv.Itoa(i)
 	}
 
 	return res

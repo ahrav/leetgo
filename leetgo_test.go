@@ -926,3 +926,58 @@ func BenchmarkLongestPalindromeSubseq(b *testing.B) {
 		_ = LongestPalindromeSubseq("bbbab")
 	}
 }
+
+func TestCoinChange(t *testing.T) {
+	tests := []struct {
+		name     string
+		coins    []int
+		amount   int
+		expected int
+	}{
+		{
+			name:     "Example 1",
+			coins:    []int{1, 2, 5},
+			amount:   11,
+			expected: 3,
+		},
+		{
+			name:     "Example 2",
+			coins:    []int{2},
+			amount:   3,
+			expected: -1,
+		},
+		{
+			name:     "Example 3",
+			coins:    []int{1},
+			amount:   0,
+			expected: 0,
+		},
+		{
+			name:     "Example 4",
+			coins:    []int{1},
+			amount:   1,
+			expected: 1,
+		},
+		{
+			name:     "Example 5",
+			coins:    []int{1},
+			amount:   2,
+			expected: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := CoinChange(tt.coins, tt.amount)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkCoinChange(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CoinChange([]int{1, 2, 5}, 11)
+	}
+}

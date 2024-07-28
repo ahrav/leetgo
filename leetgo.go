@@ -904,3 +904,26 @@ func LongestPalindromeSubseq(s string) int {
 
 	return dp[0][n-1]
 }
+
+func CoinChange(coins []int, total int) int {
+	dp := make([]int, total+1)
+	dp[0] = 0
+	for i := 1; i <= total; i++ {
+		dp[i] = math.MaxInt64
+	}
+
+	for val := range total + 1 {
+		for _, coin := range coins {
+			if coin <= val {
+				dp[val] = min(dp[val], dp[val-coin]+1)
+			}
+		}
+	}
+
+	res := dp[total]
+	if res < 0 {
+		return -1
+	}
+
+	return res
+}

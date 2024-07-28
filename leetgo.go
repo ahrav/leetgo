@@ -1,6 +1,7 @@
 package leetgo
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 	"sort"
@@ -992,4 +993,34 @@ func BoundaryOfBinaryTree(root *TreeNode) []int {
 	rightBoundary(root.Right)
 
 	return boundary
+}
+
+func PreOrderTree(root *TreeNode) {
+	if root == nil {
+		return
+	}
+
+	fmt.Println(root.Val)
+	PreOrderTree(root.Left)
+	PreOrderTree(root.Right)
+}
+
+func InOrderTree(root *TreeNode) {
+	if root == nil {
+		return
+	}
+
+	InOrderTree(root.Left)
+	fmt.Println(root.Val)
+	InOrderTree(root.Right)
+}
+
+func PostOrderTree(root *TreeNode) {
+	if root == nil {
+		return
+	}
+
+	PostOrderTree(root.Left)
+	PostOrderTree(root.Right)
+	fmt.Println(root.Val)
 }

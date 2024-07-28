@@ -1096,3 +1096,82 @@ func BenchmarkBoundaryOfBinaryTree(b *testing.B) {
 		})
 	}
 }
+
+func TestNumberOfDistinctIslands(t *testing.T) {
+	tests := []struct {
+		name     string
+		grid     [][]int
+		expected int
+	}{
+		{
+			name: "Example 1",
+			grid: [][]int{
+				{1, 1, 0, 0, 0},
+				{1, 1, 0, 0, 0},
+				{0, 0, 0, 1, 1},
+				{0, 0, 0, 1, 1},
+			},
+			expected: 1,
+		},
+		{
+			name: "Example 2",
+			grid: [][]int{
+				{1, 1, 0, 1, 1},
+				{1, 0, 0, 0, 0},
+				{0, 0, 0, 0, 1},
+				{1, 1, 0, 1, 1},
+			},
+			expected: 3,
+		},
+		{
+			name: "Example 3",
+			grid: [][]int{
+				{1, 1, 0, 1, 1},
+				{1, 0, 0, 0, 0},
+				{0, 0, 0, 0, 1},
+				{1, 1, 0, 1, 0},
+			},
+			expected: 3,
+		},
+		{
+			name: "Example 4",
+			grid: [][]int{
+				{1, 1, 0, 1, 1},
+				{1, 0, 0, 0, 0},
+				{0, 0, 0, 0, 1},
+				{1, 1, 0, 0, 1},
+			},
+			expected: 3,
+		},
+		{
+			name: "Example 5",
+			grid: [][]int{
+				{1, 1, 0, 1, 1},
+				{1, 0, 0, 0, 0},
+				{0, 0, 0, 0, 1},
+				{1, 1, 0, 0, 0},
+			},
+			expected: 3,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := NumberOfDistinctIslands(tt.grid)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkNumberOfDistinctIslands(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = NumberOfDistinctIslands([][]int{
+			{1, 1, 0, 1, 1},
+			{1, 0, 0, 0, 0},
+			{0, 0, 0, 0, 1},
+			{1, 1, 0, 1, 1},
+		})
+	}
+}

@@ -1024,3 +1024,35 @@ func PostOrderTree(root *TreeNode) {
 	PostOrderTree(root.Right)
 	fmt.Println(root.Val)
 }
+
+func NumberOfDistinctIslands(grid [][]int) int {
+	rows, cols := len(grid), len(grid[0])
+
+	m := make(map[string]struct{})
+
+	var dfs func(int, int, string) string
+	dfs = func(i, j int, direction string) string {
+		if i < 0 || i >= rows || j < 0 || j >= cols || grid[i][j] != 1 {
+			return ""
+		}
+
+		grid[i][j] = 0
+		return direction +
+			dfs(i+1, j, "U") +
+			dfs(i-1, j, "D") +
+			dfs(i, j+1, "R") +
+			dfs(i, j-1, "L") +
+			"0"
+	}
+
+	for i := range grid {
+		for j := range grid[0] {
+			if grid[i][j] == 1 {
+				dir := dfs(i, j, "")
+				m[dir] = struct{}{}
+			}
+		}
+	}
+
+	return len(m)
+}

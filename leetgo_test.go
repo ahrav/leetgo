@@ -1390,7 +1390,7 @@ func TestDistanceK(t *testing.T) {
 				},
 				Right: &TreeNode{
 					Val:   1,
-					Left:  &TreeNode{Val: 0},
+					Left:  &TreeNode{Val: 12},
 					Right: &TreeNode{Val: 8},
 				},
 			},
@@ -1402,6 +1402,7 @@ func TestDistanceK(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			tt.target = tt.root.Left
 			got := DistanceK(tt.root, tt.target, tt.k)
 			sort.Ints(got)
 			sort.Ints(tt.want)

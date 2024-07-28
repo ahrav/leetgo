@@ -1098,6 +1098,7 @@ func DistanceK(root *TreeNode, target *TreeNode, k int) []int {
 	if root == nil {
 		return []int{}
 	}
+
 	parents := make(map[*TreeNode]*TreeNode)
 
 	var dfs func(*TreeNode, *TreeNode)
@@ -1117,10 +1118,10 @@ func DistanceK(root *TreeNode, target *TreeNode, k int) []int {
 	visited[target] = true
 
 	queue := []*TreeNode{target}
-	var dist int
+	dist := 0
+
 	for len(queue) > 0 && dist < k {
 		levelSize := len(queue)
-
 		for i := 0; i < levelSize; i++ {
 			curr := queue[0]
 			queue = queue[1:]
@@ -1135,8 +1136,7 @@ func DistanceK(root *TreeNode, target *TreeNode, k int) []int {
 				queue = append(queue, curr.Right)
 			}
 
-			parent := parents[curr]
-			if parent != nil && !visited[parent] {
+			if parent := parents[curr]; parent != nil && !visited[parent] {
 				visited[parent] = true
 				queue = append(queue, parent)
 			}

@@ -872,3 +872,57 @@ func BenchmarkFizzBuzz(b *testing.B) {
 		_ = FizzBuzz(15)
 	}
 }
+
+func TestLongestPalindromeSubseq(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		expected int
+	}{
+		{
+			name:     "Example 1",
+			s:        "bbbab",
+			expected: 4,
+		},
+		{
+			name:     "Example 2",
+			s:        "cbbd",
+			expected: 2,
+		},
+		{
+			name:     "Example 3",
+			s:        "a",
+			expected: 1,
+		},
+		{
+			name:     "Example 4",
+			s:        "ac",
+			expected: 1,
+		},
+		{
+			name:     "Example 5",
+			s:        "abcda",
+			expected: 3,
+		},
+		{
+			name:     "Example 6",
+			s:        "abcdba",
+			expected: 5,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := LongestPalindromeSubseq(tt.s)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkLongestPalindromeSubseq(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = LongestPalindromeSubseq("bbbab")
+	}
+}

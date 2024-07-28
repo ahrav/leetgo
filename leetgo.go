@@ -1096,7 +1096,7 @@ func BinaryTreeDiameter(root *TreeNode) int {
 
 func DistanceK(root *TreeNode, target *TreeNode, k int) []int {
 	if root == nil {
-		return []int{}
+		return nil
 	}
 
 	parents := make(map[*TreeNode]*TreeNode)
@@ -1116,9 +1116,8 @@ func DistanceK(root *TreeNode, target *TreeNode, k int) []int {
 
 	visited := make(map[*TreeNode]bool)
 	visited[target] = true
-
-	queue := []*TreeNode{target}
 	dist := 0
+	queue := []*TreeNode{target}
 
 	for len(queue) > 0 && dist < k {
 		levelSize := len(queue)

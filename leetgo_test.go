@@ -1359,7 +1359,7 @@ func TestDistanceK(t *testing.T) {
 			root:   nil,
 			target: nil,
 			k:      2,
-			want:   []int{},
+			want:   nil,
 		},
 		{
 			name:   "Single node tree, k=0",
@@ -1402,7 +1402,10 @@ func TestDistanceK(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.target = tt.root.Left
+			if tt.root != nil && tt.root.Left != nil {
+				tt.target = tt.root.Left
+			}
+
 			got := DistanceK(tt.root, tt.target, tt.k)
 			sort.Ints(got)
 			sort.Ints(tt.want)

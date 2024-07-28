@@ -981,3 +981,118 @@ func BenchmarkCoinChange(b *testing.B) {
 		_ = CoinChange([]int{1, 2, 5}, 11)
 	}
 }
+
+func TestBoundaryOfBinaryTree(t *testing.T) {
+	tests := []struct {
+		name     string
+		root     *TreeNode
+		expected []int
+	}{
+		{
+			name: "Example 1",
+			root: &TreeNode{
+				Val: 1,
+				Left: &TreeNode{
+					Val: 2,
+					Left: &TreeNode{
+						Val:   4,
+						Left:  &TreeNode{Val: 8},
+						Right: &TreeNode{Val: 9},
+					},
+					Right: &TreeNode{
+						Val:   5,
+						Left:  &TreeNode{Val: 10},
+						Right: &TreeNode{Val: 11},
+					},
+				},
+				Right: &TreeNode{
+					Val: 3,
+					Left: &TreeNode{
+						Val:   6,
+						Left:  &TreeNode{Val: 12},
+						Right: &TreeNode{Val: 13},
+					},
+					Right: &TreeNode{
+						Val:   7,
+						Left:  &TreeNode{Val: 14},
+						Right: &TreeNode{Val: 15},
+					},
+				},
+			},
+			expected: []int{1, 2, 4, 8, 9, 10, 11, 12, 13, 14, 15, 7, 3},
+		},
+		{
+			name: "Example 2",
+			root: &TreeNode{
+				Val: 1,
+				Left: &TreeNode{
+					Val: 2,
+					Right: &TreeNode{
+						Val:   3,
+						Left:  &TreeNode{Val: 4},
+						Right: &TreeNode{Val: 5},
+					},
+				},
+			},
+			expected: []int{1, 2, 3, 4, 5},
+		},
+		{
+			name: "Example 3",
+			root: &TreeNode{
+				Val: 1,
+				Right: &TreeNode{
+					Val: 2,
+					Left: &TreeNode{
+						Val:   3,
+						Left:  &TreeNode{Val: 4},
+						Right: &TreeNode{Val: 5},
+					},
+				},
+			},
+			expected: []int{1, 4, 5, 3, 2},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := BoundaryOfBinaryTree(tt.root)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkBoundaryOfBinaryTree(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = BoundaryOfBinaryTree(&TreeNode{
+			Val: 1,
+			Left: &TreeNode{
+				Val: 2,
+				Left: &TreeNode{
+					Val:   4,
+					Left:  &TreeNode{Val: 8},
+					Right: &TreeNode{Val: 9},
+				},
+				Right: &TreeNode{
+					Val:   5,
+					Left:  &TreeNode{Val: 10},
+					Right: &TreeNode{Val: 11},
+				},
+			},
+			Right: &TreeNode{
+				Val: 3,
+				Left: &TreeNode{
+					Val:   6,
+					Left:  &TreeNode{Val: 12},
+					Right: &TreeNode{Val: 13},
+				},
+				Right: &TreeNode{
+					Val:   7,
+					Left:  &TreeNode{Val: 14},
+					Right: &TreeNode{Val: 15},
+				},
+			},
+		})
+	}
+}

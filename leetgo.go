@@ -927,3 +927,69 @@ func CoinChange(coins []int, total int) int {
 
 	return res
 }
+
+func BoundaryOfBinaryTree(root *TreeNode) []int {
+	if root.Left == nil && root.Right == nil {
+		return []int{root.Val}
+	}
+
+	boundary := []int{root.Val}
+
+	isLeaf := func(node *TreeNode) bool {
+		return node.Left == nil && node.Right == nil
+	}
+
+	var leftBoundary, leaves, rightBoundary func(node *TreeNode)
+
+	leftBoundary = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+		if isLeaf(node) {
+			return
+		}
+
+		boundary = append(boundary, node.Val)
+		if node.Left != nil {
+			leftBoundary(node.Left)
+		} else {
+			leftBoundary(node.Right)
+		}
+	}
+
+	leaves = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+
+		if isLeaf(node) {
+			boundary = append(boundary, node.Val)
+		}
+
+		leaves(node.Left)
+		leaves(node.Right)
+	}
+
+	rightBoundary = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+
+		if isLeaf(node) {
+			return
+		}
+
+		if node.Right != nil {
+			rightBoundary(node.Right)
+		} else {
+			rightBoundary(node.Left)
+		}
+		boundary = append(boundary, node.Val)
+	}
+
+	leftBoundary(root.Left)
+	leaves(root)
+	rightBoundary(root.Right)
+
+	return boundary
+}

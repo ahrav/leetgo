@@ -1273,3 +1273,73 @@ func BenchmarkBinaryTreeHeight(b *testing.B) {
 		})
 	}
 }
+
+func TestBinaryTreeDiameter(t *testing.T) {
+	tests := []struct {
+		name     string
+		tree     *TreeNode
+		expected int
+	}{
+		{
+			name:     "Single node tree",
+			tree:     &TreeNode{Val: 1},
+			expected: 1,
+		},
+		{
+			name:     "Two node tree",
+			tree:     &TreeNode{Val: 1, Left: &TreeNode{Val: 2}},
+			expected: 2,
+		},
+		{
+			name:     "Three node balanced tree",
+			tree:     &TreeNode{Val: 1, Left: &TreeNode{Val: 2}, Right: &TreeNode{Val: 3}},
+			expected: 2,
+		},
+		{
+			name:     "Four node unbalanced tree",
+			tree:     &TreeNode{Val: 1, Left: &TreeNode{Val: 2, Left: &TreeNode{Val: 4}}, Right: &TreeNode{Val: 3}},
+			expected: 3,
+		},
+		{
+			name: "Five node tree with longest path not through root",
+			tree: &TreeNode{
+				Val: 1,
+				Left: &TreeNode{
+					Val:   2,
+					Left:  &TreeNode{Val: 4},
+					Right: &TreeNode{Val: 5},
+				},
+				Right: &TreeNode{Val: 3},
+			},
+			expected: 3,
+		},
+		{
+			name:     "Nil tree",
+			tree:     nil,
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := BinaryTreeDiameter(tt.tree)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkBinaryTreeDiameter(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = BinaryTreeDiameter(&TreeNode{
+			Val: 1,
+			Left: &TreeNode{
+				Val:   2,
+				Left:  &TreeNode{Val: 4},
+				Right: &TreeNode{Val: 5},
+			},
+			Right: &TreeNode{Val: 3},
+		})
+	}
+}

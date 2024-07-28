@@ -1056,3 +1056,17 @@ func NumberOfDistinctIslands(grid [][]int) int {
 
 	return len(m)
 }
+
+func BinaryTreeHeight(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	lh := BinaryTreeHeight(root.Left)
+	rh := BinaryTreeHeight(root.Right)
+
+	if lh > rh {
+		return lh + 1
+	}
+	return rh + 1
+}

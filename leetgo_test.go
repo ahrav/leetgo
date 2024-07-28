@@ -1175,3 +1175,101 @@ func BenchmarkNumberOfDistinctIslands(b *testing.B) {
 		})
 	}
 }
+
+func TestBinaryTreeHeight(t *testing.T) {
+	tests := []struct {
+		name     string
+		root     *TreeNode
+		expected int
+	}{
+		{
+			name: "Example 1",
+			root: &TreeNode{
+				Val: 1,
+				Left: &TreeNode{
+					Val:  2,
+					Left: &TreeNode{Val: 4},
+					Right: &TreeNode{
+						Val:   5,
+						Left:  &TreeNode{Val: 7},
+						Right: &TreeNode{Val: 8},
+					},
+				},
+				Right: &TreeNode{
+					Val:   3,
+					Left:  &TreeNode{Val: 6},
+					Right: &TreeNode{Val: 9},
+				},
+			},
+			expected: 4,
+		},
+		{
+			name: "Example 2",
+			root: &TreeNode{
+				Val: 1,
+				Left: &TreeNode{
+					Val:  2,
+					Left: &TreeNode{Val: 4},
+					Right: &TreeNode{
+						Val:   5,
+						Left:  &TreeNode{Val: 7},
+						Right: &TreeNode{Val: 8},
+					},
+				},
+				Right: &TreeNode{
+					Val:   3,
+					Left:  &TreeNode{Val: 6},
+					Right: &TreeNode{Val: 9},
+				},
+			},
+			expected: 4,
+		},
+		{
+			name: "Example 3",
+			root: &TreeNode{
+				Val: 1,
+				Left: &TreeNode{
+					Val:  2,
+					Left: &TreeNode{Val: 4},
+				},
+				Right: &TreeNode{
+					Val:   3,
+					Left:  &TreeNode{Val: 6},
+					Right: &TreeNode{Val: 9},
+				},
+			},
+			expected: 3,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := BinaryTreeHeight(tt.root)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkBinaryTreeHeight(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = BinaryTreeHeight(&TreeNode{
+			Val: 1,
+			Left: &TreeNode{
+				Val:  2,
+				Left: &TreeNode{Val: 4},
+				Right: &TreeNode{
+					Val:   5,
+					Left:  &TreeNode{Val: 7},
+					Right: &TreeNode{Val: 8},
+				},
+			},
+			Right: &TreeNode{
+				Val:   3,
+				Left:  &TreeNode{Val: 6},
+				Right: &TreeNode{Val: 9},
+			},
+		})
+	}
+}

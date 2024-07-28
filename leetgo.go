@@ -1093,3 +1093,61 @@ func BinaryTreeDiameter(root *TreeNode) int {
 
 	return dfs(root)
 }
+
+func DistanceK(root *TreeNode, target *TreeNode, k int) []int {
+	if root == nil {
+		return []int{}
+	}
+	parents := make(map[*TreeNode]*TreeNode)
+
+	var dfs func(*TreeNode, *TreeNode)
+	dfs = func(node *TreeNode, parent *TreeNode) {
+		if node == nil {
+			return
+		}
+
+		parents[node] = parent
+		dfs(node.Left, node)
+		dfs(node.Right, node)
+	}
+
+	dfs(root, nil)
+
+	visited := make(map[*TreeNode]bool)
+	visited[target] = true
+
+	queue := []*TreeNode{target}
+	var dist int
+	for len(queue) > 0 && dist < k {
+		levelSize := len(queue)
+
+		for i := 0; i < levelSize; i++ {
+			curr := queue[0]
+			queue = queue[1:]
+
+			if curr.Left != nil && !visited[curr.Left] {
+				visited[curr.Left] = true
+				queue = append(queue, curr.Left)
+			}
+
+			if curr.Right != nil && !visited[curr.Right] {
+				visited[curr.Right] = true
+				queue = append(queue, curr.Right)
+			}
+
+			parent := parents[curr]
+			if parent != nil && !visited[parent] {
+				visited[parent] = true
+				queue = append(queue, parent)
+			}
+		}
+		dist++
+	}
+
+	res := make([]int, 0, len(queue))
+	for _, node := range queue {
+		res = append(res, node.Val)
+	}
+
+	return res
+}

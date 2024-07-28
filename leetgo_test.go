@@ -1,6 +1,8 @@
 package leetgo
 
 import (
+	"reflect"
+	"sort"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -1341,5 +1343,91 @@ func BenchmarkBinaryTreeDiameter(b *testing.B) {
 			},
 			Right: &TreeNode{Val: 3},
 		})
+	}
+}
+
+func TestDistanceK(t *testing.T) {
+	tests := []struct {
+		name   string
+		root   *TreeNode
+		target *TreeNode
+		k      int
+		want   []int
+	}{
+		{
+			name:   "Empty tree",
+			root:   nil,
+			target: nil,
+			k:      2,
+			want:   []int{},
+		},
+		{
+			name:   "Single node tree, k=0",
+			root:   &TreeNode{Val: 1},
+			target: &TreeNode{Val: 1},
+			k:      0,
+			want:   []int{1},
+		},
+		{
+			name: "Target is leaf, k exceeds tree depth",
+			root: &TreeNode{
+				Val:   1,
+				Left:  &TreeNode{Val: 2},
+				Right: &TreeNode{Val: 3},
+			},
+			target: &TreeNode{Val: 2},
+			k:      3,
+			want:   []int{},
+		},
+		{
+			name: "Complex tree, multiple nodes at distance k",
+			root: &TreeNode{
+				Val: 3,
+				Left: &TreeNode{
+					Val:   5,
+					Left:  &TreeNode{Val: 6},
+					Right: &TreeNode{Val: 2, Left: &TreeNode{Val: 7}, Right: &TreeNode{Val: 4}},
+				},
+				Right: &TreeNode{
+					Val:   1,
+					Left:  &TreeNode{Val: 0},
+					Right: &TreeNode{Val: 8},
+				},
+			},
+			target: &TreeNode{Val: 5},
+			k:      2,
+			want:   []int{1, 4, 7},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := DistanceK(tt.root, tt.target, tt.k)
+			sort.Ints(got)
+			sort.Ints(tt.want)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("DistanceK() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func BenchmarkDistanceK(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = DistanceK(&TreeNode{
+			Val: 3,
+			Left: &TreeNode{
+				Val:   5,
+				Left:  &TreeNode{Val: 6},
+				Right: &TreeNode{Val: 2, Left: &TreeNode{Val: 7}, Right: &TreeNode{Val: 4}},
+			},
+			Right: &TreeNode{
+				Val:   1,
+				Left:  &TreeNode{Val: 0},
+				Right: &TreeNode{Val: 8},
+			},
+		}, &TreeNode{Val: 5}, 2)
 	}
 }

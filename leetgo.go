@@ -1068,17 +1068,17 @@ func BinaryTreeHeight(root *TreeNode) int {
 	if lh > rh {
 		return lh + 1
 	}
+
 	return rh + 1
 }
 
 func BinaryTreeDiameter(root *TreeNode) int {
-	maxH := 0
-
+	maxPath := 0
 	if root == nil {
-		return maxH
+		return maxPath
 	}
 
-	var dfs func(node *TreeNode) int
+	var dfs func(*TreeNode) int
 	dfs = func(node *TreeNode) int {
 		if node == nil {
 			return 0
@@ -1087,7 +1087,7 @@ func BinaryTreeDiameter(root *TreeNode) int {
 		lh := dfs(node.Left)
 		rh := dfs(node.Right)
 
-		maxH = max(maxH, lh+rh)
+		maxPath = max(maxPath, lh+rh)
 		return max(lh, rh) + 1
 	}
 

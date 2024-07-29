@@ -1490,3 +1490,62 @@ func BenchmarkLongestOnes(b *testing.B) {
 		_ = LongestOnes([]int{1, 1, 0, 0, 0, 1, 1, 1}, 3)
 	}
 }
+
+func TestLengthOfLongestSubstring(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		expected int
+	}{
+		{
+			name:     "Example 1",
+			s:        "abcabcbb",
+			expected: 3,
+		},
+		{
+			name:     "Example 2",
+			s:        "bbbbb",
+			expected: 1,
+		},
+		{
+			name:     "Example 3",
+			s:        "pwwkew",
+			expected: 3,
+		},
+		{
+			name:     "Example 4",
+			s:        "",
+			expected: 0,
+		},
+		{
+			name:     "Example 5",
+			s:        " ",
+			expected: 1,
+		},
+		{
+			name:     "Example 6",
+			s:        "au",
+			expected: 2,
+		},
+		{
+			name:     "Example 7",
+			s:        "dvdf",
+			expected: 3,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := LengthOfLongestSubstring(tt.s)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkLengthOfLongestSubstring(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = LengthOfLongestSubstring("abcabcbb")
+	}
+}

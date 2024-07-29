@@ -1152,23 +1152,45 @@ func DistanceK(root *TreeNode, target *TreeNode, k int) []int {
 }
 
 func LongestOnes(nums []int, k int) int {
-	var left, zeroCount, maxWindow int
-	for right := 0; right < len(nums); right++ {
+	var left, right, zeroCount, maxWindow int
+	for right < len(nums) {
 		if nums[right] == 0 {
 			zeroCount++
 		}
 
-		if zeroCount > k {
+		for zeroCount > k {
 			if nums[left] == 0 {
 				zeroCount--
 			}
 			left++
 		}
 
-		if window := right - left + 1; window > maxWindow {
+		right++
+		if window := right - left; window > maxWindow {
 			maxWindow = window
 		}
 	}
 
 	return maxWindow
+}
+
+func LengthOfLongestSubstring(s string) int {
+	m := make(map[byte]struct{})
+
+	var left, right, maxSubstring int
+	for right < len(s) {
+		if _, ok := m[s[right]]; !ok {
+			m[s[right]] = struct{}{}
+			right++
+
+			if window := right - left; window > maxSubstring {
+				maxSubstring = window
+			}
+		} else {
+			delete(m, s[left])
+			left++
+		}
+	}
+
+	return maxSubstring
 }

@@ -1150,3 +1150,25 @@ func DistanceK(root *TreeNode, target *TreeNode, k int) []int {
 
 	return res
 }
+
+func LongestOnes(nums []int, k int) int {
+	var left, zeroCount, maxWindow int
+	for right := 0; right < len(nums); right++ {
+		if nums[right] == 0 {
+			zeroCount++
+		}
+
+		if zeroCount > k {
+			if nums[left] == 0 {
+				zeroCount--
+			}
+			left++
+		}
+
+		if window := right - left + 1; window > maxWindow {
+			maxWindow = window
+		}
+	}
+
+	return maxWindow
+}

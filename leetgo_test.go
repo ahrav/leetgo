@@ -1435,3 +1435,58 @@ func BenchmarkDistanceK(b *testing.B) {
 		}, &TreeNode{Val: 5}, 2)
 	}
 }
+
+func TestLongestOnes(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected int
+	}{
+		{
+			name:     "Example 1",
+			nums:     []int{1, 1, 0, 0, 0, 1, 1, 1},
+			k:        3,
+			expected: 8,
+		},
+		{
+			name:     "Example 2",
+			nums:     []int{1, 0, 0, 0, 0, 1, 1, 1},
+			k:        3,
+			expected: 6,
+		},
+		{
+			name:     "Example 3",
+			nums:     []int{1, 0, 0, 0, 0, 1, 1, 1},
+			k:        0,
+			expected: 3,
+		},
+		{
+			name:     "Example 4",
+			nums:     []int{1, 1, 1, 1, 1, 1, 1, 1},
+			k:        0,
+			expected: 8,
+		},
+		{
+			name:     "Example 5",
+			nums:     []int{0, 0, 0, 0, 0, 0, 0, 0},
+			k:        3,
+			expected: 3,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := LongestOnes(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkLongestOnes(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = LongestOnes([]int{1, 1, 0, 0, 0, 1, 1, 1}, 3)
+	}
+}

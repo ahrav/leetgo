@@ -1213,13 +1213,9 @@ func MostVisitedPattern(usernames, websites []string, timestamps []int) []string
 	}
 
 	patternCount := make(map[string]int)
-
 	for _, visits := range userVisits {
-		if len(visits) < 3 {
-			continue
-		}
-
 		patterns := make(map[string]bool)
+
 		for i := 0; i < len(visits)-2; i++ {
 			for j := i + 1; j < len(visits)-1; j++ {
 				for k := j + 1; k < len(visits); k++ {
@@ -1233,12 +1229,12 @@ func MostVisitedPattern(usernames, websites []string, timestamps []int) []string
 		}
 	}
 
-	var maxCount int
 	var maxPat string
-	for pat, cnt := range patternCount {
-		if cnt > maxCount || (cnt == maxCount && pat < maxPat) {
+	var maxCount int
+	for pat, count := range patternCount {
+		if count > maxCount || (count == maxCount && pat < maxPat) {
 			maxPat = pat
-			maxCount = cnt
+			maxCount = count
 		}
 	}
 

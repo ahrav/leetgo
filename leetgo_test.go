@@ -1549,3 +1549,50 @@ func BenchmarkLengthOfLongestSubstring(b *testing.B) {
 		_ = LengthOfLongestSubstring("abcabcbb")
 	}
 }
+
+func TestMostVisitedPattern(t *testing.T) {
+	tests := []struct {
+		name      string
+		username  []string
+		timestamp []int
+		website   []string
+		expected  []string
+	}{
+		{
+			name:      "Example 1",
+			username:  []string{"joe", "joe", "joe", "james", "james", "james", "james", "mary", "mary", "mary"},
+			timestamp: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+			website:   []string{"home", "about", "career", "home", "cart", "maps", "home", "home", "about", "career"},
+			expected:  []string{"home", "about", "career"},
+		},
+		{
+			name:      "Example 2",
+			username:  []string{"u1", "u1", "u1", "u2", "u2", "u2"},
+			timestamp: []int{1, 2, 3, 4, 5, 6},
+			website:   []string{"a", "b", "a", "a", "b", "c"},
+			expected:  []string{"a", "b", "a"},
+		},
+		{
+			name:      "Example 3",
+			username:  []string{"u1", "u2", "u1", "u2", "u1", "u2"},
+			timestamp: []int{1, 2, 3, 4, 5, 6},
+			website:   []string{"a", "a", "a", "a", "a", "a"},
+			expected:  []string{"a", "a", "a"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := MostVisitedPattern(tt.username, tt.website, tt.timestamp)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMostVisitedPattern(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MostVisitedPattern([]string{"joe", "joe", "joe", "james", "james", "james", "james", "mary", "mary", "mary"}, []string{"home", "about", "career", "home", "cart", "maps", "home", "home", "about", "career"}, []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+	}
+}

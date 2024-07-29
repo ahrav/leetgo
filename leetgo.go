@@ -1191,3 +1191,56 @@ func LengthOfLongestSubstring(s string) int {
 
 	return maxLen
 }
+
+func MostVisitedPattern(usernames, websites []string, timestamps []int) []string {
+	type visit struct {
+		website   string
+		timestamp int
+	}
+
+	userVisits := make(map[string][]visit)
+	for i, username := range usernames {
+		userVisits[username] = append(userVisits[username], visit{
+			website:   websites[i],
+			timestamp: timestamps[i],
+		})
+	}
+
+	for _, visits := range userVisits {
+		sort.Slice(visits, func(i, j int) bool {
+			return visits[i].timestamp < visits[j].timestamp
+		})
+	}
+
+	patternCount := make(map[string]int)
+
+	for _, visits := range userVisits {
+		if len(visits) < 3 {
+			continue
+		}
+
+		patterns := make(map[string]bool)
+		for i := 0; i < len(visits)-2; i++ {
+			for j := i + 1; j < len(visits)-1; j++ {
+				for k := j + 1; k < len(visits); k++ {
+					patterns[fmt.Sprintf("%s,%s,%s", visits[i].website, visits[j].website, visits[k].website)] = true
+				}
+			}
+		}
+
+		for pat := range patterns {
+			patternCount[pat]++
+		}
+	}
+
+	var maxCount int
+	var maxPat string
+	for pat, cnt := range patternCount {
+		if cnt > maxCount || (cnt == maxCount && pat < maxPat) {
+			maxPat = pat
+			maxCount = cnt
+		}
+	}
+
+	return strings.Split(maxPat, ",")
+}

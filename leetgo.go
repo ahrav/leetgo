@@ -1286,26 +1286,25 @@ func PlatesBetweenCandles(s string, queries [][]int) []int {
 	}
 
 	prefixSum := make([]int, n+1)
-	prevCandle := make([]int, n)
-	nextCandle := make([]int, n)
+	prevCandle, nextCandle := make([]int, n), make([]int, n)
 
-	lastCandle := -1
+	lastCandleIdx := -1
 	for i := 0; i < n; i++ {
-		prefixSum[i+1] = prefixSum[i] // Set the first value to 0
+		prefixSum[i+1] = prefixSum[i]
 		if s[i] == '*' {
 			prefixSum[i+1]++
 		} else {
-			lastCandle = i
+			lastCandleIdx = i
 		}
-		prevCandle[i] = lastCandle
+		prevCandle[i] = lastCandleIdx
 	}
 
-	lastCandle = -1
+	lastCandleIdx = -1
 	for i := n - 1; i >= 0; i-- {
 		if s[i] == '|' {
-			lastCandle = i
+			lastCandleIdx = i
 		}
-		nextCandle[i] = lastCandle
+		nextCandle[i] = lastCandleIdx
 	}
 
 	res := make([]int, len(queries))

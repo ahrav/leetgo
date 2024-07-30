@@ -1653,3 +1653,72 @@ func BenchmarkSortJumbled(b *testing.B) {
 		_ = SortJumbled([]int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}, []int{1000000, 10000, 100, 1})
 	}
 }
+
+func TestPlatesBetweenCandles(t *testing.T) {
+	tests := []struct {
+		name    string
+		s       string
+		queries [][]int
+		want    []int
+	}{
+		{
+			name:    "Empty string",
+			s:       "",
+			queries: [][]int{{0, 0}},
+			want:    nil,
+		},
+		{
+			name:    "No plates",
+			s:       "|||",
+			queries: [][]int{{0, 2}},
+			want:    []int{0},
+		},
+		{
+			name:    "All plates",
+			s:       "****",
+			queries: [][]int{{0, 3}},
+			want:    []int{0},
+		},
+		{
+			name:    "Single plate between candles",
+			s:       "|*|",
+			queries: [][]int{{0, 2}},
+			want:    []int{1},
+		},
+		{
+			name:    "Multiple queries with varying results",
+			s:       "||**||**|*",
+			queries: [][]int{{2, 5}, {5, 9}},
+			want:    []int{0, 2},
+		},
+		{
+			name:    "Queries with no plates between candles",
+			s:       "|**|**|",
+			queries: [][]int{{0, 2}, {4, 6}},
+			want:    []int{0, 0},
+		},
+		{
+			name:    "Overlapping queries",
+			s:       "|**|*|**|",
+			queries: [][]int{{0, 5}, {2, 7}},
+			want:    []int{3, 1},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := PlatesBetweenCandles(tt.s, tt.queries)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("PlatesBetweenCandles() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func BenchmarkPlatesBetweenCandles(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = PlatesBetweenCandles("||**||**|*", [][]int{{2, 5}, {5, 9}})
+	}
+}

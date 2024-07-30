@@ -1278,3 +1278,46 @@ func SortJumbled(mapping []int, nums []int) []int {
 
 	return res
 }
+
+func PlatesBetweenCandles(s string, queries [][]int) []int {
+	n := len(s)
+	if n == 0 {
+		return nil
+	}
+
+	prefixSum := make([]int, n+1)
+	prevCandle := make([]int, n)
+	nextCandle := make([]int, n)
+
+	lastCandle := -1
+	for i := 0; i < n; i++ {
+		prefixSum[i+1] = prefixSum[i] // Set the first value to 0
+		if s[i] == '*' {
+			prefixSum[i+1]++
+		} else {
+			lastCandle = i
+		}
+		prevCandle[i] = lastCandle
+	}
+
+	lastCandle = -1
+	for i := n - 1; i >= 0; i-- {
+		if s[i] == '|' {
+			lastCandle = i
+		}
+		nextCandle[i] = lastCandle
+	}
+
+	res := make([]int, len(queries))
+	for idx, query := range queries {
+		left, right := query[0], query[1]
+		leftCandle := nextCandle[left]
+		rightCandle := prevCandle[right]
+
+		if leftCandle != -1 && rightCandle != -1 && leftCandle < rightCandle {
+			res[idx] = prefixSum[rightCandle] - prefixSum[leftCandle]
+		}
+	}
+
+	return res
+}

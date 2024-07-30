@@ -1235,3 +1235,47 @@ func MostVisitedPattern(usernames, websites []string, timestamps []int) []string
 
 	return strings.Split(maxPat, ",")
 }
+
+func SortJumbled(mapping []int, nums []int) []int {
+	type pair struct {
+		mappedVal   int
+		originalIdx int
+	}
+
+	pairs := make([]pair, 0, len(nums))
+
+	for idx, num := range nums {
+		multiplier := 1
+		var mapped int
+		if num == 0 {
+			mapped = mapping[0]
+		} else {
+			for num > 0 {
+				digit := num % 10
+				mapped += mapping[digit] * multiplier
+				multiplier *= 10
+				num /= 10
+			}
+		}
+
+		pairs = append(pairs, pair{
+			mappedVal:   mapped,
+			originalIdx: idx,
+		})
+	}
+
+	sort.Slice(pairs, func(i, j int) bool {
+		if pairs[i].mappedVal == pairs[j].mappedVal {
+			return pairs[i].originalIdx < pairs[j].originalIdx
+		}
+
+		return pairs[i].mappedVal < pairs[j].mappedVal
+	})
+
+	result := make([]int, 0, len(nums))
+	for _, pair := range pairs {
+		result = append(result, nums[pair.originalIdx])
+	}
+
+	return result
+}

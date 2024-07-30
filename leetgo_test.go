@@ -1596,3 +1596,60 @@ func BenchmarkMostVisitedPattern(b *testing.B) {
 		_ = MostVisitedPattern([]string{"joe", "joe", "joe", "james", "james", "james", "james", "mary", "mary", "mary"}, []string{"home", "about", "career", "home", "cart", "maps", "home", "home", "about", "career"}, []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	}
 }
+
+func TestSortJumbled(t *testing.T) {
+	tests := []struct {
+		name    string
+		mapping []int
+		nums    []int
+		want    []int
+	}{
+		{
+			name:    "Empty input",
+			mapping: []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+			nums:    []int{},
+			want:    []int{},
+		},
+		{
+			name:    "Single digit numbers",
+			mapping: []int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0},
+			nums:    []int{0, 1, 2, 3, 4, 5},
+			want:    []int{5, 4, 3, 2, 1, 0},
+		},
+		{
+			name:    "All same mapped value",
+			mapping: []int{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+			nums:    []int{10, 20, 30, 40, 50},
+			want:    []int{10, 20, 30, 40, 50},
+		},
+		{
+			name:    "Large numbers",
+			mapping: []int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0},
+			nums:    []int{1000000, 10000, 100, 1},
+			want:    []int{1, 100, 10000, 1000000},
+		},
+		{
+			name:    "Duplicate numbers",
+			mapping: []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+			nums:    []int{555, 901, 555, 123, 901},
+			want:    []int{123, 555, 555, 901, 901},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := SortJumbled(tt.mapping, tt.nums)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SortJumbled() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func BenchmarkSortJumbled(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = SortJumbled([]int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}, []int{1000000, 10000, 100, 1})
+	}
+}

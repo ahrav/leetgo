@@ -1363,26 +1363,26 @@ func LongestPalindrome(s string) string {
 		return s
 	}
 
-	expandAroundCenter := func(i, j int) int {
-		for i >= 0 && j < n && s[i] == s[j] {
-			i--
-			j++
+	expandAroundCenter := func(left, right int) int {
+		for left >= 0 && right < n && s[left] == s[right] {
+			left--
+			right++
 		}
 
-		return j - i - 1
+		return right - left - 1
 	}
 
-	var maxLen, startIdx int
+	var startIdx, maxLength int
 	for i := 0; i < n; i++ {
 		oddLen := expandAroundCenter(i, i)
 		evenLen := expandAroundCenter(i, i+1)
 
 		maxL := max(oddLen, evenLen)
-		if maxL > maxLen {
+		if maxL > maxLength {
+			maxLength = maxL
 			startIdx = i - (maxL-1)/2
-			maxLen = maxL
 		}
 	}
 
-	return s[startIdx : startIdx+maxLen]
+	return s[startIdx : startIdx+maxLength]
 }

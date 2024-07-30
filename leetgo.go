@@ -1238,15 +1238,14 @@ func MostVisitedPattern(usernames, websites []string, timestamps []int) []string
 
 func SortJumbled(mapping []int, nums []int) []int {
 	type pair struct {
-		mappedVal   int
-		originalIdx int
+		originalIndex int
+		mappedVal     int
 	}
 
 	pairs := make([]pair, 0, len(nums))
-
 	for idx, num := range nums {
-		multiplier := 1
 		var mapped int
+		multiplier := 1
 		if num == 0 {
 			mapped = mapping[0]
 		} else {
@@ -1259,23 +1258,23 @@ func SortJumbled(mapping []int, nums []int) []int {
 		}
 
 		pairs = append(pairs, pair{
-			mappedVal:   mapped,
-			originalIdx: idx,
+			originalIndex: idx,
+			mappedVal:     mapped,
 		})
 	}
 
 	sort.Slice(pairs, func(i, j int) bool {
 		if pairs[i].mappedVal == pairs[j].mappedVal {
-			return pairs[i].originalIdx < pairs[j].originalIdx
+			return pairs[i].originalIndex < pairs[j].originalIndex
 		}
 
 		return pairs[i].mappedVal < pairs[j].mappedVal
 	})
 
-	result := make([]int, 0, len(nums))
+	res := make([]int, 0, len(nums))
 	for _, pair := range pairs {
-		result = append(result, nums[pair.originalIdx])
+		res = append(res, nums[pair.originalIndex])
 	}
 
-	return result
+	return res
 }

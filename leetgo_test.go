@@ -1722,3 +1722,166 @@ func BenchmarkPlatesBetweenCandles(b *testing.B) {
 		_ = PlatesBetweenCandles("||**||**|*", [][]int{{2, 5}, {5, 9}})
 	}
 }
+
+func TestLongestPalindrome(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "Empty string",
+			input:    "",
+			expected: "",
+		},
+		{
+			name:     "Single character",
+			input:    "a",
+			expected: "a",
+		},
+		{
+			name:     "Two different characters",
+			input:    "ab",
+			expected: "a",
+		},
+		{
+			name:     "Two same characters",
+			input:    "aa",
+			expected: "aa",
+		},
+		{
+			name:     "Odd length palindrome",
+			input:    "racecar",
+			expected: "racecar",
+		},
+		{
+			name:     "Even length palindrome",
+			input:    "abccba",
+			expected: "abccba",
+		},
+		{
+			name:     "Multiple palindromes",
+			input:    "abcddcbafg",
+			expected: "abcddcba",
+		},
+		{
+			name:     "Palindrome at the beginning",
+			input:    "abbacd",
+			expected: "abba",
+		},
+		{
+			name:     "Palindrome at the end",
+			input:    "cdabba",
+			expected: "abba",
+		},
+		{
+			name:     "No palindrome longer than 1",
+			input:    "abcdef",
+			expected: "a",
+		},
+		{
+			name:     "All same characters",
+			input:    "aaaaa",
+			expected: "aaaaa",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// result := LongestPalindromeDP(tt.input)
+			result := LongestPalindrome(tt.input)
+			if result != tt.expected {
+				t.Errorf("LongestPalindrome(%q) = %q, want %q", tt.input, result, tt.expected)
+			}
+		})
+	}
+}
+
+func BenchmarkLongestPalindrome(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = LongestPalindrome("abcddcbafg")
+	}
+}
+
+func TestLongestPalindromeDP(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "Empty string",
+			input:    "",
+			expected: "",
+		},
+		{
+			name:     "Single character",
+			input:    "a",
+			expected: "a",
+		},
+		{
+			name:     "Two different characters",
+			input:    "ab",
+			expected: "a",
+		},
+		{
+			name:     "Two same characters",
+			input:    "aa",
+			expected: "aa",
+		},
+		{
+			name:     "Odd length palindrome",
+			input:    "racecar",
+			expected: "racecar",
+		},
+		{
+			name:     "Even length palindrome",
+			input:    "abccba",
+			expected: "abccba",
+		},
+		{
+			name:     "Multiple palindromes",
+			input:    "abcddcbafg",
+			expected: "abcddcba",
+		},
+		{
+			name:     "Palindrome at the beginning",
+			input:    "abbacd",
+			expected: "abba",
+		},
+		{
+			name:     "Palindrome at the end",
+			input:    "cdabba",
+			expected: "abba",
+		},
+		{
+			name:     "No palindrome longer than 1",
+			input:    "abcdef",
+			expected: "a",
+		},
+		{
+			name:     "All same characters",
+			input:    "aaaaa",
+			expected: "aaaaa",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := LongestPalindromeDP(tt.input)
+			if result != tt.expected {
+				t.Errorf("LongestPalindrome(%q) = %q, want %q", tt.input, result, tt.expected)
+			}
+		})
+	}
+}
+
+func BenchmarkLongestPalindromeDP(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = LongestPalindromeDP("abcddcbafg")
+	}
+}

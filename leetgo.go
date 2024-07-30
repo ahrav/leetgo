@@ -1319,3 +1319,70 @@ func PlatesBetweenCandles(s string, queries [][]int) []int {
 
 	return res
 }
+
+func LongestPalindromeDP(s string) string {
+	n := len(s)
+	if n < 2 {
+		return s
+	}
+
+	dp := make([][]bool, n)
+	for i := range dp {
+		dp[i] = make([]bool, n)
+		dp[i][i] = true
+	}
+
+	start, maxLen := 0, 1
+	for i := 0; i < n-1; i++ {
+		if s[i] == s[i+1] {
+			dp[i][i+1] = true
+			start = i
+			maxLen = 2
+		}
+	}
+
+	for length := 3; length <= n; length++ {
+		for i := 0; i <= n-length; i++ {
+			j := i + length - 1
+			if s[i] == s[j] && dp[i+1][j-1] == true {
+				dp[i][j] = true
+				if length > maxLen {
+					maxLen = length
+					start = i
+				}
+			}
+		}
+	}
+
+	return s[start : start+maxLen]
+}
+
+func LongestPalindrome(s string) string {
+	n := len(s)
+	if n < 2 {
+		return s
+	}
+
+	expandAroundCenter := func(i, j int) int {
+		for i >= 0 && j < n && s[i] == s[j] {
+			i--
+			j++
+		}
+
+		return j - i - 1
+	}
+
+	var maxLen, startIdx int
+	for i := 0; i < n; i++ {
+		oddLen := expandAroundCenter(i, i)
+		evenLen := expandAroundCenter(i, i+1)
+
+		maxL := max(oddLen, evenLen)
+		if maxL > maxLen {
+			startIdx = i - (maxL-1)/2
+			maxLen = maxL
+		}
+	}
+
+	return s[startIdx : startIdx+maxLen]
+}

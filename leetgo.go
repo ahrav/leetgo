@@ -1388,7 +1388,8 @@ func LongestPalindrome(s string) string {
 }
 
 func LetterCombinations(digits string) []string {
-	if len(digits) == 0 {
+	n := len(digits)
+	if n == 0 {
 		return nil
 	}
 
@@ -1404,18 +1405,17 @@ func LetterCombinations(digits string) []string {
 	}
 
 	var result []string
-	current := make([]byte, len(digits))
-
+	curr := make([]byte, n)
 	var backtrack func(int)
 	backtrack = func(index int) {
-		if index == len(digits) {
-			result = append(result, string(current))
+		if index == n {
+			result = append(result, string(curr))
 			return
 		}
 
 		letters := mapping[digits[index]]
 		for i := range letters {
-			current[index] = letters[i]
+			curr[index] = letters[i]
 			backtrack(index + 1)
 		}
 	}

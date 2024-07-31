@@ -1936,3 +1936,96 @@ func BenchmarkLetterCombinations(b *testing.B) {
 		_ = LetterCombinations("456")
 	}
 }
+
+func TestSearchRotatedArray(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		target   int
+		expected int
+	}{
+		{
+			name:     "Target in first half of rotated array",
+			nums:     []int{4, 5, 6, 7, 0, 1, 2},
+			target:   5,
+			expected: 1,
+		},
+		{
+			name:     "Target in second half of rotated array",
+			nums:     []int{4, 5, 6, 7, 0, 1, 2},
+			target:   1,
+			expected: 5,
+		},
+		{
+			name:     "Target is first element",
+			nums:     []int{4, 5, 6, 7, 0, 1, 2},
+			target:   4,
+			expected: 0,
+		},
+		{
+			name:     "Target is last element",
+			nums:     []int{4, 5, 6, 7, 0, 1, 2},
+			target:   2,
+			expected: 6,
+		},
+		{
+			name:     "Target not in array",
+			nums:     []int{4, 5, 6, 7, 0, 1, 2},
+			target:   3,
+			expected: -1,
+		},
+		{
+			name:     "Array with one element, target present",
+			nums:     []int{1},
+			target:   1,
+			expected: 0,
+		},
+		{
+			name:     "Array with one element, target not present",
+			nums:     []int{1},
+			target:   0,
+			expected: -1,
+		},
+		{
+			name:     "Array with two elements, target in first position",
+			nums:     []int{2, 1},
+			target:   2,
+			expected: 0,
+		},
+		{
+			name:     "Array with two elements, target in second position",
+			nums:     []int{2, 1},
+			target:   1,
+			expected: 1,
+		},
+		{
+			name:     "Rotated array with duplicate elements, target present",
+			nums:     []int{2, 5, 6, 0, 0, 1, 2},
+			target:   0,
+			expected: 3,
+		},
+		{
+			name:     "Rotated array with duplicate elements, target not present",
+			nums:     []int{2, 5, 6, 0, 0, 1, 2},
+			target:   3,
+			expected: -1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := SearchRotatedArray(tt.nums, tt.target)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkSearchRotatedArray(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = SearchRotatedArray([]int{4, 5, 6, 7, 0, 1, 2}, 5)
+	}
+}

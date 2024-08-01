@@ -1484,7 +1484,7 @@ func NumTeams(rating []int) int {
 		for j := 0; j < i; j++ {
 			if rating[j] < rating[i] {
 				leftSmaller[i]++
-			} else if rating[j] > rating[i] {
+			} else {
 				leftLarger[i]++
 			}
 		}
@@ -1494,7 +1494,7 @@ func NumTeams(rating []int) int {
 		for j := n - 1; j > i; j-- {
 			if rating[j] > rating[i] {
 				rightLarger[i]++
-			} else if rating[j] < rating[i] {
+			} else {
 				rightSmaller[i]++
 			}
 		}

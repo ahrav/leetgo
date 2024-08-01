@@ -2138,3 +2138,66 @@ func BenchmarkThreeSum(b *testing.B) {
 		_ = ThreeSum([]int{-1, 0, 1, 2, -1, -4})
 	}
 }
+
+func TestMergeIntervals(t *testing.T) {
+	tests := []struct {
+		name      string
+		intervals [][]int
+		expected  [][]int
+	}{
+		{
+			name:      "Empty input",
+			intervals: nil,
+			expected:  nil,
+		},
+		{
+			name:      "Single interval",
+			intervals: [][]int{{1, 3}},
+			expected:  [][]int{{1, 3}},
+		},
+		{
+			name:      "Two overlapping intervals",
+			intervals: [][]int{{1, 3}, {2, 4}},
+			expected:  [][]int{{1, 4}},
+		},
+		{
+			name:      "Two non-overlapping intervals",
+			intervals: [][]int{{1, 2}, {3, 4}},
+			expected:  [][]int{{1, 2}, {3, 4}},
+		},
+		{
+			name:      "Multiple overlapping intervals",
+			intervals: [][]int{{1, 3}, {2, 6}, {8, 10}, {15, 18}},
+			expected:  [][]int{{1, 6}, {8, 10}, {15, 18}},
+		},
+		{
+			name:      "Multiple non-overlapping intervals",
+			intervals: [][]int{{1, 4}, {5, 6}},
+			expected:  [][]int{{1, 4}, {5, 6}},
+		},
+		{
+			name:      "Multiple overlapping and non-overlapping intervals",
+			intervals: [][]int{{1, 3}, {2, 6}, {8, 10}, {15, 18}, {1, 2}, {3, 4}},
+			expected:  [][]int{{1, 6}, {8, 10}, {15, 18}},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := MergeIntervals(tt.intervals)
+			if !reflect.DeepEqual(result, tt.expected) {
+				t.Errorf("MergeIntervals(%v) = %v, want %v", tt.intervals, result, tt.expected)
+			}
+		})
+	}
+}
+
+func BenchmarkMergeIntervals(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MergeIntervals([][]int{{1, 3}, {2, 6}, {8, 10}, {15, 18}})
+	}
+}

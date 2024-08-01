@@ -1555,3 +1555,29 @@ func ThreeSum(nums []int) [][]int {
 
 	return result
 }
+
+func MergeIntervals(intervals [][]int) [][]int {
+	if len(intervals) < 2 {
+		return intervals
+	}
+
+	sort.Slice(intervals, func(i, j int) bool {
+		return intervals[i][0] < intervals[j][0]
+	})
+
+	res := [][]int{intervals[0]}
+	for i := 1; i < len(intervals); i++ {
+		last := res[len(res)-1]
+		curr := intervals[i]
+
+		if curr[0] <= last[1] {
+			if curr[1] > last[1] {
+				last[1] = curr[1]
+			}
+		} else {
+			res = append(res, []int{curr[0], curr[1]})
+		}
+	}
+
+	return res
+}

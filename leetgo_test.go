@@ -2095,3 +2095,46 @@ func BenchmarkNumTeams(b *testing.B) {
 		_ = NumTeams([]int{1, 10, 5, 8, 3, 7, 2, 9, 4, 6})
 	}
 }
+
+func TestThreeSum(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    []int
+		expected [][]int
+	}{
+		{
+			name:     "All positive numbers",
+			input:    []int{-1, 0, 1, 2, -1, -4},
+			expected: [][]int{{-1, -1, 2}, {-1, 0, 1}},
+		},
+		{
+			name:     "Large numbers",
+			input:    []int{1000000, -1000000, 0},
+			expected: [][]int{{-1000000, 0, 1000000}},
+		},
+		{
+			name:     "Duplicate solutions",
+			input:    []int{0, 0, 0, 0},
+			expected: [][]int{{0, 0, 0}},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := ThreeSum(tt.input)
+			if !reflect.DeepEqual(result, tt.expected) {
+				t.Errorf("ThreeSum(%v) = %v, want %v", tt.input, result, tt.expected)
+			}
+		})
+	}
+}
+
+func BenchmarkThreeSum(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = ThreeSum([]int{-1, 0, 1, 2, -1, -4})
+	}
+}

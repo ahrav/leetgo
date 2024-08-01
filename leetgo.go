@@ -1581,3 +1581,20 @@ func MergeIntervals(intervals [][]int) [][]int {
 
 	return result
 }
+
+func LowestCommonAncestorDFS(root, p, q *TreeNode) *TreeNode {
+	if root == nil || root == p || root == q {
+		return root
+	}
+
+	left := LowestCommonAncestorDFS(root.Left, p, q)
+	right := LowestCommonAncestorDFS(root.Right, p, q)
+
+	if left != nil && right != nil {
+		return root
+	}
+	if left != nil {
+		return left
+	}
+	return right
+}

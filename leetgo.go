@@ -1565,9 +1565,9 @@ func MergeIntervals(intervals [][]int) [][]int {
 		return intervals[i][0] < intervals[j][0]
 	})
 
-	res := [][]int{intervals[0]}
+	result := [][]int{intervals[0]}
 	for i := 1; i < len(intervals); i++ {
-		last := res[len(res)-1]
+		last := result[len(result)-1]
 		curr := intervals[i]
 
 		if curr[0] <= last[1] {
@@ -1575,9 +1575,9 @@ func MergeIntervals(intervals [][]int) [][]int {
 				last[1] = curr[1]
 			}
 		} else {
-			res = append(res, []int{curr[0], curr[1]})
+			result = append(result, []int{curr[0], curr[1]})
 		}
 	}
 
-	return res
+	return result
 }

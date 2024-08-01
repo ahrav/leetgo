@@ -1429,7 +1429,6 @@ func BinarySearch(nums []int, target int) int {
 
 	for left <= right {
 		mid := left + (right-left)/2
-
 		if nums[mid] == target {
 			return mid
 		}
@@ -1449,7 +1448,6 @@ func SearchRotatedArray(nums []int, target int) int {
 
 	for left <= right {
 		mid := left + (right-left)/2
-
 		if nums[mid] == target {
 			return mid
 		}
@@ -1470,4 +1468,43 @@ func SearchRotatedArray(nums []int, target int) int {
 	}
 
 	return -1
+}
+
+func NumTeams(rating []int) int {
+	if len(rating) < 3 {
+		return 0
+	}
+
+	n := len(rating)
+	leftSmaller := make([]int, n)
+	leftLarger := make([]int, n)
+	rightSmaller := make([]int, n)
+	rightLarger := make([]int, n)
+
+	for i := 1; i < n; i++ {
+		for j := 0; j < i; j++ {
+			if rating[j] < rating[i] {
+				leftSmaller[i]++
+			} else if rating[j] > rating[i] {
+				leftLarger[i]++
+			}
+		}
+	}
+
+	for i := n - 2; i >= 0; i-- {
+		for j := n - 1; j > i; j-- {
+			if rating[j] > rating[i] {
+				rightLarger[i]++
+			} else if rating[j] < rating[i] {
+				rightSmaller[i]++
+			}
+		}
+	}
+
+	var cnt int
+	for idx := 1; idx < n-1; idx++ {
+		cnt += (leftSmaller[idx] * rightLarger[idx]) + (rightSmaller[idx] * leftLarger[idx])
+	}
+
+	return cnt
 }

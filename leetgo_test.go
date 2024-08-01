@@ -2029,3 +2029,69 @@ func BenchmarkSearchRotatedArray(b *testing.B) {
 		_ = SearchRotatedArray([]int{4, 5, 6, 7, 0, 1, 2}, 5)
 	}
 }
+
+func TestNumTeams(t *testing.T) {
+	tests := []struct {
+		name     string
+		rating   []int
+		expected int
+	}{
+		{
+			name:     "Empty array",
+			rating:   []int{},
+			expected: 0,
+		},
+		{
+			name:     "Array with less than 3 elements",
+			rating:   []int{1, 2},
+			expected: 0,
+		},
+		{
+			name:     "Array with 3 elements in ascending order",
+			rating:   []int{1, 2, 3},
+			expected: 1,
+		},
+		{
+			name:     "Array with 3 elements in descending order",
+			rating:   []int{3, 2, 1},
+			expected: 1,
+		},
+		{
+			name:     "Array with 4 elements with multiple teams",
+			rating:   []int{2, 5, 3, 4},
+			expected: 1,
+		},
+		{
+			name:     "Array with duplicate ratings",
+			rating:   []int{1, 2, 3, 4, 4, 5},
+			expected: 16,
+		},
+		{
+			name:     "Array with negative ratings",
+			rating:   []int{-3, -2, -1, 0, 1, 2},
+			expected: 20,
+		},
+		{
+			name:     "Large array with mixed ratings",
+			rating:   []int{1, 10, 5, 8, 3, 7, 2, 9, 4, 6},
+			expected: 38,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := NumTeams(tt.rating)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkNumTeams(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = NumTeams([]int{1, 10, 5, 8, 3, 7, 2, 9, 4, 6})
+	}
+}

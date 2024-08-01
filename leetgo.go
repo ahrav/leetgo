@@ -1476,10 +1476,9 @@ func NumTeams(rating []int) int {
 	}
 
 	n := len(rating)
-	leftSmaller := make([]int, n)
-	leftLarger := make([]int, n)
-	rightSmaller := make([]int, n)
-	rightLarger := make([]int, n)
+
+	leftSmaller, leftLarger := make([]int, n), make([]int, n)
+	rightSmaller, rightLarger := make([]int, n), make([]int, n)
 
 	for i := 1; i < n; i++ {
 		for j := 0; j < i; j++ {
@@ -1502,8 +1501,8 @@ func NumTeams(rating []int) int {
 	}
 
 	var cnt int
-	for idx := 1; idx < n-1; idx++ {
-		cnt += (leftSmaller[idx] * rightLarger[idx]) + (rightSmaller[idx] * leftLarger[idx])
+	for i := 1; i < n-1; i++ {
+		cnt += (leftSmaller[i] * rightLarger[i]) + (leftLarger[i] * rightSmaller[i])
 	}
 
 	return cnt

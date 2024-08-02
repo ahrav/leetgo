@@ -2,6 +2,7 @@ package leetgo
 
 import (
 	"reflect"
+	"slices"
 	"sort"
 	"testing"
 
@@ -2319,5 +2320,60 @@ func BenchmarkLowestCommonAncestorDFS(b *testing.B) {
 				Right: &TreeNode{Val: 8},
 			},
 		}, p, q)
+	}
+}
+
+func TestTopKFrequent(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected []int
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{1},
+			k:        1,
+			expected: []int{1},
+		},
+		{
+			name:     "Multiple elements",
+			nums:     []int{1, 1, 1, 2, 2, 3},
+			k:        2,
+			expected: []int{1, 2},
+		},
+		{
+			name:     "Large input",
+			nums:     []int{1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4},
+			k:        3,
+			expected: []int{3, 4, 1},
+		},
+		{
+			name:     "All same elements",
+			nums:     []int{1, 1, 1, 1, 1},
+			k:        1,
+			expected: []int{1},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := TopKFrequent(tt.nums, tt.k)
+			slices.Sort(result)
+			slices.Sort(tt.expected)
+			if !reflect.DeepEqual(result, tt.expected) {
+				t.Errorf("TopKFrequent(%v, %d) = %v, want %v", tt.nums, tt.k, result, tt.expected)
+			}
+		})
+	}
+}
+
+func BenchmarkTopKFrequent(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = TopKFrequent([]int{1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4}, 3)
 	}
 }

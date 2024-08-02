@@ -1598,3 +1598,26 @@ func LowestCommonAncestorDFS(root, p, q *TreeNode) *TreeNode {
 	}
 	return right
 }
+
+func TopKFrequent(nums []int, k int) []int {
+	m := make(map[int]int)
+	for _, num := range nums {
+		m[num]++
+	}
+
+	buckets := make([][]int, len(nums)+1)
+	for k, v := range m {
+		buckets[v] = append(buckets[v], k)
+	}
+
+	res := make([]int, 0, k)
+	for i := len(buckets) - 1; i >= 0 && len(res) < k; i-- {
+		res = append(res, buckets[i]...)
+		if len(res) > k {
+			res = res[:k]
+			break
+		}
+	}
+
+	return res
+}

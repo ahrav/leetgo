@@ -1600,14 +1600,14 @@ func LowestCommonAncestorDFS(root, p, q *TreeNode) *TreeNode {
 }
 
 func TopKFrequent(nums []int, k int) []int {
-	m := make(map[int]int)
+	freqCount := make(map[int]int)
 	for _, num := range nums {
-		m[num]++
+		freqCount[num]++
 	}
 
 	buckets := make([][]int, len(nums)+1)
-	for k, v := range m {
-		buckets[v] = append(buckets[v], k)
+	for num, freq := range freqCount {
+		buckets[freq] = append(buckets[freq], num)
 	}
 
 	res := make([]int, 0, k)

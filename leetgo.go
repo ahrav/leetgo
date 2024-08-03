@@ -1621,3 +1621,30 @@ func TopKFrequent(nums []int, k int) []int {
 
 	return res
 }
+
+func NextGreaterElements(nums []int) []int {
+	n := len(nums)
+	if n == 1 {
+		return []int{-1}
+	}
+
+	res := make([]int, n)
+	for i := range res {
+		res[i] = -1
+	}
+
+	var stack []int
+	for i := range n * 2 {
+		for len(stack) > 0 && nums[stack[len(stack)-1]] < nums[i%n] {
+			lidx := len(stack) - 1
+			res[stack[lidx]] = nums[i%n]
+			stack = stack[:lidx]
+		}
+
+		if i < n {
+			stack = append(stack, i)
+		}
+	}
+
+	return res
+}

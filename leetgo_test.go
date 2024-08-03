@@ -2377,3 +2377,56 @@ func BenchmarkTopKFrequent(b *testing.B) {
 		_ = TopKFrequent([]int{1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4}, 3)
 	}
 }
+
+func TestNextGreaterElements(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected []int
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{1},
+			expected: []int{-1},
+		},
+		{
+			name:     "Two elements",
+			nums:     []int{1, 2},
+			expected: []int{2, -1},
+		},
+		{
+			name:     "Three elements",
+			nums:     []int{1, 2, 1},
+			expected: []int{2, -1, 2},
+		},
+		{
+			name:     "Multiple elements",
+			nums:     []int{1, 2, 1, 3, 4, 2},
+			expected: []int{2, 3, 3, 4, -1, 3},
+		},
+		{
+			name:     "All same elements",
+			nums:     []int{1, 1, 1, 1, 1},
+			expected: []int{-1, -1, -1, -1, -1},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := NextGreaterElements(tt.nums)
+			if !reflect.DeepEqual(result, tt.expected) {
+				t.Errorf("NextGreaterElements(%v) = %v, want %v", tt.nums, result, tt.expected)
+			}
+		})
+	}
+}
+
+func BenchmarkNextGreaterElements(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = NextGreaterElements([]int{1, 2, 1, 3, 4, 2})
+	}
+}

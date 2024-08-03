@@ -2481,3 +2481,60 @@ func BenchmarkJump(b *testing.B) {
 		_ = Jump([]int{2, 3, 1, 1, 4})
 	}
 }
+
+func TestMinimumAddedCoins(t *testing.T) {
+	tests := []struct {
+		name     string
+		coins    []int
+		amount   int
+		expected int
+	}{
+		{
+			name:     "Single coin",
+			coins:    []int{1},
+			amount:   2,
+			expected: 1,
+		},
+		{
+			name:     "Two coins",
+			coins:    []int{1, 2},
+			amount:   3,
+			expected: 0,
+		},
+		{
+			name:     "Three coins",
+			coins:    []int{1, 4, 10},
+			amount:   19,
+			expected: 2,
+		},
+		{
+			name:     "Multiple coins",
+			coins:    []int{1, 2, 5, 10},
+			amount:   13,
+			expected: 1,
+		},
+		{
+			name:     "All same coins",
+			coins:    []int{1, 1, 1, 1, 1},
+			amount:   10,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := MinimumAddedCoins(tt.coins, tt.amount)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMinimumAddedCoins(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MinimumAddedCoins([]int{1, 2, 5, 10}, 13)
+	}
+}

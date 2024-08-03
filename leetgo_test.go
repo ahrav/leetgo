@@ -2595,3 +2595,64 @@ func BenchmarkWordBreak(b *testing.B) {
 		_ = WordBreak("applepenapple", []string{"apple", "pen"})
 	}
 }
+
+func TestIsValidParenthesis(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		expected bool
+	}{
+		{
+			name:     "Empty string",
+			s:        "",
+			expected: true,
+		},
+		{
+			name:     "Single parenthesis",
+			s:        "(",
+			expected: false,
+		},
+		{
+			name:     "Two parentheses",
+			s:        "()",
+			expected: true,
+		},
+		{
+			name:     "Multiple parentheses",
+			s:        "()[]{}",
+			expected: true,
+		},
+		{
+			name:     "Multiple parentheses with invalid order",
+			s:        "(]",
+			expected: false,
+		},
+		{
+			name:     "Multiple parentheses with invalid nesting",
+			s:        "([)]",
+			expected: false,
+		},
+		{
+			name:     "Multiple parentheses with valid nesting",
+			s:        "{[]}",
+			expected: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := IsValidParenthesis(tt.s)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkIsValidParenthesis(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = IsValidParenthesis("{[]}")
+	}
+}

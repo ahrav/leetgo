@@ -2656,3 +2656,115 @@ func BenchmarkIsValidParenthesis(b *testing.B) {
 		_ = IsValidParenthesis("{[]}")
 	}
 }
+
+func TestCanJumpBackwards(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected bool
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{0},
+			expected: true,
+		},
+		{
+			name:     "Two elements",
+			nums:     []int{1, 0},
+			expected: true,
+		},
+		{
+			name:     "Three elements",
+			nums:     []int{2, 3, 1},
+			expected: true,
+		},
+		{
+			name:     "Multiple elements",
+			nums:     []int{2, 3, 1, 1, 4},
+			expected: true,
+		},
+		{
+			name:     "All same elements",
+			nums:     []int{1, 1, 1, 1, 1},
+			expected: true,
+		},
+		{
+			name:     "Cannot jump backwards",
+			nums:     []int{3, 2, 1, 0, 4},
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := CanJumpBackwards(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkCanJumpBackwards(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CanJumpBackwards([]int{2, 3, 1, 1, 4})
+	}
+}
+
+func TestCanJumpForwards(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected bool
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{0},
+			expected: true,
+		},
+		{
+			name:     "Two elements",
+			nums:     []int{1, 0},
+			expected: true,
+		},
+		{
+			name:     "Three elements",
+			nums:     []int{2, 3, 1},
+			expected: true,
+		},
+		{
+			name:     "Multiple elements",
+			nums:     []int{2, 3, 1, 1, 4},
+			expected: true,
+		},
+		{
+			name:     "All same elements",
+			nums:     []int{1, 1, 1, 1, 1},
+			expected: true,
+		},
+		{
+			name:     "Cannot jump backwards",
+			nums:     []int{3, 2, 1, 0, 4},
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := CanJumpForwards(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkCanJumpForwards(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CanJumpForwards([]int{2, 3, 1, 1, 4})
+	}
+}

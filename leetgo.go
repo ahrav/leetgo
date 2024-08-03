@@ -1781,3 +1781,62 @@ func IsValidParenthesis(s string) bool {
 
 	return len(stack) == 0
 }
+
+func MergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
+	tmpHead := new(ListNode)
+	curr := tmpHead
+
+	for list1 != nil && list2 != nil {
+		if list1.Val < list2.Val {
+			curr.Next = list1
+			list1 = list1.Next
+		} else {
+			curr.Next = list2
+			list2 = list2.Next
+		}
+		curr = curr.Next
+	}
+
+	if list1 != nil {
+		curr.Next = list1
+	}
+
+	if list2 != nil {
+		curr.Next = list2
+	}
+
+	return tmpHead.Next
+}
+
+func CanJumpBackwards(nums []int) bool {
+	n := len(nums)
+	lastPost := n - 1
+
+	for i := lastPost; i >= 0; i-- {
+		if i+nums[i] >= lastPost {
+			lastPost = i
+		}
+	}
+
+	return lastPost == 0
+}
+
+func CanJumpForwards(nums []int) bool {
+	n := len(nums)
+	if n == 0 {
+		return false
+	}
+	if n == 1 {
+		return true
+	}
+
+	var maxReach int
+	for i := 0; i <= maxReach && i < n; i++ {
+		maxReach = max(maxReach, i+nums[i])
+		if maxReach >= n-1 {
+			return true
+		}
+	}
+
+	return false
+}

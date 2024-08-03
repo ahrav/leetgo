@@ -1724,3 +1724,28 @@ func MinimumAddedCoins(coins []int, target int) int {
 
 	return added
 }
+
+func WordBreak(s string, wordDict []string) bool {
+	if len(s) == 0 {
+		return false
+	}
+
+	m := make(map[string]bool)
+	for _, word := range wordDict {
+		m[word] = true
+	}
+
+	dp := make([]bool, len(s)+1)
+	dp[0] = true
+
+	for i := 1; i <= len(s); i++ {
+		for j := 0; j < i; j++ {
+			if _, ok := m[s[j:i]]; ok && dp[j] {
+				dp[i] = true
+				break
+			}
+		}
+	}
+
+	return dp[len(s)]
+}

@@ -1694,7 +1694,6 @@ func Jump(nums []int) int {
 	var jumps, currEnd, currFarthest int
 	for i := 0; i < n-1; i++ {
 		currFarthest = max(currFarthest, i+nums[i])
-
 		if i == currEnd {
 			jumps++
 			currEnd = currFarthest

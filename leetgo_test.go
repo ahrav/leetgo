@@ -2430,3 +2430,54 @@ func BenchmarkNextGreaterElements(b *testing.B) {
 		_ = NextGreaterElements([]int{1, 2, 1, 3, 4, 2})
 	}
 }
+
+func TestJump(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{1},
+			expected: 0,
+		},
+		{
+			name:     "Two elements",
+			nums:     []int{2, 3},
+			expected: 1,
+		},
+		{
+			name:     "Three elements",
+			nums:     []int{2, 3, 1},
+			expected: 1,
+		},
+		{
+			name:     "Multiple elements",
+			nums:     []int{2, 3, 1, 1, 4},
+			expected: 2,
+		},
+		{
+			name:     "All same elements",
+			nums:     []int{1, 1, 1, 1, 1},
+			expected: 4,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := Jump(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkJump(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = Jump([]int{2, 3, 1, 1, 4})
+	}
+}

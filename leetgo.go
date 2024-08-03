@@ -1659,7 +1659,7 @@ func WidthOfBinaryTree(root *TreeNode) int {
 		position int
 	}
 
-	maxWidth := 0
+	maxWdith := 0
 	queue := []QueueItem{{root, 0, 0}}
 	for len(queue) > 0 {
 		levelSize := len(queue)
@@ -1670,7 +1670,7 @@ func WidthOfBinaryTree(root *TreeNode) int {
 			queue = queue[1:]
 
 			if i == levelSize-1 {
-				maxWidth = max(maxWidth, item.position-firstPos+1)
+				maxWdith = max(maxWdith, item.position-firstPos+1)
 			}
 
 			if item.node.Left != nil {
@@ -1682,5 +1682,27 @@ func WidthOfBinaryTree(root *TreeNode) int {
 		}
 	}
 
-	return maxWidth
+	return maxWdith
+}
+
+func Jump(nums []int) int {
+	n := len(nums)
+	if n <= 1 {
+		return 0
+	}
+
+	var jumps, currEnd, currFarthest int
+	for i := 0; i < n-1; i++ {
+		currFarthest = max(currFarthest, i+nums[i])
+
+		if i == currEnd {
+			jumps++
+			currEnd = currFarthest
+			if currEnd >= n-1 {
+				break
+			}
+		}
+	}
+
+	return jumps
 }

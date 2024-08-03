@@ -1624,7 +1624,7 @@ func TopKFrequent(nums []int, k int) []int {
 
 func NextGreaterElements(nums []int) []int {
 	n := len(nums)
-	if n == 0 {
+	if n == 1 {
 		return []int{-1}
 	}
 

@@ -1726,19 +1726,20 @@ func MinimumAddedCoins(coins []int, target int) int {
 }
 
 func WordBreak(s string, wordDict []string) bool {
-	if len(s) == 0 {
+	n := len(s)
+	if n == 0 {
 		return false
 	}
 
-	m := make(map[string]bool)
+	m := make(map[string]struct{})
 	for _, word := range wordDict {
-		m[word] = true
+		m[word] = struct{}{}
 	}
 
-	dp := make([]bool, len(s)+1)
+	dp := make([]bool, n+1)
 	dp[0] = true
 
-	for i := 1; i <= len(s); i++ {
+	for i := 1; i <= n; i++ {
 		for j := 0; j < i; j++ {
 			if _, ok := m[s[j:i]]; ok && dp[j] {
 				dp[i] = true
@@ -1747,5 +1748,5 @@ func WordBreak(s string, wordDict []string) bool {
 		}
 	}
 
-	return dp[len(s)]
+	return dp[n]
 }

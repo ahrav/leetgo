@@ -1707,21 +1707,20 @@ func Jump(nums []int) int {
 }
 
 func MinimumAddedCoins(coins []int, target int) int {
-	slices.Sort(coins)
+	sort.Ints(coins)
 
-	n := len(coins)
-	var maxReach, coinsIdx, coinsAdded int
-	for i := 1; i <= target; i++ {
-		for coinsIdx < n && coins[coinsIdx] <= i {
-			maxReach += coins[coinsIdx]
-			coinsIdx++
+	var maxT, cIdx, added int
+	for curr := 1; curr <= target; curr++ {
+		for len(coins) > cIdx && coins[cIdx] <= curr {
+			maxT += coins[cIdx]
+			cIdx++
 		}
 
-		if i > maxReach {
-			maxReach += i
-			coinsAdded++
+		if maxT < curr {
+			maxT += curr
+			added++
 		}
 	}
 
-	return coinsAdded
+	return added
 }

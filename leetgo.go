@@ -1647,3 +1647,40 @@ func NextGreaterElements(nums []int) []int {
 
 	return res
 }
+
+func WidthOfBinaryTree(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	type QueueItem struct {
+		node     *TreeNode
+		level    int
+		position int
+	}
+
+	maxWidth := 0
+	queue := []QueueItem{{root, 0, 0}}
+	for len(queue) > 0 {
+		levelSize := len(queue)
+		firstPos := queue[0].position
+
+		for i := 0; i < levelSize; i++ {
+			item := queue[0]
+			queue = queue[1:]
+
+			if i == levelSize-1 {
+				maxWidth = max(maxWidth, item.position-firstPos+1)
+			}
+
+			if item.node.Left != nil {
+				queue = append(queue, QueueItem{item.node.Left, item.level + 1, item.position * 2})
+			}
+			if item.node.Right != nil {
+				queue = append(queue, QueueItem{item.node.Right, item.level + 1, item.position*2 + 1})
+			}
+		}
+	}
+
+	return maxWidth
+}

@@ -1,9 +1,11 @@
 package leetgo
 
 import (
+	"fmt"
 	"reflect"
 	"slices"
 	"sort"
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -2824,4 +2826,56 @@ func BenchmarkMergeAlternately(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_ = MergeAlternately("abcdefgddhdkslfjsldfh", "defgkllskdieldjflsdj")
 	}
+}
+
+func TestSudoku(t *testing.T) {
+	board := [][]int{
+		{5, 3, 0, 0, 7, 0, 0, 0, 0},
+		{6, 0, 0, 1, 9, 5, 0, 0, 0},
+		{0, 9, 8, 0, 0, 0, 0, 6, 0},
+		{8, 0, 0, 0, 6, 0, 0, 0, 3},
+		{4, 0, 0, 8, 0, 3, 0, 0, 1},
+		{7, 0, 0, 0, 2, 0, 0, 0, 6},
+		{0, 6, 0, 0, 0, 0, 2, 8, 0},
+		{0, 0, 0, 4, 1, 9, 0, 0, 5},
+		{0, 0, 0, 0, 8, 0, 0, 7, 9},
+	}
+
+	expected := [][]int{
+		{5, 3, 4, 6, 7, 8, 9, 1, 2},
+		{6, 7, 2, 1, 9, 5, 3, 4, 8},
+		{1, 9, 8, 3, 4, 2, 5, 6, 7},
+		{8, 5, 9, 7, 6, 1, 4, 2, 3},
+		{4, 2, 6, 8, 5, 3, 7, 9, 1},
+		{7, 1, 3, 9, 2, 4, 8, 5, 6},
+		{9, 6, 1, 5, 3, 7, 2, 8, 4},
+		{2, 8, 7, 4, 1, 9, 6, 3, 5},
+		{3, 4, 5, 2, 8, 6, 1, 7, 9},
+	}
+
+	result := Sudoku(board)
+
+	assert.NotNil(t, result)
+	if !reflect.DeepEqual(result, expected) {
+		t.Errorf("Sudoku solver returned incorrect solution.\nExpected:\n%v\nGot:\n%v", formatBoard(expected), formatBoard(result))
+	}
+
+}
+
+// Helper function to format the board for better readability in error messages
+func formatBoard(board [][]int) string {
+	var sb strings.Builder
+	for i, row := range board {
+		if i%3 == 0 && i != 0 {
+			sb.WriteString("------+-------+------\n")
+		}
+		for j, num := range row {
+			if j%3 == 0 && j != 0 {
+				sb.WriteString("| ")
+			}
+			sb.WriteString(fmt.Sprintf("%d ", num))
+		}
+		sb.WriteString("\n")
+	}
+	return sb.String()
 }

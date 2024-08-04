@@ -2045,3 +2045,73 @@ func NQueensFirstSolution(n int) []string {
 	backtrack(0)
 	return result
 }
+
+func Sudoku(board [][]int) [][]int {
+	const size = 9
+
+	findEmptyCell := func() (int, int) {
+		for i := 0; i < size; i++ {
+			for j := 0; j < size; j++ {
+				if board[i][j] == 0 {
+					return i, j
+				}
+			}
+		}
+
+		return -1, -1
+	}
+
+	isValid := func(row, col, num int) bool {
+		for i := 0; i < size; i++ {
+			if board[row][i] == num {
+				return false
+			}
+		}
+
+		for i := 0; i < size; i++ {
+			if board[i][col] == num {
+				return false
+			}
+		}
+
+		startRow := row - row%3
+		startCol := col - col%3
+		for i := 0; i < 3; i++ {
+			for j := 0; j < 3; j++ {
+				if board[i+startRow][j+startCol] == num {
+					return false
+				}
+			}
+		}
+
+		return true
+	}
+
+	var backtrack func() bool
+	backtrack = func() bool {
+		row, col := findEmptyCell()
+		if row == -1 && col == -1 {
+			return true
+		}
+
+		for num := 1; num <= size; num++ {
+			if isValid(row, col, num) {
+				board[row][col] = num
+
+				if backtrack() {
+					return true
+				}
+
+				board[row][col] = 0
+			}
+		}
+
+		return false
+	}
+
+	if backtrack() {
+		return board
+	}
+
+	return nil
+}

@@ -2038,6 +2038,8 @@ func NQueensFirstSolution(n int) []string {
 				board[row][col] = '.'
 			}
 		}
+
+		return false
 	}
 
 	backtrack(0)

@@ -2768,3 +2768,60 @@ func BenchmarkCanJumpForwards(b *testing.B) {
 		_ = CanJumpForwards([]int{2, 3, 1, 1, 4})
 	}
 }
+
+func TestMergeAlternately(t *testing.T) {
+	tests := []struct {
+		name     string
+		word1    string
+		word2    string
+		expected string
+	}{
+		{
+			name:     "Single character",
+			word1:    "a",
+			word2:    "b",
+			expected: "ab",
+		},
+		{
+			name:     "Two characters",
+			word1:    "ab",
+			word2:    "cd",
+			expected: "acbd",
+		},
+		{
+			name:     "Three characters",
+			word1:    "abc",
+			word2:    "def",
+			expected: "adbecf",
+		},
+		{
+			name:     "Different lengths",
+			word1:    "abc",
+			word2:    "defg",
+			expected: "adbecfg",
+		},
+		{
+			name:     "Empty strings",
+			word1:    "",
+			word2:    "",
+			expected: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := MergeAlternately(tt.word1, tt.word2)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMergeAlternately(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MergeAlternately("abcdefgddhdkslfjsldfh", "defgkllskdieldjflsdj")
+	}
+}

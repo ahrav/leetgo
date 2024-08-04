@@ -1864,3 +1864,42 @@ func MergeAlternately(word1 string, word2 string) string {
 
 	return sb.String()
 }
+
+type Node struct {
+	Val    int
+	Next   *Node
+	Random *Node
+}
+
+func CopyRandomList(head *Node) *Node {
+	if head == nil {
+		return head
+	}
+
+	curr := head
+	for curr != nil {
+		newNode := &Node{Val: curr.Val}
+		newNode.Next = curr.Next
+		curr.Next = newNode
+		curr = newNode.Next
+	}
+
+	curr = head
+	for curr != nil {
+		if curr.Random != nil {
+			curr.Next.Random = curr.Random.Next
+		}
+		curr = curr.Next.Next
+	}
+
+	tmpHead := new(Node)
+	copyCurr, curr := tmpHead, head
+	for curr != nil {
+		copyCurr.Next = curr.Next
+		curr.Next = curr.Next.Next
+		copyCurr = copyCurr.Next
+		curr = curr.Next
+	}
+
+	return tmpHead.Next
+}

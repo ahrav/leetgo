@@ -1903,3 +1903,19 @@ func CopyRandomList(head *Node) *Node {
 
 	return tmpHead.Next
 }
+
+type ParkingSystem struct{ spaces [3]uint16 }
+
+func ParkingSystemConstructor(big int, medium int, small int) ParkingSystem {
+	return ParkingSystem{spaces: [3]uint16{uint16(big), uint16(medium), uint16(small)}}
+}
+
+func (ps *ParkingSystem) AddCar(carType int) bool {
+	idx := carType - 1
+	if ps.spaces[idx] > 0 {
+		ps.spaces[idx] = ps.spaces[idx] - 1
+		return true
+	}
+
+	return false
+}

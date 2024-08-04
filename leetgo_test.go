@@ -2862,7 +2862,7 @@ func TestSudoku(t *testing.T) {
 
 }
 
-// Helper function to format the board for better readability in error messages
+// Helper function to format the board for better readability in error messages.
 func formatBoard(board [][]int) string {
 	var sb strings.Builder
 	for i, row := range board {

@@ -1919,3 +1919,127 @@ func (ps *ParkingSystem) AddCar(carType int) bool {
 
 	return false
 }
+
+func NQueensAllSolutions(n int) [][]string {
+	board := make([][]byte, n)
+	for i := range board {
+		board[i] = make([]byte, n)
+		for j := range board[i] {
+			board[i][j] = '.'
+		}
+	}
+
+	constructSolution := func() []string {
+		solution := make([]string, 0, n)
+		for i := range board {
+			solution = append(solution, string(board[i]))
+		}
+
+		return solution
+	}
+
+	isValid := func(row, col int) bool {
+		for i := 0; i < row; i++ {
+			if board[i][col] == 'Q' {
+				return false
+			}
+		}
+
+		for i, j := row-1, col-1; i >= 0 && j >= 0; i, j = i-1, j-1 {
+			if board[i][j] == 'Q' {
+				return false
+			}
+		}
+
+		for i, j := row-1, col+1; i >= 0 && j < n; i, j = i-1, j+1 {
+			if board[i][j] == 'Q' {
+				return false
+			}
+		}
+
+		return true
+	}
+
+	var result [][]string
+	var backtrack func(int)
+	backtrack = func(row int) {
+		if row == n {
+			result = append(result, constructSolution())
+		}
+
+		for col := 0; col < n; col++ {
+			if isValid(row, col) {
+				board[row][col] = 'Q'
+				backtrack(row + 1)
+				board[row][col] = '.'
+			}
+		}
+	}
+
+	backtrack(0)
+	return result
+}
+
+func NQueensFirstSolution(n int) []string {
+	board := make([][]byte, n)
+	for i := range board {
+		board[i] = make([]byte, n)
+		for j := range board[i] {
+			board[i][j] = '.'
+		}
+	}
+
+	constructSolution := func() []string {
+		solution := make([]string, 0, n)
+		for i := range board {
+			solution = append(solution, string(board[i]))
+		}
+
+		return solution
+	}
+
+	isValid := func(row, col int) bool {
+		for i := 0; i < row; i++ {
+			if board[i][col] == 'Q' {
+				return false
+			}
+		}
+
+		for i, j := row-1, col-1; i >= 0 && j >= 0; i, j = i-1, j-1 {
+			if board[i][j] == 'Q' {
+				return false
+			}
+		}
+
+		for i, j := row-1, col+1; i >= 0 && j < n; i, j = i-1, j+1 {
+			if board[i][j] == 'Q' {
+				return false
+			}
+		}
+
+		return true
+	}
+
+	var result []string
+
+	var backtrack func(int) bool
+	backtrack = func(row int) bool {
+		if row == n {
+			result = constructSolution()
+			return true
+		}
+
+		for col := 0; col < n; col++ {
+			if isValid(row, col) {
+				board[row][col] = 'Q'
+				if backtrack(row + 1) {
+					return true
+				}
+				board[row][col] = '.'
+			}
+		}
+	}
+
+	backtrack(0)
+	return result
+}

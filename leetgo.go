@@ -2115,3 +2115,23 @@ func Sudoku(board [][]int) [][]int {
 
 	return nil
 }
+
+func DiameterOfBinaryTree(root *TreeNode) int {
+	maxDiameter := 0
+
+	var dfs func(*TreeNode) int
+	dfs = func(node *TreeNode) int {
+		if node == nil {
+			return 0
+		}
+
+		lh := dfs(node.Left)
+		rh := dfs(node.Right)
+
+		maxDiameter = max(maxDiameter, lh+rh)
+		return max(lh, rh) + 1
+	}
+
+	dfs(root)
+	return maxDiameter
+}

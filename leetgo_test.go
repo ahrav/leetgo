@@ -2977,3 +2977,55 @@ func BenchmarkLongestCommonPrefix(b *testing.B) {
 		_ = LongestCommonPrefix([]string{"flower", "flow", "flight"})
 	}
 }
+
+func TestMoveZeroes(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected []int
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{0},
+			expected: []int{0},
+		},
+		{
+			name:     "Two elements",
+			nums:     []int{0, 1},
+			expected: []int{1, 0},
+		},
+		{
+			name:     "Three elements",
+			nums:     []int{0, 1, 0},
+			expected: []int{1, 0, 0},
+		},
+		{
+			name:     "Multiple elements",
+			nums:     []int{0, 1, 0, 3, 12},
+			expected: []int{1, 3, 12, 0, 0},
+		},
+		{
+			name:     "All zeroes",
+			nums:     []int{0, 0, 0, 0, 0},
+			expected: []int{0, 0, 0, 0, 0},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			MoveZeroes(tt.nums)
+			assert.Equal(t, tt.expected, tt.nums)
+		})
+	}
+}
+
+func BenchmarkMoveZeroes(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		nums := []int{0, 1, 0, 3, 12}
+		MoveZeroes(nums)
+	}
+}

@@ -2238,3 +2238,14 @@ func LongestCommonPrefix(strs []string) string {
 
 	return builder.String()
 }
+
+func MoveZeroes(nums []int) {
+	n := len(nums)
+	var insertIdx int
+	for i := 0; i < n; i++ {
+		if nums[i] != 0 {
+			nums[insertIdx], nums[i] = nums[i], nums[insertIdx]
+			insertIdx++
+		}
+	}
+}

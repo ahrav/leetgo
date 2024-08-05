@@ -2879,3 +2879,60 @@ func formatBoard(board [][]int) string {
 	}
 	return sb.String()
 }
+
+func TestFindKthLargest(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected int
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{1},
+			k:        1,
+			expected: 1,
+		},
+		{
+			name:     "Two elements",
+			nums:     []int{1, 2},
+			k:        1,
+			expected: 2,
+		},
+		{
+			name:     "Three elements",
+			nums:     []int{1, 2, 3},
+			k:        2,
+			expected: 2,
+		},
+		{
+			name:     "Multiple elements",
+			nums:     []int{3, 2, 1, 5, 6, 4},
+			k:        2,
+			expected: 5,
+		},
+		{
+			name:     "All same elements",
+			nums:     []int{1, 1, 1, 1, 1},
+			k:        1,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := FindKthLargest(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkFindKthLargest(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = FindKthLargest([]int{3, 2, 1, 5, 6, 4}, 2)
+	}
+}

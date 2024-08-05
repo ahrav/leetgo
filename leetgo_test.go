@@ -2936,3 +2936,44 @@ func BenchmarkFindKthLargest(b *testing.B) {
 		_ = FindKthLargest([]int{3, 2, 1, 5, 6, 4}, 2)
 	}
 }
+
+func TestLongestCommonPrefix(t *testing.T) {
+	tests := []struct {
+		name     string
+		strs     []string
+		expected string
+	}{
+		{
+			name:     "Single string",
+			strs:     []string{"flower"},
+			expected: "flower",
+		},
+		{
+			name:     "Two strings with common prefix",
+			strs:     []string{"flower", "flow", "flight"},
+			expected: "fl",
+		},
+		{
+			name:     "Two strings with no common prefix",
+			strs:     []string{"dog", "racecar", "car"},
+			expected: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := LongestCommonPrefix(tt.strs)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLongestCommonPrefix(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = LongestCommonPrefix([]string{"flower", "flow", "flight"})
+	}
+}

@@ -2223,3 +2223,18 @@ func FindKthLargest(nums []int, k int) int {
 
 	return (*h)[0]
 }
+
+func LongestCommonPrefix(strs []string) string {
+	var builder strings.Builder
+	for i := 0; i < len(strs[0]); i++ {
+		s := strs[0][i]
+		for idx := range strs {
+			if len(strs[idx]) <= i || strs[idx][i] != s {
+				return builder.String()
+			}
+		}
+		builder.WriteByte(s)
+	}
+
+	return builder.String()
+}

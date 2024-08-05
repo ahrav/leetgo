@@ -2140,7 +2140,9 @@ func DiameterOfBinaryTree(root *TreeNode) int {
 }
 
 func IsValidSudoku(board [][]byte) bool {
-	hasDuplicates := func(arr []byte) bool {
+	const size = 9
+
+	hasDuplicates := func(arr [size]byte) bool {
 		seen := make(map[byte]struct{})
 		for i := range arr {
 			if arr[i] != '.' {
@@ -2156,33 +2158,33 @@ func IsValidSudoku(board [][]byte) bool {
 	}
 
 	for i := range board {
-		if hasDuplicates(board[i]) {
+		if hasDuplicates([9]byte(board[i])) {
 			return false
 		}
 	}
 
-	const size = 9
-	col := make([]byte, size)
+	var arr [size]byte
 	for i := 0; i < size; i++ {
 		for j := 0; j < size; j++ {
-			col[j] = board[i][j]
+			arr[j] = board[i][j]
 		}
-		if hasDuplicates(col) {
+
+		if hasDuplicates(arr) {
 			return false
 		}
 	}
 
-	box := make([]byte, size)
 	for i := 0; i < size; i += 3 {
 		for j := 0; j < size; j += 3 {
 			idx := 0
 			for m := i; m < i+3; m++ {
 				for n := j; n < j+3; n++ {
-					box[idx] = board[m][n]
+					arr[idx] = board[m][n]
 					idx++
 				}
 			}
-			if hasDuplicates(box) {
+
+			if hasDuplicates(arr) {
 				return false
 			}
 		}

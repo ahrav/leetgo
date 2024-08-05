@@ -2249,3 +2249,22 @@ func MoveZeroes(nums []int) {
 		}
 	}
 }
+
+func MaximumUnits(boxTypes [][]int, truckSize int) int {
+	sort.Slice(boxTypes, func(i, j int) bool {
+		return boxTypes[i][1] > boxTypes[j][1]
+	})
+
+	var total int
+	for idx := range boxTypes {
+		if truckSize >= boxTypes[idx][0] {
+			total += boxTypes[idx][0] * boxTypes[idx][1]
+			truckSize -= boxTypes[idx][0]
+		} else {
+			total += truckSize * boxTypes[idx][1]
+			break
+		}
+	}
+
+	return total
+}

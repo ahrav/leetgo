@@ -3029,3 +3029,54 @@ func BenchmarkMoveZeroes(b *testing.B) {
 		MoveZeroes(nums)
 	}
 }
+
+func TestMaximumUnits(t *testing.T) {
+	tests := []struct {
+		name      string
+		boxTypes  [][]int
+		truckSize int
+		expected  int
+	}{
+		{
+			name:      "Single box",
+			boxTypes:  [][]int{{1, 3}},
+			truckSize: 3,
+			expected:  3,
+		},
+		{
+			name:      "Two boxes",
+			boxTypes:  [][]int{{5, 10}, {2, 5}, {4, 7}, {3, 9}},
+			truckSize: 10,
+			expected:  91,
+		},
+		{
+			name:      "Multiple boxes",
+			boxTypes:  [][]int{{1, 3}, {2, 2}, {3, 1}},
+			truckSize: 4,
+			expected:  8,
+		},
+		{
+			name:      "All same boxes",
+			boxTypes:  [][]int{{1, 3}, {1, 3}, {1, 3}},
+			truckSize: 4,
+			expected:  9,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := MaximumUnits(tt.boxTypes, tt.truckSize)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMaximumUnits(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MaximumUnits([][]int{{5, 10}, {2, 5}, {4, 7}, {3, 9}}, 10)
+	}
+}

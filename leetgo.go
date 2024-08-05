@@ -2138,3 +2138,55 @@ func DiameterOfBinaryTree(root *TreeNode) int {
 	dfs(root)
 	return maxDiameter
 }
+
+func IsValidSudoku(board [][]byte) bool {
+	hasDuplicates := func(arr []byte) bool {
+		seen := make(map[byte]struct{})
+		for i := range arr {
+			if arr[i] != '.' {
+				if _, exists := seen[arr[i]]; exists {
+					return true
+				} else {
+					seen[arr[i]] = struct{}{}
+				}
+			}
+		}
+
+		return false
+	}
+
+	for i := range board {
+		if hasDuplicates(board[i]) {
+			return false
+		}
+	}
+
+	const size = 9
+	col := make([]byte, size)
+	for i := 0; i < size; i++ {
+		for j := 0; j < size; j++ {
+			col[j] = board[i][j]
+		}
+		if hasDuplicates(col) {
+			return false
+		}
+	}
+
+	box := make([]byte, size)
+	for i := 0; i < size; i += 3 {
+		for j := 0; j < size; j += 3 {
+			idx := 0
+			for m := i; m < i+3; m++ {
+				for n := j; n < j+3; n++ {
+					box[idx] = board[m][n]
+					idx++
+				}
+			}
+			if hasDuplicates(box) {
+				return false
+			}
+		}
+	}
+
+	return true
+}

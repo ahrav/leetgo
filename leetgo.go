@@ -2323,7 +2323,7 @@ func ReverseLinkedList(head *ListNode) *ListNode {
 
 	var prev *ListNode
 	curr := head
-	if curr != nil {
+	for curr != nil {
 		next := curr.Next
 		curr.Next = prev
 		prev = curr

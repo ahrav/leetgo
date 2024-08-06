@@ -2293,3 +2293,25 @@ func (s *MinStack) Pop() {
 func (s *MinStack) Top() int { return s.stack[len(s.stack)-1] }
 
 func (s *MinStack) GetMin() int { return s.minStack[len(s.minStack)-1] }
+
+func RotateArray(arr []int, k int) {
+	n := len(arr)
+	if n < 2 {
+		return
+	}
+
+	d := k % n
+	if d == 0 {
+		return
+	}
+
+	revArr := func(arr []int) {
+		for i := 0; i < len(arr)/2; i++ {
+			arr[i], arr[len(arr)-1-i] = arr[len(arr)-1-i], arr[i]
+		}
+	}
+
+	revArr(arr)
+	revArr(arr[:d])
+	revArr(arr[d:])
+}

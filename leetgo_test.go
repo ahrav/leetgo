@@ -3080,3 +3080,61 @@ func BenchmarkMaximumUnits(b *testing.B) {
 		_ = MaximumUnits([][]int{{5, 10}, {2, 5}, {4, 7}, {3, 9}}, 10)
 	}
 }
+
+func TestRotateArray(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected []int
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{1},
+			k:        1,
+			expected: []int{1},
+		},
+		{
+			name:     "Two elements",
+			nums:     []int{1, 2},
+			k:        1,
+			expected: []int{2, 1},
+		},
+		{
+			name:     "Three elements",
+			nums:     []int{1, 2, 3},
+			k:        1,
+			expected: []int{3, 1, 2},
+		},
+		{
+			name:     "Multiple elements",
+			nums:     []int{1, 2, 3, 4, 5, 6, 7},
+			k:        3,
+			expected: []int{5, 6, 7, 1, 2, 3, 4},
+		},
+		{
+			name:     "All same elements",
+			nums:     []int{1, 1, 1, 1, 1},
+			k:        2,
+			expected: []int{1, 1, 1, 1, 1},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			RotateArray(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, tt.nums)
+		})
+	}
+}
+
+func BenchmarkRotateArray(b *testing.B) {
+	b.ReportAllocs()
+
+	nums := []int{1, 2, 3, 4, 5, 6, 7}
+	for i := 0; i < b.N; i++ {
+		RotateArray(nums, 3)
+	}
+}

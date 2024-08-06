@@ -3138,3 +3138,54 @@ func BenchmarkRotateArray(b *testing.B) {
 		RotateArray(nums, 3)
 	}
 }
+
+func TestCountPrimes(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected int
+	}{
+		{
+			name:     "Single number",
+			n:        10,
+			expected: 4,
+		},
+		{
+			name:     "Two numbers",
+			n:        2,
+			expected: 0,
+		},
+		{
+			name:     "Multiple numbers",
+			n:        20,
+			expected: 8,
+		},
+		{
+			name:     "All prime numbers",
+			n:        100,
+			expected: 25,
+		},
+		{
+			name:     "No prime numbers",
+			n:        1,
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := CountPrimes(tt.n)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkCountPrimes(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CountPrimes(100)
+	}
+}

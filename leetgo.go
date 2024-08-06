@@ -2315,3 +2315,20 @@ func RotateArray(arr []int, k int) {
 	revArr(arr[:d])
 	revArr(arr[d:])
 }
+
+func ReverseLinkedList(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+
+	var prev *ListNode
+	curr := head
+	if curr != nil {
+		next := curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = next
+	}
+
+	return prev
+}

@@ -2445,3 +2445,49 @@ func TopKFrequentWords(words []string, k int) []string {
 
 	return res
 }
+
+func MyAtoi(s string) int {
+	n := len(s)
+	if n == 0 {
+		return 0
+	}
+
+	result, idx, sign := 0, 0, 1
+
+	for idx < n && s[idx] == ' ' {
+		idx++
+	}
+
+	if idx < n && (s[idx] == '-' || s[idx] == '+') {
+		if s[idx] == '-' {
+			sign = -1
+		}
+		idx++
+	}
+
+	for idx < n {
+		digit := int(s[idx] - '0')
+		if digit < 0 || digit > 9 {
+			break
+		}
+
+		if result > math.MaxInt32 || (result == math.MaxInt32/10 && digit > math.MaxInt32%10) {
+			if sign == 1 {
+				return math.MaxInt32
+			}
+			return math.MinInt32
+		}
+
+		result = result*10 + digit
+		idx++
+	}
+
+	result *= sign
+	if result > math.MaxInt32 {
+		return math.MaxInt32
+	} else if result < math.MinInt32 {
+		return math.MinInt32
+	}
+
+	return result
+}

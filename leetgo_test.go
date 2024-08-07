@@ -2,6 +2,7 @@ package leetgo
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 	"slices"
 	"sort"
@@ -3299,5 +3300,96 @@ func BenchmarkTopKFrequentWords(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_ = TopKFrequentWords([]string{"the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"}, 4)
+	}
+}
+
+func TestMyAtoi(t *testing.T) {
+	tests := []struct {
+		name     string
+		str      string
+		expected int
+	}{
+		{
+			name:     "Single digit",
+			str:      "1",
+			expected: 1,
+		},
+		{
+			name:     "Two digits",
+			str:      "42",
+			expected: 42,
+		},
+		{
+			name:     "Multiple digits",
+			str:      "   -42",
+			expected: -42,
+		},
+		{
+			name:     "Leading characters",
+			str:      "4193 with words",
+			expected: 4193,
+		},
+		{
+			name:     "Trailing characters",
+			str:      "words and 987",
+			expected: 0,
+		},
+		{
+			name:     "Overflow",
+			str:      "-91283472332",
+			expected: math.MinInt32,
+		},
+		{
+			name:     "Underflow",
+			str:      "91283472332",
+			expected: math.MaxInt32,
+		},
+		{
+			name:     "Empty string",
+			str:      "",
+			expected: 0,
+		},
+		{
+			name:     "Only whitespace",
+			str:      "   ",
+			expected: 0,
+		},
+		{
+			name:     "Only sign",
+			str:      "+",
+			expected: 0,
+		},
+		{
+			name:     "Sign and whitespace",
+			str:      "  +  ",
+			expected: 0,
+		},
+		{
+			name:     "Sign and letters",
+			str:      "  +a  ",
+			expected: 0,
+		},
+		{
+			name:     "Sign and digits",
+			str:      "  +123  ",
+			expected: 123,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := MyAtoi(tt.str)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMyAtoi(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MyAtoi("   -42")
 	}
 }

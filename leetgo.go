@@ -2356,3 +2356,34 @@ func CountPrimes(n int) int {
 
 	return total
 }
+
+func MinSwaps(nums []int) int {
+	n := len(nums)
+
+	var totalOnes int
+	for i := range n {
+		if nums[i] == 1 {
+			totalOnes++
+		}
+	}
+
+	if totalOnes == 0 || totalOnes == n {
+		return 0
+	}
+
+	var onesCount int
+	for i := range totalOnes {
+		if nums[i] == 1 {
+			onesCount++
+		}
+	}
+
+	maxOnes := onesCount
+	for i := range n {
+		onesCount -= nums[i]
+		onesCount += nums[(i+totalOnes)%n]
+		maxOnes = max(maxOnes, onesCount)
+	}
+
+	return totalOnes - maxOnes
+}

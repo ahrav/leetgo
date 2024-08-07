@@ -3189,3 +3189,64 @@ func BenchmarkCountPrimes(b *testing.B) {
 		_ = CountPrimes(100)
 	}
 }
+
+func TestMinSwaps(t *testing.T) {
+	tests := []struct {
+		name     string
+		data     []int
+		expected int
+	}{
+		{
+			name:     "Single element",
+			data:     []int{1},
+			expected: 0,
+		},
+		{
+			name:     "Two elements",
+			data:     []int{1, 0},
+			expected: 0,
+		},
+		{
+			name:     "Three elements",
+			data:     []int{1, 0, 0},
+			expected: 0,
+		},
+		{
+			name:     "Multiple elements",
+			data:     []int{1, 0, 0, 0, 1, 0, 1},
+			expected: 1,
+		},
+		{
+			name:     "All same elements",
+			data:     []int{1, 1, 1, 1, 1},
+			expected: 0,
+		},
+		{
+			name:     "wrap",
+			data:     []int{1, 1, 0, 0, 1},
+			expected: 0,
+		},
+		{
+			name:     "Multi Swap",
+			data:     []int{0, 1, 1, 1, 0, 0, 1, 1, 0},
+			expected: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := MinSwaps(tt.data)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMinSwaps(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MinSwaps([]int{1, 0, 0, 0, 1, 0, 1})
+	}
+}

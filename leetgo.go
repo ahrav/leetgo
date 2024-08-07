@@ -2387,3 +2387,61 @@ func MinSwaps(nums []int) int {
 
 	return totalOnes - maxOnes
 }
+
+type WordFreqs []WordFreq
+
+type WordFreq struct {
+	word string
+	freq int
+}
+
+func (w WordFreqs) Len() int { return len(w) }
+func (w WordFreqs) Less(i, j int) bool {
+	if w[i].freq == w[j].freq {
+		return w[i].word > w[j].word
+	}
+
+	return w[i].freq < w[j].freq
+}
+
+func (w WordFreqs) Swap(i, j int) { w[i], w[j] = w[j], w[i] }
+
+func (w *WordFreqs) Push(x any) { *w = append(*w, x.(WordFreq)) }
+
+func (w *WordFreqs) Pop() any {
+	old := *w
+	n := len(old)
+	x := old[n-1]
+	*w = old[:n-1]
+	return x
+}
+
+func TopKFrequentWords(words []string, k int) []string {
+	freqs := make(map[string]int)
+	for i := range words {
+		freqs[words[i]]++
+	}
+
+	h := new(WordFreqs)
+	heap.Init(h)
+
+	for word, freq := range freqs {
+		if h.Len() < k {
+			heap.Push(h, WordFreq{word, freq})
+			continue
+		}
+		top := (*h)[0]
+		if top.freq < freq || (top.freq == freq && word < top.word) {
+			heap.Pop(h)
+			heap.Push(h, WordFreq{word, freq})
+		}
+	}
+
+	res := make([]string, k)
+	for i := k - 1; i >= 0; i-- {
+		res[i] = heap.Pop(h).(WordFreq).word
+
+	}
+
+	return res
+}

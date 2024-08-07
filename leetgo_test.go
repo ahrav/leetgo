@@ -3250,3 +3250,54 @@ func BenchmarkMinSwaps(b *testing.B) {
 		_ = MinSwaps([]int{1, 0, 0, 0, 1, 0, 1})
 	}
 }
+
+func TestTopKFrequentWords(t *testing.T) {
+	tests := []struct {
+		name     string
+		words    []string
+		k        int
+		expected []string
+	}{
+		{
+			name:     "Single word",
+			words:    []string{"i"},
+			k:        1,
+			expected: []string{"i"},
+		},
+		{
+			name:     "Two words",
+			words:    []string{"i", "love", "leetcode", "i", "love", "coding"},
+			k:        2,
+			expected: []string{"i", "love"},
+		},
+		{
+			name:     "Multiple words",
+			words:    []string{"the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"},
+			k:        4,
+			expected: []string{"the", "is", "sunny", "day"},
+		},
+		{
+			name:     "All same words",
+			words:    []string{"i", "i", "i", "i", "i"},
+			k:        1,
+			expected: []string{"i"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := TopKFrequentWords(tt.words, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkTopKFrequentWords(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = TopKFrequentWords([]string{"the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"}, 4)
+	}
+}

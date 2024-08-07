@@ -2367,7 +2367,7 @@ func MinSwaps(nums []int) int {
 		}
 	}
 
-	if totalOnes == 0 || totalOnes == n {
+	if totalOnes == n || totalOnes == 0 {
 		return 0
 	}
 

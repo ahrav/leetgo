@@ -2396,6 +2396,7 @@ type WordFreq struct {
 }
 
 func (w WordFreqs) Len() int { return len(w) }
+
 func (w WordFreqs) Less(i, j int) bool {
 	if w[i].freq == w[j].freq {
 		return w[i].word > w[j].word
@@ -2417,15 +2418,15 @@ func (w *WordFreqs) Pop() any {
 }
 
 func TopKFrequentWords(words []string, k int) []string {
-	freqs := make(map[string]int)
-	for i := range words {
-		freqs[words[i]]++
+	freqCount := make(map[string]int)
+	for _, word := range words {
+		freqCount[word]++
 	}
 
 	h := new(WordFreqs)
 	heap.Init(h)
 
-	for word, freq := range freqs {
+	for word, freq := range freqCount {
 		if h.Len() < k {
 			heap.Push(h, WordFreq{word, freq})
 			continue
@@ -2440,7 +2441,6 @@ func TopKFrequentWords(words []string, k int) []string {
 	res := make([]string, k)
 	for i := k - 1; i >= 0; i-- {
 		res[i] = heap.Pop(h).(WordFreq).word
-
 	}
 
 	return res

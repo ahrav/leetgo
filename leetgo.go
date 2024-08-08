@@ -2604,17 +2604,17 @@ func RotateImageOneEighty(matrix [][]int) {
 		return
 	}
 
-	// Reverse rows.
+	// Rotate rows.
 	for i := 0; i < n; i++ {
 		for j, k := 0, n-1; j < k; j, k = j+1, k-1 {
 			matrix[i][j], matrix[i][k] = matrix[i][k], matrix[i][j]
 		}
 	}
 
-	// Reverse columns.
-	for i := 0; i < n; i++ {
-		for j := 0; j < n/2; j++ {
-			matrix[j][i], matrix[n-1-j][i] = matrix[n-1-j][i], matrix[j][i]
+	// Rotate columns.
+	for j := 0; j < n; j++ {
+		for i := 0; i < n/2; i++ {
+			matrix[i][j], matrix[n-1-i][j] = matrix[n-1-i][j], matrix[i][j]
 		}
 	}
 }

@@ -2569,7 +2569,7 @@ func RotateImageClockW(matrix [][]int) {
 		}
 	}
 
-	// Reverse.
+	// Reverse rows.
 	for i := 0; i < n; i++ {
 		for j, k := 0, n-1; j < k; j, k = j+1, k-1 {
 			matrix[i][j], matrix[i][k] = matrix[i][k], matrix[i][j]
@@ -2583,7 +2583,7 @@ func RotateImageCounterClockW(matrix [][]int) {
 		return
 	}
 
-	// Reverse.
+	// Reverse rows.
 	for i := 0; i < n; i++ {
 		for j, k := 0, n-1; j < k; j, k = j+1, k-1 {
 			matrix[i][j], matrix[i][k] = matrix[i][k], matrix[i][j]
@@ -2594,6 +2594,27 @@ func RotateImageCounterClockW(matrix [][]int) {
 	for i := 0; i < n; i++ {
 		for j := i + 1; j < n; j++ {
 			matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+		}
+	}
+}
+
+func RotateImageOneEighty(matrix [][]int) {
+	n := len(matrix)
+	if n < 2 {
+		return
+	}
+
+	// Reverse rows.
+	for i := 0; i < n; i++ {
+		for j, k := 0, n-1; j < k; j, k = j+1, k-1 {
+			matrix[i][j], matrix[i][k] = matrix[i][k], matrix[i][j]
+		}
+	}
+
+	// Reverse columns.
+	for i := 0; i < n; i++ {
+		for j := 0; j < n/2; j++ {
+			matrix[j][i], matrix[n-1-j][i] = matrix[n-1-j][i], matrix[j][i]
 		}
 	}
 }

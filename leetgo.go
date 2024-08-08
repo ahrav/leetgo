@@ -2497,23 +2497,23 @@ func FindOrder(numCourses int, prerequisites [][]int) []int {
 	graph := make([][]int, numCourses)
 	for _, pair := range prerequisites {
 		course, req := pair[0], pair[1]
-		graph[req] = append(graph[req], course) // Dependency is req -> course
+		graph[req] = append(graph[req], course) // prereq -> course dep
 	}
 
-	visited := make([]int, numCourses)
+	visitStatus := make([]int, numCourses)
 	var stack []int
 
 	var dfs func(int) bool
 	dfs = func(course int) bool {
-		if visited[course] == 1 {
-			return false // Visiting again, no bueno :(
+		if visitStatus[course] == 1 {
+			return false // visiting again
 		}
 
-		if visited[course] == 2 {
+		if visitStatus[course] == 2 {
 			return true // visited
 		}
 
-		visited[course] = 1 // visiting
+		visitStatus[course] = 1 // visiting
 
 		for _, req := range graph[course] {
 			if !dfs(req) {
@@ -2522,14 +2522,14 @@ func FindOrder(numCourses int, prerequisites [][]int) []int {
 		}
 
 		stack = append(stack, course)
-		visited[course] = 2
+		visitStatus[course] = 2
 		return true
 	}
 
 	for course := 0; course < numCourses; course++ {
-		if visited[course] == 0 {
+		if visitStatus[course] == 0 {
 			if !dfs(course) {
-				return []int{} // cycle detected no solution
+				return []int{} // cycle detected, no solution
 			}
 		}
 	}

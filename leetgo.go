@@ -2500,21 +2500,20 @@ func FindOrder(numCourses int, prerequisites [][]int) []int {
 		graph[req] = append(graph[req], course) // prereq -> course dep
 	}
 
-	visitStatus := make([]int, numCourses)
+	visitCnt := make([]int, numCourses)
 	var stack []int
 
 	var dfs func(int) bool
 	dfs = func(course int) bool {
-		if visitStatus[course] == 1 {
+		if visitCnt[course] == 1 {
 			return false // visiting again
 		}
 
-		if visitStatus[course] == 2 {
+		if visitCnt[course] == 2 {
 			return true // visited
 		}
 
-		visitStatus[course] = 1 // visiting
-
+		visitCnt[course] = 1 // visiting
 		for _, req := range graph[course] {
 			if !dfs(req) {
 				return false
@@ -2522,12 +2521,12 @@ func FindOrder(numCourses int, prerequisites [][]int) []int {
 		}
 
 		stack = append(stack, course)
-		visitStatus[course] = 2
+		visitCnt[course] = 2 // visited
 		return true
 	}
 
 	for course := 0; course < numCourses; course++ {
-		if visitStatus[course] == 0 {
+		if visitCnt[course] == 0 {
 			if !dfs(course) {
 				return []int{} // cycle detected, no solution
 			}
@@ -2555,4 +2554,23 @@ func FirstUniqChar(s string) int {
 	}
 
 	return -1
+}
+
+func RotateImage(matrix [][]int) {
+	n := len(matrix)
+	if n == 1 {
+		return
+	}
+
+	for i := 0; i < n; i++ {
+		for j := i + 1; j < n; j++ {
+			matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+		}
+	}
+
+	for i := 0; i < n; i++ {
+		for j, k := 0, n-1; j < k; j, k = j+1, k-1 {
+			matrix[i][j], matrix[i][k] = matrix[i][k], matrix[i][j]
+		}
+	}
 }

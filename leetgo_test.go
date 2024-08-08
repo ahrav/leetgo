@@ -3573,7 +3573,7 @@ func TestRotateImage(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			RotateImage(tt.matrix)
+			RotateImageClockW(tt.matrix)
 			assert.Equal(t, tt.expected, tt.matrix)
 		})
 	}
@@ -3589,6 +3589,6 @@ func BenchmarkRotateImage(b *testing.B) {
 			{13, 3, 6, 7},
 			{15, 14, 12, 16},
 		}
-		RotateImage(matrix)
+		RotateImageClockW(matrix)
 	}
 }

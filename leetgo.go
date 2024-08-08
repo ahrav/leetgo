@@ -2471,6 +2471,7 @@ func MyAtoi(s string) int {
 			break
 		}
 
+		// Tricky tricky ;)
 		if result > math.MaxInt32 || (result == math.MaxInt32/10 && digit > math.MaxInt32%10) {
 			if sign == 1 {
 				return math.MaxInt32

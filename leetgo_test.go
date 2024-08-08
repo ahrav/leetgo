@@ -3393,3 +3393,66 @@ func BenchmarkMyAtoi(b *testing.B) {
 		_ = MyAtoi("   -42")
 	}
 }
+
+func TestFindOrder(t *testing.T) {
+	tests := []struct {
+		name          string
+		numCourses    int
+		prerequisites [][]int
+		expected      []int
+	}{
+		{
+			name:          "Single course",
+			numCourses:    1,
+			prerequisites: nil,
+			expected:      []int{0},
+		},
+		{
+			name:          "Two courses",
+			numCourses:    2,
+			prerequisites: [][]int{{1, 0}},
+			expected:      []int{0, 1},
+		},
+		{
+			name:          "Multiple courses",
+			numCourses:    4,
+			prerequisites: [][]int{{1, 0}, {2, 0}, {3, 1}, {3, 2}},
+			expected:      []int{0, 2, 1, 3},
+		},
+		{
+			name:          "Cycle",
+			numCourses:    3,
+			prerequisites: [][]int{{1, 0}, {2, 1}, {0, 2}},
+			expected:      []int{},
+		},
+		{
+			name:          "Multiple cycles",
+			numCourses:    4,
+			prerequisites: [][]int{{1, 0}, {2, 1}, {0, 2}, {3, 1}, {3, 2}},
+			expected:      []int{},
+		},
+		{
+			name:          "No prerequisites",
+			numCourses:    3,
+			prerequisites: nil,
+			expected:      []int{2, 1, 0},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := FindOrder(tt.numCourses, tt.prerequisites)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkFindOrder(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = FindOrder(4, [][]int{{1, 0}, {2, 0}, {3, 1}, {3, 2}})
+	}
+}

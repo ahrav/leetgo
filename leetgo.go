@@ -2492,3 +2492,51 @@ func MyAtoi(s string) int {
 
 	return result
 }
+
+func FindOrder(numCourses int, prerequisites [][]int) []int {
+	graph := make([][]int, numCourses)
+	for _, prereqs := range prerequisites {
+		course, prereq := prereqs[0], prereqs[1]
+		graph[prereq] = append(graph[prereq], course)
+	}
+
+	visited := make([]int, numCourses)
+	var stack []int
+
+	var dfs func(int) bool
+	dfs = func(course int) bool {
+		if visited[course] == 1 {
+			return false // visiting again
+		}
+
+		if visited[course] == 2 {
+			return true // visited
+		}
+
+		visited[course] = 1 // visiting
+
+		for _, pre := range graph[course] {
+			if !dfs(pre) {
+				return false
+			}
+		}
+
+		visited[course] = 2 // visited
+		stack = append(stack, course)
+		return true
+	}
+
+	for course := 0; course < numCourses; course++ {
+		if visited[course] == 0 {
+			if !dfs(course) {
+				return []int{}
+			}
+		}
+	}
+
+	for i, j := 0, len(stack)-1; i < j; i, j = i+1, j-1 {
+		stack[i], stack[j] = stack[j], stack[i]
+	}
+
+	return stack
+}

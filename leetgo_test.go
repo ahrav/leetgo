@@ -3592,3 +3592,83 @@ func BenchmarkRotateImage(b *testing.B) {
 		RotateImageClockW(matrix)
 	}
 }
+
+func TestRotateImageCounterClockW(t *testing.T) {
+	tests := []struct {
+		name     string
+		matrix   [][]int
+		expected [][]int
+	}{
+		{
+			name: "Single element",
+			matrix: [][]int{
+				{1},
+			},
+			expected: [][]int{
+				{1},
+			},
+		},
+		{
+			name: "Two elements",
+			matrix: [][]int{
+				{1, 2},
+				{3, 4},
+			},
+			expected: [][]int{
+				{2, 4},
+				{1, 3},
+			},
+		},
+		{
+			name: "Three elements",
+			matrix: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+			expected: [][]int{
+				{3, 6, 9},
+				{2, 5, 8},
+				{1, 4, 7},
+			},
+		},
+		{
+			name: "Four elements",
+			matrix: [][]int{
+				{5, 1, 9, 11},
+				{2, 4, 8, 10},
+				{13, 3, 6, 7},
+				{15, 14, 12, 16},
+			},
+			expected: [][]int{
+				{11, 10, 7, 16},
+				{9, 8, 6, 12},
+				{1, 4, 3, 14},
+				{5, 2, 13, 15},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			RotateImageCounterClockW(tt.matrix)
+			assert.Equal(t, tt.expected, tt.matrix)
+		})
+	}
+}
+
+func BenchmarkRotateImageCounterClockW(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		matrix := [][]int{
+			{5, 1, 9, 11},
+			{2, 4, 8, 10},
+			{13, 3, 6, 7},
+			{15, 14, 12, 16},
+		}
+		RotateImageCounterClockW(matrix)
+	}
+}

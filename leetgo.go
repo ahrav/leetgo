@@ -2558,7 +2558,7 @@ func FirstUniqChar(s string) int {
 
 func RotateImageClockW(matrix [][]int) {
 	n := len(matrix)
-	if n == 1 {
+	if n < 2 {
 		return
 	}
 
@@ -2573,6 +2573,27 @@ func RotateImageClockW(matrix [][]int) {
 	for i := 0; i < n; i++ {
 		for j, k := 0, n-1; j < k; j, k = j+1, k-1 {
 			matrix[i][j], matrix[i][k] = matrix[i][k], matrix[i][j]
+		}
+	}
+}
+
+func RotateImageCounterClockW(matrix [][]int) {
+	n := len(matrix)
+	if n < 2 {
+		return
+	}
+
+	// Reverse.
+	for i := 0; i < n; i++ {
+		for j, k := 0, n-1; j < k; j, k = j+1, k-1 {
+			matrix[i][j], matrix[i][k] = matrix[i][k], matrix[i][j]
+		}
+	}
+
+	// Transpose.
+	for i := 0; i < n; i++ {
+		for j := i + 1; j < n; j++ {
+			matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
 		}
 	}
 }

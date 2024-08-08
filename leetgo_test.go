@@ -3456,3 +3456,59 @@ func BenchmarkFindOrder(b *testing.B) {
 		_ = FindOrder(4, [][]int{{1, 0}, {2, 0}, {3, 1}, {3, 2}})
 	}
 }
+
+func TestFirstUniqChar(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		expected int
+	}{
+		{
+			name:     "Single character",
+			s:        "a",
+			expected: 0,
+		},
+		{
+			name:     "Two characters",
+			s:        "aa",
+			expected: -1,
+		},
+		{
+			name:     "Three characters",
+			s:        "aba",
+			expected: 1,
+		},
+		{
+			name:     "Multiple characters",
+			s:        "leetcode",
+			expected: 0,
+		},
+		{
+			name:     "All same characters",
+			s:        "cc",
+			expected: -1,
+		},
+		{
+			name:     "Empty string",
+			s:        "",
+			expected: -1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := FirstUniqChar(tt.s)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkFirstUniqChar(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = FirstUniqChar("leetcode")
+	}
+}

@@ -2540,3 +2540,19 @@ func FindOrder(numCourses int, prerequisites [][]int) []int {
 
 	return stack
 }
+
+func FirstUniqChar(s string) int {
+	var charCount [26]int
+
+	for i := range s {
+		charCount[s[i]-'a']++
+	}
+
+	for i := range s {
+		if charCount[s[i]-'a'] == 1 {
+			return i
+		}
+	}
+
+	return -1
+}

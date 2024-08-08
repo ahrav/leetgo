@@ -2495,9 +2495,9 @@ func MyAtoi(s string) int {
 
 func FindOrder(numCourses int, prerequisites [][]int) []int {
 	graph := make([][]int, numCourses)
-	for _, prereqs := range prerequisites {
-		course, prereq := prereqs[0], prereqs[1]
-		graph[prereq] = append(graph[prereq], course)
+	for _, pair := range prerequisites {
+		course, req := pair[0], pair[1]
+		graph[req] = append(graph[req], course) // Dependency is req -> course
 	}
 
 	visited := make([]int, numCourses)
@@ -2506,7 +2506,7 @@ func FindOrder(numCourses int, prerequisites [][]int) []int {
 	var dfs func(int) bool
 	dfs = func(course int) bool {
 		if visited[course] == 1 {
-			return false // visiting again
+			return false // Visiting again, no bueno :(
 		}
 
 		if visited[course] == 2 {
@@ -2515,21 +2515,21 @@ func FindOrder(numCourses int, prerequisites [][]int) []int {
 
 		visited[course] = 1 // visiting
 
-		for _, pre := range graph[course] {
-			if !dfs(pre) {
+		for _, req := range graph[course] {
+			if !dfs(req) {
 				return false
 			}
 		}
 
-		visited[course] = 2 // visited
 		stack = append(stack, course)
+		visited[course] = 2
 		return true
 	}
 
 	for course := 0; course < numCourses; course++ {
 		if visited[course] == 0 {
 			if !dfs(course) {
-				return []int{}
+				return []int{} // cycle detected no solution
 			}
 		}
 	}

@@ -2691,10 +2691,10 @@ func ReorganizeString(s string) string {
 	}
 
 	var prev CharFreq
-	var str strings.Builder
+	var result strings.Builder
 	for h.Len() > 0 {
 		curr := heap.Pop(h).(CharFreq)
-		str.WriteByte(curr.char)
+		result.WriteByte(curr.char)
 
 		if prev.freq > 0 {
 			heap.Push(h, prev)
@@ -2704,12 +2704,12 @@ func ReorganizeString(s string) string {
 		prev = curr
 	}
 
-	res := str.String()
-	for i := 1; i < len(res); i++ {
-		if res[i] == res[i-1] {
+	str := result.String()
+	for i := 1; i < len(str); i++ {
+		if str[i] == str[i-1] {
 			return ""
 		}
 	}
 
-	return res
+	return str
 }

@@ -3895,3 +3895,78 @@ func BenchmarkReorganizeString(b *testing.B) {
 		_ = ReorganizeString("aaabbb")
 	}
 }
+
+func TestSubarraySum(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected int
+	}{
+		{
+			name:     "All positive numbers",
+			nums:     []int{1, 2, 3, 4, 5},
+			k:        9,
+			expected: 2,
+		},
+		{
+			name:     "All negative numbers",
+			nums:     []int{-1, -2, -3, -4, -5},
+			k:        -3,
+			expected: 2,
+		},
+		{
+			name:     "Mixed positive and negative numbers",
+			nums:     []int{-1, 2, -3, 4, -5},
+			k:        -3,
+			expected: 2,
+		},
+		{
+			name:     "Single element equal to k",
+			nums:     []int{5},
+			k:        5,
+			expected: 1,
+		},
+		{
+			name:     "Empty array",
+			nums:     []int{},
+			k:        5,
+			expected: 0,
+		},
+		{
+			name:     "Large array with multiple subarrays",
+			nums:     []int{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+			k:        3,
+			expected: 8,
+		},
+		{
+			name:     "Array with zeros",
+			nums:     []int{0, 0, 0, 0, 0},
+			k:        0,
+			expected: 15,
+		},
+		{
+			name:     "No subarrays sum to k",
+			nums:     []int{1, 2, 3, 4, 5},
+			k:        20,
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := SubarraySum(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkSubarraySum(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = SubarraySum([]int{1, 2, 3, 4, 5}, 9)
+	}
+}

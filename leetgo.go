@@ -2713,3 +2713,20 @@ func ReorganizeString(s string) string {
 
 	return str
 }
+
+func SubarraySum(nums []int, k int) int {
+	count, sum := 0, 0
+	sumFreq := make(map[int]int)
+	sumFreq[0] = 1
+
+	for _, num := range nums {
+		sum += num
+		if freq, exists := sumFreq[sum-k]; exists {
+			count += freq
+		}
+
+		sumFreq[sum]++
+	}
+
+	return count
+}

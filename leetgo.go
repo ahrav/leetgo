@@ -2649,3 +2649,67 @@ func FindRotation(mat [][]int, target [][]int) bool {
 
 	return true
 }
+
+type CharFreq struct {
+	char byte
+	freq int
+}
+
+type MaxHeap []CharFreq
+
+func (h MaxHeap) Len() int           { return len(h) }
+func (h MaxHeap) Less(i, j int) bool { return h[i].freq > h[j].freq }
+func (h MaxHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *MaxHeap) Push(x any) { *h = append(*h, x.(CharFreq)) }
+func (h *MaxHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[:n-1]
+	return x
+}
+
+func ReorganizeString(s string) string {
+	if len(s) < 2 {
+		return s
+	}
+
+	charFreq := make(map[byte]int)
+	for i := range s {
+		charFreq[s[i]]++
+		if charFreq[s[i]] > (len(s)+1)/2 {
+			return ""
+		}
+	}
+
+	h := new(MaxHeap)
+	heap.Init(h)
+
+	for char, freq := range charFreq {
+		heap.Push(h, CharFreq{char, freq})
+	}
+
+	var prev CharFreq
+	var str strings.Builder
+	for h.Len() > 0 {
+		curr := heap.Pop(h).(CharFreq)
+		str.WriteByte(curr.char)
+
+		if prev.freq > 0 {
+			heap.Push(h, prev)
+		}
+
+		curr.freq--
+		prev = curr
+	}
+
+	res := str.String()
+	for i := 1; i < len(res); i++ {
+		if res[i] == res[i-1] {
+			return ""
+		}
+	}
+
+	return res
+}

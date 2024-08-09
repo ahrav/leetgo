@@ -2884,20 +2884,20 @@ func CanFinish(numCourses int, prerequisites [][]int) bool {
 	}
 
 	visited := make([]bool, numCourses)
-	recursionStack := make([]bool, numCourses)
+	recurStack := make([]bool, numCourses)
 
 	var hasCycle func(int) bool
 	hasCycle = func(course int) bool {
-		if recursionStack[course] {
-			return true // Cycle
+		if recurStack[course] {
+			return true // visiting again
 		}
 
 		if visited[course] {
-			return false // Visited
+			return false // visited
 		}
 
+		recurStack[course] = true
 		visited[course] = true
-		recursionStack[course] = true
 
 		for _, req := range graph[course] {
 			if hasCycle(req) {
@@ -2905,8 +2905,7 @@ func CanFinish(numCourses int, prerequisites [][]int) bool {
 			}
 		}
 
-		recursionStack[course] = false
-
+		recurStack[course] = false
 		return false
 	}
 

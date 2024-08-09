@@ -2830,7 +2830,7 @@ func MinMeetingRoomSweep(intervals [][]int) int {
 	sort.Ints(ends)
 
 	sp, ep := 0, 0
-	maxRooms, rooms := 1, 0
+	rooms, maxRooms := 0, 1
 	for sp < n {
 		if starts[sp] < ends[ep] {
 			sp++

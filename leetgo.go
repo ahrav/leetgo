@@ -2813,3 +2813,37 @@ func MinMeetingRoomsHeap(intervals [][]int) int {
 
 	return maxRooms
 }
+
+func MinMeetingRoomSweep(intervals [][]int) int {
+	n := len(intervals)
+	if n < 2 {
+		return 1
+	}
+
+	starts, ends := make([]int, n), make([]int, n)
+	for i := range intervals {
+		starts[i] = intervals[i][0]
+		ends[i] = intervals[i][1]
+	}
+
+	sort.Ints(starts)
+	sort.Ints(ends)
+
+	sp, ep := 0, 0
+	maxRooms, rooms := 1, 0
+	for sp < n {
+		if starts[sp] < ends[ep] {
+			sp++
+			rooms++
+		} else {
+			ep++
+			rooms--
+		}
+
+		if rooms > maxRooms {
+			maxRooms = rooms
+		}
+	}
+
+	return maxRooms
+}

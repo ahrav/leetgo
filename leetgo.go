@@ -2847,3 +2847,31 @@ func MinMeetingRoomSweep(intervals [][]int) int {
 
 	return maxRooms
 }
+
+func IsBalancedBinaryTree(root *TreeNode) bool {
+	var dfs func(*TreeNode) (bool, int)
+	dfs = func(node *TreeNode) (bool, int) {
+		if node == nil {
+			return true, 0
+		}
+
+		leftBal, lh := dfs(node.Left)
+		if !leftBal {
+			return false, lh
+		}
+
+		rightBal, rh := dfs(node.Right)
+		if !rightBal {
+			return false, rh
+		}
+
+		if math.Abs(float64(lh-rh)) > 1 {
+			return false, 0
+		}
+
+		return true, max(lh, rh) + 1
+	}
+
+	isBal, _ := dfs(root)
+	return isBal
+}

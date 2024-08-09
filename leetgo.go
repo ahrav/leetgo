@@ -2730,3 +2730,42 @@ func SubarraySum(nums []int, k int) int {
 
 	return count
 }
+
+func NumberToWords(num int) string {
+	if num == 0 {
+		return "Zero"
+	}
+
+	var (
+		ones      = []string{"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"}
+		teens     = []string{"Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"}
+		tens      = []string{"", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"}
+		thousands = []string{"", "Thousand", "Million", "Billion"}
+	)
+
+	var helper func(int) string
+	helper = func(i int) string {
+		if i == 0 {
+			return ""
+		} else if i < 10 {
+			return ones[i] + " "
+		} else if i < 20 {
+			return teens[i-10] + " "
+		} else if i < 100 {
+			return tens[i/10] + " " + helper(i%10)
+		}
+
+		return ones[i/100] + " Hundred " + helper(i%100)
+	}
+
+	var result []string
+	for i := 0; num > 0; i++ {
+		rem := num % 1000
+		if rem != 0 {
+			result = append([]string{helper(rem) + thousands[i]}, result...)
+		}
+		num /= 1000
+	}
+
+	return strings.TrimSpace(strings.Join(result, " "))
+}

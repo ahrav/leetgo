@@ -3752,3 +3752,95 @@ func BenchmarkRotateImageOneEighty(b *testing.B) {
 		RotateImageOneEighty(matrix)
 	}
 }
+
+func TestFindRotation(t *testing.T) {
+	tests := []struct {
+		name     string
+		mat      [][]int
+		target   [][]int
+		expected bool
+	}{
+		{
+			name: "Single element",
+			mat: [][]int{
+				{1},
+			},
+			target: [][]int{
+				{1},
+			},
+			expected: true,
+		},
+		{
+			name: "Two elements",
+			mat: [][]int{
+				{1, 2},
+				{3, 4},
+			},
+			target: [][]int{
+				{1, 2},
+				{3, 4},
+			},
+			expected: true,
+		},
+		{
+			name: "Three elements",
+			mat: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+			target: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+			expected: true,
+		},
+		{
+			name: "Four elements",
+			mat: [][]int{
+				{5, 1, 9, 11},
+				{2, 4, 8, 10},
+				{13, 3, 6, 7},
+				{15, 14, 12, 16},
+			},
+			target: [][]int{
+				{5, 1, 9, 11},
+				{2, 4, 8, 10},
+				{13, 3, 6, 7},
+				{15, 14, 12, 16},
+			},
+			expected: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := FindRotation(tt.mat, tt.target)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+
+}
+
+func BenchmarkFindRotation(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		matrix := [][]int{
+			{5, 1, 9, 11},
+			{2, 4, 8, 10},
+			{13, 3, 6, 7},
+			{15, 14, 12, 16},
+		}
+		target := [][]int{
+			{5, 1, 9, 11},
+			{2, 4, 8, 10},
+			{13, 3, 6, 7},
+			{15, 14, 12, 16},
+		}
+		_ = FindRotation(matrix, target)
+	}
+}

@@ -2618,3 +2618,34 @@ func RotateImageOneEighty(matrix [][]int) {
 		}
 	}
 }
+
+func FindRotation(mat [][]int, target [][]int) bool {
+	n := len(mat)
+	eq, rot90, rot180, rot270 := true, true, true, true
+
+	for i := 0; i < n; i++ {
+		for j := 0; j < n; j++ {
+			if mat[i][j] != target[i][j] {
+				eq = false
+			}
+
+			if mat[i][j] != target[j][n-1-i] {
+				rot90 = false
+			}
+
+			if mat[i][j] != target[n-1-i][n-1-j] {
+				rot180 = false
+			}
+
+			if mat[i][j] != target[n-1-j][i] {
+				rot270 = false
+			}
+
+			if !(eq || rot90 || rot180 || rot270) {
+				return false
+			}
+		}
+	}
+
+	return true
+}

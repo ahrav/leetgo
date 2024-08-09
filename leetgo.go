@@ -2875,3 +2875,46 @@ func IsBalancedBinaryTree(root *TreeNode) bool {
 	isBal, _ := dfs(root)
 	return isBal
 }
+
+func CanFinish(numCourses int, prerequisites [][]int) bool {
+	graph := make([][]int, numCourses)
+	for _, pair := range prerequisites {
+		course, req := pair[0], pair[1]
+		graph[req] = append(graph[req], course)
+	}
+
+	visited := make([]bool, numCourses)
+	recursionStack := make([]bool, numCourses)
+
+	var hasCycle func(int) bool
+	hasCycle = func(course int) bool {
+		if recursionStack[course] {
+			return true // Cycle
+		}
+
+		if visited[course] {
+			return false // Visited
+		}
+
+		visited[course] = true
+		recursionStack[course] = true
+
+		for _, req := range graph[course] {
+			if hasCycle(req) {
+				return true
+			}
+		}
+
+		recursionStack[course] = false
+
+		return false
+	}
+
+	for course := 0; course < numCourses; course++ {
+		if hasCycle(course) {
+			return false
+		}
+	}
+
+	return true
+}

@@ -4217,3 +4217,66 @@ func BenchmarkMinMeetingRoomsSweep(b *testing.B) {
 		_ = MinMeetingRoomSweep([][]int{{0, 30}, {5, 10}, {15, 20}, {25, 30}, {30, 35}})
 	}
 }
+
+func TestCanFinish(t *testing.T) {
+	tests := []struct {
+		name          string
+		numCourses    int
+		prerequisites [][]int
+		expected      bool
+	}{
+		{
+			name:          "Single course",
+			numCourses:    1,
+			prerequisites: nil,
+			expected:      true,
+		},
+		{
+			name:          "Two courses",
+			numCourses:    2,
+			prerequisites: [][]int{{1, 0}},
+			expected:      true,
+		},
+		{
+			name:          "Multiple courses",
+			numCourses:    4,
+			prerequisites: [][]int{{1, 0}, {2, 0}, {3, 1}, {3, 2}},
+			expected:      true,
+		},
+		{
+			name:          "Cycle",
+			numCourses:    3,
+			prerequisites: [][]int{{1, 0}, {2, 1}, {0, 2}},
+			expected:      false,
+		},
+		{
+			name:          "Multiple cycles",
+			numCourses:    4,
+			prerequisites: [][]int{{1, 0}, {2, 1}, {0, 2}, {3, 1}, {3, 2}},
+			expected:      false,
+		},
+		{
+			name:          "No prerequisites",
+			numCourses:    3,
+			prerequisites: nil,
+			expected:      true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := CanFinish(tt.numCourses, tt.prerequisites)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkCanFinish(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CanFinish(4, [][]int{{1, 0}, {2, 0}, {3, 1}, {3, 2}})
+	}
+}

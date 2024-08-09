@@ -4051,3 +4051,86 @@ func BenchmarkNumberToWords(b *testing.B) {
 		_ = NumberToWords(1234567890)
 	}
 }
+
+func TestMinMeetingRooms(t *testing.T) {
+	tests := []struct {
+		name      string
+		intervals [][]int
+		expected  int
+	}{
+		{
+			name: "Single interval",
+			intervals: [][]int{
+				{0, 30},
+			},
+			expected: 1,
+		},
+		{
+			name: "Two intervals",
+			intervals: [][]int{
+				{0, 30},
+				{5, 10},
+			},
+			expected: 2,
+		},
+		{
+			name: "Three intervals",
+			intervals: [][]int{
+				{0, 30},
+				{5, 10},
+				{15, 20},
+			},
+			expected: 2,
+		},
+		{
+			name: "Four intervals",
+			intervals: [][]int{
+				{0, 30},
+				{5, 10},
+				{15, 20},
+				{25, 30},
+			},
+			expected: 2,
+		},
+		{
+			name: "Five intervals",
+			intervals: [][]int{
+				{0, 30},
+				{5, 10},
+				{15, 20},
+				{25, 30},
+				{30, 35},
+			},
+			expected: 2,
+		},
+		{
+			name: "Six intervals",
+			intervals: [][]int{
+				{0, 30},
+				{5, 10},
+				{15, 20},
+				{25, 30},
+				{30, 35},
+				{35, 40},
+			},
+			expected: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := MinMeetingRoomsHeap(tt.intervals)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMinMeetingRooms(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MinMeetingRoomsHeap([][]int{{0, 30}, {5, 10}, {15, 20}, {25, 30}, {30, 35}})
+	}
+}

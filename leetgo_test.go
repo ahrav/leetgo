@@ -4357,3 +4357,72 @@ func BenchmarkMaxProfit2(b *testing.B) {
 		_ = MaxProfit2([]int{7, 1, 5, 3, 6, 4, 8, 2, 10, 9})
 	}
 }
+
+func TestCharacterReplacement(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		k        int
+		expected int
+	}{
+		{
+			name:     "Empty string",
+			s:        "",
+			k:        2,
+			expected: 0,
+		},
+		{
+			name:     "Single character string",
+			s:        "A",
+			k:        1,
+			expected: 1,
+		},
+		{
+			name:     "All same characters",
+			s:        "AAAA",
+			k:        2,
+			expected: 4,
+		},
+		{
+			name:     "No replacements needed",
+			s:        "ABCDE",
+			k:        0,
+			expected: 1,
+		},
+		{
+			name:     "k greater than string length",
+			s:        "ABC",
+			k:        5,
+			expected: 3,
+		},
+		{
+			name:     "Complex case with multiple character types",
+			s:        "AABABBA",
+			k:        1,
+			expected: 4,
+		},
+		{
+			name:     "Case with non-consecutive repeating characters",
+			s:        "ABCBABBA",
+			k:        2,
+			expected: 6,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := CharacterReplacement(tt.s, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkCharacterReplacement(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CharacterReplacement("ABCBABBA", 2)
+	}
+}

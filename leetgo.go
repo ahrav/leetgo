@@ -2996,3 +2996,41 @@ func OrangesRotting(grid [][]int) int {
 
 	return minutes
 }
+
+func SpiralMatrix2(n int) [][]int {
+	mat := make([][]int, n)
+	for i := range mat {
+		mat[i] = make([]int, n)
+	}
+
+	top, bottom, left, right := 0, n-1, 0, n-1
+
+	num, target := 1, n*n
+	for num <= target {
+		for i := left; i <= right; i++ {
+			mat[top][i] = num
+			num++
+		}
+		top++
+
+		for i := top; i <= bottom; i++ {
+			mat[i][right] = num
+			num++
+		}
+		right--
+
+		for i := right; i >= left; i-- {
+			mat[bottom][i] = num
+			num++
+		}
+		bottom--
+
+		for i := bottom; i >= top; i-- {
+			mat[i][left] = num
+			num++
+		}
+		left++
+	}
+
+	return mat
+}

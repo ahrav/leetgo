@@ -4514,3 +4514,71 @@ func BenchmarkOrangesRotting(b *testing.B) {
 		})
 	}
 }
+
+func TestSpiralMatrix2(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected [][]int
+	}{
+		{
+			name: "1x1 matrix",
+			n:    1,
+			expected: [][]int{
+				{1},
+			},
+		},
+		{
+			name: "3x3 matrix",
+			n:    3,
+			expected: [][]int{
+				{1, 2, 3},
+				{8, 9, 4},
+				{7, 6, 5},
+			},
+		},
+		{
+			name: "4x4 matrix",
+			n:    4,
+			expected: [][]int{
+				{1, 2, 3, 4},
+				{12, 13, 14, 5},
+				{11, 16, 15, 6},
+				{10, 9, 8, 7},
+			},
+		},
+		{
+			name:     "0x0 matrix",
+			n:        0,
+			expected: [][]int{},
+		},
+		{
+			name: "5x5 matrix",
+			n:    5,
+			expected: [][]int{
+				{1, 2, 3, 4, 5},
+				{16, 17, 18, 19, 6},
+				{15, 24, 25, 20, 7},
+				{14, 23, 22, 21, 8},
+				{13, 12, 11, 10, 9},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := SpiralMatrix2(tt.n)
+			if !reflect.DeepEqual(result, tt.expected) {
+				t.Errorf("SpiralMatrix2(%d) = %v, want %v", tt.n, result, tt.expected)
+			}
+		})
+	}
+}
+
+func BenchmarkSpiralMatrix2(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = SpiralMatrix2(5)
+	}
+}

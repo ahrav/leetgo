@@ -3132,3 +3132,37 @@ func CanPlaceFlowers(flowerbed []int, n int) bool {
 
 	return false
 }
+
+func ReverseVowels(s string) string {
+	n := len(s)
+	if n < 2 {
+		return s
+	}
+
+	vowels := [128]bool{'A': true, 'E': true, 'I': true, 'O': true, 'U': true, 'a': true, 'e': true, 'i': true, 'o': true, 'u': true}
+
+	res := []byte(s)
+	lp, rp := 0, n-1
+	for lp <= rp {
+		if !vowels[s[lp]] && !vowels[s[rp]] {
+			lp++
+			rp--
+			continue
+		}
+
+		if vowels[s[lp]] && vowels[s[rp]] {
+			res[lp], res[rp] = s[rp], s[lp]
+			lp++
+			rp--
+			continue
+		}
+
+		if !vowels[s[lp]] {
+			lp++
+		} else {
+			rp--
+		}
+	}
+
+	return string(res)
+}

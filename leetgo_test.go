@@ -4935,3 +4935,74 @@ func BenchmarkCanPlaceFlowers(b *testing.B) {
 		_ = CanPlaceFlowers([]int{0, 0, 0, 0, 0}, 1)
 	}
 }
+
+func TestReverseVowels(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		expected string
+	}{
+		{
+			name:     "Empty string",
+			s:        "",
+			expected: "",
+		},
+		{
+			name:     "Single character string",
+			s:        "A",
+			expected: "A",
+		},
+		{
+			name:     "Two character string",
+			s:        "AB",
+			expected: "AB",
+		},
+		{
+			name:     "Three character string",
+			s:        "ABC",
+			expected: "ABC",
+		},
+		{
+			name:     "Three character string with vowels",
+			s:        "ABC",
+			expected: "ABC",
+		},
+		{
+			name:     "Three character string with vowels",
+			s:        "ABE",
+			expected: "EBA",
+		},
+		{
+			name:     "Four character string with vowels",
+			s:        "ABCE",
+			expected: "EBCA",
+		},
+		{
+			name:     "Five character string with vowels",
+			s:        "ABCDE",
+			expected: "EBCDA",
+		},
+		{
+			name:     "Six character string with vowels",
+			s:        "ABCDEF",
+			expected: "EBCDAF",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := ReverseVowels(tt.s)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkReverseVowels(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = ReverseVowels("ABCDEF")
+	}
+}

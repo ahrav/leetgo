@@ -4636,6 +4636,81 @@ func BenchmarkSpiralOrder(b *testing.B) {
 	}
 }
 
+func TestGcd(t *testing.T) {
+	tests := []struct {
+		name     string
+		a        int
+		b        int
+		expected int
+	}{
+		{
+			name:     "Two equal numbers",
+			a:        5,
+			b:        5,
+			expected: 5,
+		},
+		{
+			name:     "Two different numbers",
+			a:        5,
+			b:        10,
+			expected: 5,
+		},
+		{
+			name:     "Two prime numbers",
+			a:        7,
+			b:        11,
+			expected: 1,
+		},
+		{
+			name:     "Two large prime numbers",
+			a:        7919,
+			b:        7907,
+			expected: 1,
+		},
+		{
+			name:     "Two large numbers with common factor",
+			a:        7919,
+			b:        15838,
+			expected: 7919,
+		},
+		{
+			name:     "Two large numbers with no common factor",
+			a:        7919,
+			b:        15839,
+			expected: 1,
+		},
+		{
+			name:     "Two large numbers with common factor",
+			a:        15838,
+			b:        7919,
+			expected: 7919,
+		},
+		{
+			name:     "Two large numbers with no common factor",
+			a:        15839,
+			b:        7919,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := Gcd(tt.a, tt.b)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkGcd(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = Gcd(15838, 7919)
+	}
+}
+
 func TestGcdOfStrings(t *testing.T) {
 	tests := []struct {
 		name     string

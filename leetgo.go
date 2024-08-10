@@ -3067,16 +3067,23 @@ func SpiralOrder(matrix [][]int) []int {
 	return result
 }
 
+func Gcd(n1, n2 int) int {
+	for n2 != 0 {
+		n1, n2 = n2, n1%n2
+	}
+	return n1
+}
+
 func GcdOfStrings(str1 string, str2 string) string {
 	if str1+str2 != str2+str1 {
 		return ""
 	}
 
-	gcd := func(i, j int) int {
-		for j != 0 {
-			i, j = j, i%j
+	gcd := func(a, b int) int {
+		for b != 0 {
+			a, b = b, a%b
 		}
-		return i
+		return a
 	}
 
 	return str1[:gcd(len(str1), len(str2))]

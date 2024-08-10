@@ -3034,3 +3034,35 @@ func SpiralMatrix2(n int) [][]int {
 
 	return mat
 }
+
+func SpiralOrder(matrix [][]int) []int {
+	rows, cols := len(matrix), len(matrix[0])
+
+	top, bottom, left, right := 0, rows-1, 0, cols-1
+
+	result := make([]int, 0, rows*cols)
+	target := rows * cols
+	for len(result) < target {
+		for i := left; i <= right && len(result) < target; i++ {
+			result = append(result, matrix[top][i])
+		}
+		top++
+
+		for i := top; i <= bottom && len(result) < target; i++ {
+			result = append(result, matrix[i][right])
+		}
+		right--
+
+		for i := right; i >= left && len(result) < target; i-- {
+			result = append(result, matrix[bottom][i])
+		}
+		bottom--
+
+		for i := bottom; i >= top && len(result) < target; i-- {
+			result = append(result, matrix[i][left])
+		}
+		left++
+	}
+
+	return result
+}

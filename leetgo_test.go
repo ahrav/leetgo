@@ -4582,3 +4582,56 @@ func BenchmarkSpiralMatrix2(b *testing.B) {
 		_ = SpiralMatrix2(5)
 	}
 }
+
+func TestSpiralOrder(t *testing.T) {
+	tests := []struct {
+		name     string
+		matrix   [][]int
+		expected []int
+	}{
+		{
+			name:     "4x4 matrix",
+			matrix:   [][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}},
+			expected: []int{1, 2, 3, 4, 8, 12, 16, 15, 14, 13, 9, 5, 6, 7, 11, 10},
+		},
+		{
+			name:     "1x1 matrix",
+			matrix:   [][]int{{1}},
+			expected: []int{1},
+		},
+		{
+			name:     "2x3 matrix",
+			matrix:   [][]int{{1, 2, 3}, {4, 5, 6}},
+			expected: []int{1, 2, 3, 6, 5, 4},
+		},
+		{
+			name:     "3x2 matrix",
+			matrix:   [][]int{{1, 2}, {3, 4}, {5, 6}},
+			expected: []int{1, 2, 4, 6, 5, 3},
+		},
+		{
+			name:     "Empty matrix",
+			matrix:   [][]int{},
+			expected: []int{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := SpiralOrder(tt.matrix)
+			if !reflect.DeepEqual(result, tt.expected) {
+				t.Errorf("SpiralOrder() = %v, want %v", result, tt.expected)
+			}
+		})
+	}
+}
+
+func BenchmarkSpiralOrder(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = SpiralOrder([][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}})
+	}
+}

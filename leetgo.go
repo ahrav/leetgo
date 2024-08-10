@@ -3088,3 +3088,47 @@ func GcdOfStrings(str1 string, str2 string) string {
 
 	return str1[:gcd(len(str1), len(str2))]
 }
+
+func KidsWithCandies(candies []int, extraCandies int) []bool {
+	maxV := candies[0]
+
+	n := len(candies)
+	for i := 1; i < n; i++ {
+		if candies[i] > maxV {
+			maxV = candies[i]
+		}
+	}
+
+	res := make([]bool, n)
+	for i := 0; i < n; i++ {
+		res[i] = candies[i]+extraCandies >= maxV
+	}
+
+	return res
+}
+
+func CanPlaceFlowers(flowerbed []int, n int) bool {
+	size := len(flowerbed)
+	if n == 0 || size == 0 {
+		return true
+	}
+
+	for i := 0; i < size; i++ {
+		if flowerbed[i] == 0 {
+			leftEmpty := (i == 0) || flowerbed[i-1] == 0
+			rightEmpty := (i == size-1) || flowerbed[i+1] == 0
+
+			if leftEmpty && rightEmpty {
+				flowerbed[i] = 1
+				i++
+				n--
+			}
+
+			if n == 0 {
+				return true
+			}
+		}
+	}
+
+	return false
+}

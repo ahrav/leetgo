@@ -4803,3 +4803,135 @@ func BenchmarkGcdOfStrings(b *testing.B) {
 		_ = GcdOfStrings("ABCDEFABCDEF", "ABCDEF")
 	}
 }
+
+func TestKidsWithCandies(t *testing.T) {
+	tests := []struct {
+		name         string
+		candies      []int
+		extraCandies int
+		expected     []bool
+	}{
+		{
+			name:         "Single kid with all candies",
+			candies:      []int{5},
+			extraCandies: 5,
+			expected:     []bool{true},
+		},
+		{
+			name:         "Two kids with equal candies",
+			candies:      []int{5, 5},
+			extraCandies: 5,
+			expected:     []bool{true, true},
+		},
+		{
+			name:         "Two kids with different candies",
+			candies:      []int{5, 10},
+			extraCandies: 5,
+			expected:     []bool{true, true},
+		},
+		{
+			name:         "Three kids with different candies",
+			candies:      []int{2, 3, 5},
+			extraCandies: 1,
+			expected:     []bool{false, false, true},
+		},
+		{
+			name:         "Four kids with different candies",
+			candies:      []int{2, 3, 5, 1},
+			extraCandies: 3,
+			expected:     []bool{true, true, true, false},
+		},
+		{
+			name:         "Five kids with different candies",
+			candies:      []int{2, 3, 5, 1, 7},
+			extraCandies: 2,
+			expected:     []bool{false, false, true, false, true},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := KidsWithCandies(tt.candies, tt.extraCandies)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkKidsWithCandies(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = KidsWithCandies([]int{2, 3, 5, 1, 7}, 2)
+	}
+}
+
+func TestCanPlaceFlowers(t *testing.T) {
+	tests := []struct {
+		name      string
+		flowerbed []int
+		n         int
+		expected  bool
+	}{
+		{
+			name:      "Empty flowerbed",
+			flowerbed: []int{},
+			n:         1,
+			expected:  true,
+		},
+		{
+			name:      "Single flowerbed",
+			flowerbed: []int{0},
+			n:         1,
+			expected:  true,
+		},
+		{
+			name:      "Two flowerbeds",
+			flowerbed: []int{0, 0},
+			n:         1,
+			expected:  true,
+		},
+		{
+			name:      "Three flowerbeds",
+			flowerbed: []int{0, 0, 0},
+			n:         1,
+			expected:  true,
+		},
+		{
+			name:      "Four flowerbeds",
+			flowerbed: []int{0, 0, 0, 0},
+			n:         1,
+			expected:  true,
+		},
+		{
+			name:      "Five flowerbeds",
+			flowerbed: []int{0, 0, 0, 0, 0},
+			n:         1,
+			expected:  true,
+		},
+		{
+			name:      "Six flowerbeds",
+			flowerbed: []int{0, 0, 0, 0, 0, 0},
+			n:         1,
+			expected:  true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := CanPlaceFlowers(tt.flowerbed, tt.n)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkCanPlaceFlowers(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CanPlaceFlowers([]int{0, 0, 0, 0, 0}, 1)
+	}
+}

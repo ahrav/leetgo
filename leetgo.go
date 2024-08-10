@@ -3067,11 +3067,11 @@ func SpiralOrder(matrix [][]int) []int {
 	return result
 }
 
-func Gcd(n1, n2 int) int {
-	for n2 != 0 {
-		n1, n2 = n2, n1%n2
+func Gcd(a, b int) int {
+	for b != 0 {
+		a, b = b, a%b
 	}
-	return n1
+	return a
 }
 
 func GcdOfStrings(str1 string, str2 string) string {

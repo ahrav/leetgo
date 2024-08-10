@@ -2932,7 +2932,7 @@ func MaxProfit2(prices []int) int {
 func CharacterReplacement(s string, k int) int {
 	var charCount [26]int
 
-	left, maxCount, maxLen := 0, 0, 0
+	var left, maxCount, maxLen int
 	for right := 0; right < len(s); right++ {
 		charCount[s[right]-'A']++
 		maxCount = max(maxCount, charCount[s[right]-'A'])

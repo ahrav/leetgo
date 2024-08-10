@@ -4280,3 +4280,80 @@ func BenchmarkCanFinish(b *testing.B) {
 		_ = CanFinish(4, [][]int{{1, 0}, {2, 0}, {3, 1}, {3, 2}})
 	}
 }
+
+func TestMaxProfit2(t *testing.T) {
+	tests := []struct {
+		name     string
+		prices   []int
+		expected int
+	}{
+		{
+			name:     "Single price",
+			prices:   []int{7},
+			expected: 0,
+		},
+		{
+			name:     "Two prices",
+			prices:   []int{7, 1},
+			expected: 0,
+		},
+		{
+			name:     "Three prices",
+			prices:   []int{7, 1, 5},
+			expected: 4,
+		},
+		{
+			name:     "Four prices",
+			prices:   []int{7, 1, 5, 3},
+			expected: 4,
+		},
+		{
+			name:     "Five prices",
+			prices:   []int{7, 1, 5, 3, 6},
+			expected: 7,
+		},
+		{
+			name:     "Six prices",
+			prices:   []int{7, 1, 5, 3, 6, 4},
+			expected: 7,
+		},
+		{
+			name:     "Seven prices",
+			prices:   []int{7, 1, 5, 3, 6, 4, 8},
+			expected: 11,
+		},
+		{
+			name:     "Eight prices",
+			prices:   []int{7, 1, 5, 3, 6, 4, 8, 2},
+			expected: 11,
+		},
+		{
+			name:     "Nine prices",
+			prices:   []int{7, 1, 5, 3, 6, 4, 8, 2, 10},
+			expected: 19,
+		},
+		{
+			name:     "Ten prices",
+			prices:   []int{7, 1, 5, 3, 6, 4, 8, 2, 10, 9},
+			expected: 19,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := MaxProfit2(tt.prices)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+
+}
+
+func BenchmarkMaxProfit2(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MaxProfit2([]int{7, 1, 5, 3, 6, 4, 8, 2, 10, 9})
+	}
+}

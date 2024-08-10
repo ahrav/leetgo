@@ -2896,11 +2896,11 @@ func CanFinish(numCourses int, prerequisites [][]int) bool {
 			return false // visited
 		}
 
-		recurStack[course] = true
 		visited[course] = true
+		recurStack[course] = true
 
-		for _, req := range graph[course] {
-			if hasCycle(req) {
+		for _, rec := range graph[course] {
+			if hasCycle(rec) {
 				return true
 			}
 		}

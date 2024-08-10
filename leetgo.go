@@ -2947,3 +2947,52 @@ func CharacterReplacement(s string, k int) int {
 
 	return maxLen
 }
+
+func OrangesRotting(grid [][]int) int {
+	type Coord struct{ x, y int }
+	var queue []Coord
+
+	var freshCnt int
+	for i := range grid {
+		for j := range grid[i] {
+			if grid[i][j] == 1 {
+				freshCnt++
+			} else if grid[i][j] == 2 {
+				queue = append(queue, Coord{i, j})
+			}
+		}
+	}
+
+	if freshCnt == 0 {
+		return 0
+	}
+
+	minutes := -1
+
+	rows, cols := len(grid), len(grid[0])
+	directions := []Coord{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}
+	for len(queue) > 0 {
+		level := len(queue)
+		for i := 0; i < level; i++ {
+			curr := queue[0]
+			queue = queue[1:]
+
+			for _, coord := range directions {
+				newX, newY := curr.x+coord.x, curr.y+coord.y
+				if newX >= 0 && newX < rows && newY >= 0 && newY < cols && grid[newX][newY] == 1 {
+					grid[newX][newY] = 2
+					freshCnt--
+					queue = append(queue, Coord{newX, newY})
+				}
+			}
+		}
+
+		minutes++
+	}
+
+	if freshCnt > 0 {
+		return -1
+	}
+
+	return minutes
+}

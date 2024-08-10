@@ -4426,3 +4426,91 @@ func BenchmarkCharacterReplacement(b *testing.B) {
 		_ = CharacterReplacement("ABCBABBA", 2)
 	}
 }
+
+func TestOrangesRotting(t *testing.T) {
+	tests := []struct {
+		name     string
+		grid     [][]int
+		expected int
+	}{
+		{
+			name: "All oranges already rotten",
+			grid: [][]int{
+				{2, 2, 2},
+				{2, 2, 2},
+				{2, 2, 2},
+			},
+			expected: 0,
+		},
+		{
+			name: "No fresh oranges",
+			grid: [][]int{
+				{0, 2, 2},
+				{0, 0, 2},
+				{2, 2, 2},
+			},
+			expected: 0,
+		},
+		{
+			name: "Rot all oranges",
+			grid: [][]int{
+				{2, 1, 1},
+				{1, 1, 0},
+				{0, 1, 1},
+			},
+			expected: 4,
+		},
+		{
+			name: "Single row grid",
+			grid: [][]int{
+				{2, 1, 1, 1, 2},
+			},
+			expected: 2,
+		},
+		{
+			name: "Single column grid",
+			grid: [][]int{
+				{2},
+				{1},
+				{1},
+				{1},
+				{2},
+			},
+			expected: 2,
+		},
+		{
+			name: "Large grid",
+			grid: [][]int{
+				{2, 1, 1, 1, 1, 1},
+				{1, 1, 0, 0, 1, 1},
+				{1, 0, 1, 1, 0, 1},
+				{1, 1, 0, 0, 1, 1},
+				{1, 1, 1, 1, 1, 2},
+			},
+			expected: -1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := OrangesRotting(tt.grid)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkOrangesRotting(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = OrangesRotting([][]int{
+			{2, 1, 1, 1, 1, 1},
+			{1, 1, 0, 0, 1, 1},
+			{1, 0, 1, 1, 0, 1},
+			{1, 1, 0, 0, 1, 1},
+			{1, 1, 1, 1, 1, 2},
+		})
+	}
+}

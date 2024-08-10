@@ -3143,23 +3143,17 @@ func ReverseVowels(s string) string {
 
 	res := []byte(s)
 	lp, rp := 0, n-1
-	for lp <= rp {
-		if !vowels[s[lp]] && !vowels[s[rp]] {
+	for lp < rp {
+		for lp < rp && !vowels[res[lp]] {
 			lp++
+		}
+		for lp < rp && !vowels[res[rp]] {
 			rp--
-			continue
 		}
 
-		if vowels[s[lp]] && vowels[s[rp]] {
-			res[lp], res[rp] = s[rp], s[lp]
+		if lp < rp {
+			res[lp], res[rp] = res[rp], res[lp]
 			lp++
-			rp--
-			continue
-		}
-
-		if !vowels[s[lp]] {
-			lp++
-		} else {
 			rp--
 		}
 	}

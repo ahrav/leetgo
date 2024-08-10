@@ -4635,3 +4635,96 @@ func BenchmarkSpiralOrder(b *testing.B) {
 		_ = SpiralOrder([][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}})
 	}
 }
+
+func TestGcdOfStrings(t *testing.T) {
+	tests := []struct {
+		name     string
+		str1     string
+		str2     string
+		expected string
+	}{
+		{
+			name:     "Two empty strings",
+			str1:     "",
+			str2:     "",
+			expected: "",
+		},
+		{
+			name:     "Single character strings",
+			str1:     "A",
+			str2:     "A",
+			expected: "A",
+		},
+		{
+			name:     "Two different single character strings",
+			str1:     "A",
+			str2:     "B",
+			expected: "",
+		},
+		{
+			name:     "Two equal strings",
+			str1:     "ABC",
+			str2:     "ABC",
+			expected: "ABC",
+		},
+		{
+			name:     "Two different strings",
+			str1:     "ABC",
+			str2:     "DEF",
+			expected: "",
+		},
+		{
+			name:     "Two strings with common factor",
+			str1:     "ABCABC",
+			str2:     "ABC",
+			expected: "ABC",
+		},
+		{
+			name:     "Two strings with no common factor",
+			str1:     "ABCDEF",
+			str2:     "ABC",
+			expected: "",
+		},
+		{
+			name:     "Two strings with no common factor",
+			str1:     "ABCDEF",
+			str2:     "DEF",
+			expected: "",
+		},
+		{
+			name:     "Two strings with common factor",
+			str1:     "ABCDEFABCDEF",
+			str2:     "ABCDEF",
+			expected: "ABCDEF",
+		},
+		{
+			name:     "Two strings with common factor",
+			str1:     "ABCDEFABCDEF",
+			str2:     "DEF",
+			expected: "",
+		},
+		{
+			name:     "Two strings with common factor",
+			str1:     "ABCDEFABCDEF",
+			str2:     "ABC",
+			expected: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := GcdOfStrings(tt.str1, tt.str2)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkGcdOfStrings(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = GcdOfStrings("ABCDEFABCDEF", "ABCDEF")
+	}
+}

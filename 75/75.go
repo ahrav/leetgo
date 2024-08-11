@@ -211,5 +211,30 @@ func FindMaxAverage(nums []int, k int) float64 {
 		}
 	}
 
-	return float64(sum) / float64(k)
+	return float64(maxSum) / float64(k)
+}
+
+func MaxArea(height []int) int {
+	n := len(height)
+
+	lp, rp, maxArea := 0, n-1, 0
+	for lp < rp {
+		width := rp - lp
+		minH := 0
+
+		if height[lp] > height[rp] {
+			minH = height[rp]
+			rp--
+		} else {
+			minH = height[lp]
+			lp++
+		}
+
+		area := width * minH
+		if width*minH > maxArea {
+			maxArea = area
+		}
+	}
+
+	return maxArea
 }

@@ -732,3 +732,49 @@ func BenchmarkFindMaxAverage(b *testing.B) {
 		_ = FindMaxAverage([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}, 1)
 	}
 }
+
+func TestMaxArea(t *testing.T) {
+	tests := []struct {
+		name     string
+		heights  []int
+		expected int
+	}{
+		{
+			name:     "Example 1",
+			heights:  []int{1, 8, 6, 2, 5, 4, 8, 3, 7},
+			expected: 49,
+		},
+		{
+			name:     "Example 2",
+			heights:  []int{1, 1},
+			expected: 1,
+		},
+		{
+			name:     "Example 3",
+			heights:  []int{4, 3, 2, 1, 4},
+			expected: 16,
+		},
+		{
+			name:     "Example 4",
+			heights:  []int{1, 2, 1},
+			expected: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MaxArea(tt.heights)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMaxArea(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MaxArea([]int{1, 8, 6, 2, 5, 4, 8, 3, 7})
+	}
+}

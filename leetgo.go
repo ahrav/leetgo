@@ -3190,8 +3190,8 @@ func ReverseWords(s string) string {
 		end := start
 		for end < n && chars[end] != ' ' {
 			chars[writeIdx] = chars[end]
-			writeIdx++
 			end++
+			writeIdx++
 		}
 
 		reverse(writeIdx-(end-start), writeIdx-1)

@@ -5067,3 +5067,108 @@ func BenchmarkReverseWords(b *testing.B) {
 		_ = ReverseWords("The quick brown fox jumps over the")
 	}
 }
+
+func TestIsSubsequence(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		t        string
+		expected bool
+	}{
+		{
+			name:     "Empty strings",
+			s:        "",
+			t:        "",
+			expected: true,
+		},
+		{
+			name:     "Empty s string",
+			s:        "",
+			t:        "abc",
+			expected: true,
+		},
+		{
+			name:     "Empty t string",
+			s:        "abc",
+			t:        "",
+			expected: false,
+		},
+		{
+			name:     "Single character strings",
+			s:        "a",
+			t:        "a",
+			expected: true,
+		},
+		{
+			name:     "Two character strings",
+			s:        "ab",
+			t:        "abc",
+			expected: true,
+		},
+		{
+			name:     "Two character strings",
+			s:        "ac",
+			t:        "abc",
+			expected: true,
+		},
+		{
+			name:     "Two character strings",
+			s:        "bc",
+			t:        "abc",
+			expected: true,
+		},
+		{
+			name:     "Two character strings",
+			s:        "cb",
+			t:        "abc",
+			expected: false,
+		},
+		{
+			name:     "Three character strings",
+			s:        "abc",
+			t:        "ahbgdc",
+			expected: true,
+		},
+		{
+			name:     "Three character strings",
+			s:        "axc",
+			t:        "ahbgdc",
+			expected: false,
+		},
+		{
+			name:     "Three character strings",
+			s:        "abc",
+			t:        "ahbgdc",
+			expected: true,
+		},
+		{
+			name:     "Three character strings",
+			s:        "abc",
+			t:        "ahbgdc",
+			expected: true,
+		},
+		{
+			name:     "Four character strings",
+			s:        "abc",
+			t:        "ahbgdc",
+			expected: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := IsSubsequence(tt.s, tt.t)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkIsSubsequence(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = IsSubsequence("abc", "ahbgdc")
+	}
+}

@@ -3200,3 +3200,22 @@ func ReverseWords(s string) string {
 
 	return string(chars[:writeIdx])
 }
+
+func IsSubsequence(s string, t string) bool {
+	slen, tlen := len(s), len(t)
+	if slen > tlen {
+		return false
+	}
+
+	sp, tp := 0, 0
+	for sp < slen && tp < tlen {
+		if s[sp] == t[tp] {
+			sp++
+			tp++
+		} else {
+			tp++
+		}
+	}
+
+	return sp == slen
+}

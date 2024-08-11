@@ -1,6 +1,8 @@
 package seventyfive
 
-import "strings"
+import (
+	"strings"
+)
 
 func MergeAlternately(word1 string, word2 string) string {
 	len1, len2 := len(word1), len(word2)
@@ -188,4 +190,26 @@ func IsSubsequence(s string, t string) bool {
 	}
 
 	return sp == slen
+}
+
+func FindMaxAverage(nums []int, k int) float64 {
+	n := len(nums)
+	if k > n {
+		return 0
+	}
+
+	var sum int
+	for i := range k {
+		sum += nums[i]
+	}
+
+	maxSum := sum
+	for i := k; i < n; i++ {
+		sum = sum - nums[i-k] + nums[i]
+		if sum > maxSum {
+			maxSum = sum
+		}
+	}
+
+	return float64(sum) / float64(k)
 }

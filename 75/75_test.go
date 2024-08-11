@@ -651,3 +651,84 @@ func BenchmarkIsSubsequence(b *testing.B) {
 		_ = IsSubsequence("abc", "ahbgdc")
 	}
 }
+
+func TestFindMaxAverage(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected float64
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{1},
+			k:        1,
+			expected: 1.0,
+		},
+		{
+			name:     "Two elements",
+			nums:     []int{1, 2},
+			k:        1,
+			expected: 2.0,
+		},
+		{
+			name:     "Three elements",
+			nums:     []int{1, 2, 3},
+			k:        1,
+			expected: 3.0,
+		},
+		{
+			name:     "Four elements",
+			nums:     []int{1, 2, 3, 4},
+			k:        1,
+			expected: 4.0,
+		},
+		{
+			name:     "Five elements",
+			nums:     []int{1, 2, 3, 4, 5},
+			k:        1,
+			expected: 5.0,
+		},
+		{
+			name:     "Six elements",
+			nums:     []int{1, 2, 3, 4, 5, 6},
+			k:        1,
+			expected: 6.0,
+		},
+		{
+			name:     "Seven elements",
+			nums:     []int{1, 2, 3, 4, 5, 6, 7},
+			k:        1,
+			expected: 7.0,
+		},
+		{
+			name:     "Eight elements",
+			nums:     []int{1, 2, 3, 4, 5, 6, 7, 8},
+			k:        1,
+			expected: 8.0,
+		},
+		{
+			name:     "Nine elements",
+			nums:     []int{1, 2, 3, 4, 5, 6, 7, 8, 9},
+			k:        1,
+			expected: 9.0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := FindMaxAverage(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkFindMaxAverage(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = FindMaxAverage([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}, 1)
+	}
+}

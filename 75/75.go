@@ -3,6 +3,7 @@ package seventyfive
 import (
 	"math"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -334,4 +335,35 @@ func IncreasingTripletDP(nums []int) bool {
 	}
 
 	return false
+}
+
+func Compress(chars []byte) int {
+	n := len(chars)
+	if n < 2 {
+		return n
+	}
+
+	var readPtr, writePtr int
+	for readPtr < n {
+		currChar := chars[readPtr]
+		count := 0
+
+		for readPtr < n && chars[readPtr] == currChar {
+			readPtr++
+			count++
+		}
+
+		chars[writePtr] = currChar
+		writePtr++
+
+		if count > 1 {
+			strCount := strconv.Itoa(count)
+			for i := 0; i < len(strCount); i++ {
+				chars[writePtr] = strCount[i]
+				writePtr++
+			}
+		}
+	}
+
+	return writePtr
 }

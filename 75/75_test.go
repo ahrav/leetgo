@@ -1095,3 +1095,71 @@ func BenchmarkIncreasingTripletDP(b *testing.B) {
 		_ = IncreasingTripletDP([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	}
 }
+
+func TestCompress(t *testing.T) {
+	tests := []struct {
+		name     string
+		chars    []byte
+		expected int
+	}{
+		{
+			name:     "Single character",
+			chars:    []byte{'a'},
+			expected: 1,
+		},
+		{
+			name:     "Two different characters",
+			chars:    []byte{'a', 'b'},
+			expected: 2,
+		},
+		{
+			name:     "Three repeated characters",
+			chars:    []byte{'a', 'a', 'a'},
+			expected: 2,
+		},
+		{
+			name:     "Mixed repeated and single characters",
+			chars:    []byte{'a', 'b', 'b', 'c', 'c', 'c'},
+			expected: 5,
+		},
+		{
+			name:     "Long sequence of repeated characters",
+			chars:    []byte{'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'},
+			expected: 3,
+		},
+		{
+			name:     "Alternating characters",
+			chars:    []byte{'a', 'b', 'a', 'b', 'a', 'b'},
+			expected: 6,
+		},
+		{
+			name:     "Empty input",
+			chars:    []byte{},
+			expected: 0,
+		},
+		{
+			name:     "Multiple groups of repeated characters",
+			chars:    []byte{'a', 'a', 'b', 'b', 'c', 'c', 'c', 'd', 'd', 'd', 'd'},
+			expected: 8,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := Compress(tt.chars)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkCompress(b *testing.B) {
+	b.ReportAllocs()
+
+	input := []byte{'a', 'a', 'b', 'b', 'c', 'c', 'c', 'd', 'd', 'd', 'd', 'e', 'e', 'e', 'e', 'e'}
+
+	for i := 0; i < b.N; i++ {
+		_ = Compress(input)
+	}
+}

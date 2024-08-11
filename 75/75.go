@@ -1,6 +1,7 @@
 package seventyfive
 
 import (
+	"math"
 	"sort"
 	"strings"
 )
@@ -287,4 +288,24 @@ func MaxOperationsComplement(nums []int, k int) int {
 	}
 
 	return operations
+}
+
+func IncreasingTriplet(nums []int) bool {
+	n := len(nums)
+	if n < 3 {
+		return false
+	}
+
+	first, second := math.MaxInt, math.MaxInt
+	for _, num := range nums {
+		if num <= first {
+			first = num
+		} else if num <= second {
+			second = num
+		} else {
+			return true
+		}
+	}
+
+	return false
 }

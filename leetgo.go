@@ -3177,15 +3177,12 @@ func ReverseWords(s string) string {
 
 	start, writeIdx := 0, 0
 	for start < n {
-		for start < n && chars[start] == ' ' {
+		if chars[start] == ' ' {
 			start++
+			continue
 		}
 
-		if start == n {
-			break
-		}
-
-		if writeIdx > 0 {
+		if writeIdx != 0 {
 			chars[writeIdx] = ' '
 			writeIdx++
 		}

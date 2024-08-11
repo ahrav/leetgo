@@ -1,5 +1,31 @@
 package seventyfive
 
+import "strings"
+
+func MergeAlternately(word1 string, word2 string) string {
+	len1, len2 := len(word1), len(word2)
+
+	var sb strings.Builder
+	sb.Grow(len1 + len2)
+
+	maxLen := len1
+	if len2 > len1 {
+		maxLen = len2
+	}
+
+	for i := 0; i < maxLen; i++ {
+		if i < len1 {
+			sb.WriteByte(word1[i])
+		}
+
+		if i < len2 {
+			sb.WriteByte(word2[i])
+		}
+	}
+
+	return sb.String()
+}
+
 func Gcd(a, b int) int {
 	for b != 0 {
 		a, b = b, a%b
@@ -132,6 +158,17 @@ func ReverseWords(s string) string {
 	}
 
 	return string(chars[:writeIdx])
+}
+
+func MoveZeroes(nums []int) {
+	n := len(nums)
+	var insertIdx int
+	for i := 0; i < n; i++ {
+		if nums[i] != 0 {
+			nums[insertIdx], nums[i] = nums[i], nums[insertIdx]
+			insertIdx++
+		}
+	}
 }
 
 func IsSubsequence(s string, t string) bool {

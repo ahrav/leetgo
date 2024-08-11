@@ -6,6 +6,63 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestMergeAlternately(t *testing.T) {
+	tests := []struct {
+		name     string
+		word1    string
+		word2    string
+		expected string
+	}{
+		{
+			name:     "Single character",
+			word1:    "a",
+			word2:    "b",
+			expected: "ab",
+		},
+		{
+			name:     "Two characters",
+			word1:    "ab",
+			word2:    "cd",
+			expected: "acbd",
+		},
+		{
+			name:     "Three characters",
+			word1:    "abc",
+			word2:    "def",
+			expected: "adbecf",
+		},
+		{
+			name:     "Different lengths",
+			word1:    "abc",
+			word2:    "defg",
+			expected: "adbecfg",
+		},
+		{
+			name:     "Empty strings",
+			word1:    "",
+			word2:    "",
+			expected: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := MergeAlternately(tt.word1, tt.word2)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMergeAlternately(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MergeAlternately("abcdefgddhdkslfjsldfh", "defgkllskdieldjflsdj")
+	}
+}
+
 func TestGcd(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -435,6 +492,58 @@ func BenchmarkReverseWords(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_ = ReverseWords("The quick brown fox jumps over the")
+	}
+}
+
+func TestMoveZeroes(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected []int
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{0},
+			expected: []int{0},
+		},
+		{
+			name:     "Two elements",
+			nums:     []int{0, 1},
+			expected: []int{1, 0},
+		},
+		{
+			name:     "Three elements",
+			nums:     []int{0, 1, 0},
+			expected: []int{1, 0, 0},
+		},
+		{
+			name:     "Multiple elements",
+			nums:     []int{0, 1, 0, 3, 12},
+			expected: []int{1, 3, 12, 0, 0},
+		},
+		{
+			name:     "All zeroes",
+			nums:     []int{0, 0, 0, 0, 0},
+			expected: []int{0, 0, 0, 0, 0},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			MoveZeroes(tt.nums)
+			assert.Equal(t, tt.expected, tt.nums)
+		})
+	}
+}
+
+func BenchmarkMoveZeroes(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		nums := []int{0, 1, 0, 3, 12}
+		MoveZeroes(nums)
 	}
 }
 

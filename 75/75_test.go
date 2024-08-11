@@ -1163,3 +1163,81 @@ func BenchmarkCompress(b *testing.B) {
 		_ = Compress(input)
 	}
 }
+
+func TestLongestOnes(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected int
+	}{
+		{
+			name:     "All ones",
+			nums:     []int{1, 1, 1, 1, 1},
+			k:        0,
+			expected: 5,
+		},
+		{
+			name:     "All zeros",
+			nums:     []int{0, 0, 0, 0, 0},
+			k:        3,
+			expected: 3,
+		},
+		{
+			name:     "Alternating ones and zeros",
+			nums:     []int{1, 0, 1, 0, 1},
+			k:        1,
+			expected: 3,
+		},
+		{
+			name:     "Multiple groups of ones",
+			nums:     []int{1, 1, 0, 0, 1, 1, 1, 0, 1},
+			k:        2,
+			expected: 7,
+		},
+		{
+			name:     "K greater than number of zeros",
+			nums:     []int{0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1},
+			k:        10,
+			expected: 19,
+		},
+		{
+			name:     "K equals zero",
+			nums:     []int{1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0},
+			k:        0,
+			expected: 4,
+		},
+		{
+			name:     "Single element array",
+			nums:     []int{0},
+			k:        1,
+			expected: 1,
+		},
+		{
+			name:     "Empty array",
+			nums:     []int{},
+			k:        5,
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := LongestOnes(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLongestOnes(b *testing.B) {
+	b.ReportAllocs()
+
+	nums := []int{1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0}
+	k := 2
+
+	for i := 0; i < b.N; i++ {
+		_ = LongestOnes(nums, k)
+	}
+}

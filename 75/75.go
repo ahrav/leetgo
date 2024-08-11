@@ -346,20 +346,20 @@ func Compress(chars []byte) int {
 	var rPtr, wPtr int
 	for rPtr < n {
 		curr := chars[rPtr]
-		count := 0
+		cnt := 0
 
 		for rPtr < n && chars[rPtr] == curr {
 			rPtr++
-			count++
+			cnt++
 		}
 
 		chars[wPtr] = curr
 		wPtr++
 
-		if count > 1 {
-			strCnt := strconv.Itoa(count)
-			for i := 0; i < len(strCnt); i++ {
-				chars[wPtr] = strCnt[i]
+		if cnt > 1 {
+			str := strconv.Itoa(cnt)
+			for i := 0; i < len(str); i++ {
+				chars[wPtr] = str[i]
 				wPtr++
 			}
 		}

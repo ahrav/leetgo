@@ -343,27 +343,27 @@ func Compress(chars []byte) int {
 		return n
 	}
 
-	var readPtr, writePtr int
-	for readPtr < n {
-		currChar := chars[readPtr]
+	var rPtr, wPtr int
+	for rPtr < n {
+		curr := chars[rPtr]
 		count := 0
 
-		for readPtr < n && chars[readPtr] == currChar {
-			readPtr++
+		for rPtr < n && chars[rPtr] == curr {
+			rPtr++
 			count++
 		}
 
-		chars[writePtr] = currChar
-		writePtr++
+		chars[wPtr] = curr
+		wPtr++
 
 		if count > 1 {
-			strCount := strconv.Itoa(count)
-			for i := 0; i < len(strCount); i++ {
-				chars[writePtr] = strCount[i]
-				writePtr++
+			strCnt := strconv.Itoa(count)
+			for i := 0; i < len(strCnt); i++ {
+				chars[wPtr] = strCnt[i]
+				wPtr++
 			}
 		}
 	}
 
-	return writePtr
+	return wPtr
 }

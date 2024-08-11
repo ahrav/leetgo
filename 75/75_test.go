@@ -1,6 +1,7 @@
 package seventyfive
 
 import (
+	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -776,5 +777,179 @@ func BenchmarkMaxArea(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_ = MaxArea([]int{1, 8, 6, 2, 5, 4, 8, 3, 7})
+	}
+}
+
+func TestMaxOperationsTwoPointer(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		target   int
+		expected int
+	}{
+		{
+			name:     "Example 1",
+			nums:     []int{1, 2, 3, 4},
+			target:   5,
+			expected: 2,
+		},
+		{
+			name:     "Example 2",
+			nums:     []int{3, 1, 3, 4, 3},
+			target:   6,
+			expected: 1,
+		},
+		{
+			name:     "Example 3",
+			nums:     []int{3, 1, 3, 4, 3},
+			target:   7,
+			expected: 1,
+		},
+		{
+			name:     "Example 4",
+			nums:     []int{2, 2, 2, 3, 3},
+			target:   4,
+			expected: 1,
+		},
+		{
+			name:     "Example 5",
+			nums:     []int{1, 1, 1, 1},
+			target:   2,
+			expected: 2,
+		},
+		{
+			name:     "Example 6",
+			nums:     []int{1, 2, 3, 4, 5},
+			target:   5,
+			expected: 2,
+		},
+		{
+			name:     "Example 7",
+			nums:     []int{1, 2, 3, 4, 5},
+			target:   6,
+			expected: 2,
+		},
+		{
+			name:     "Example 8",
+			nums:     []int{1, 2, 3, 4, 5},
+			target:   7,
+			expected: 2,
+		},
+		{
+			name:     "Example 9",
+			nums:     []int{1, 2, 3, 4, 5},
+			target:   8,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MaxOperationsTwoPointer(tt.nums, tt.target)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMaxOperationsTwoPointer(b *testing.B) {
+	b.ReportAllocs()
+
+	large := make([]int, 10_000)
+	for i := range large {
+		large[i] = rand.Intn(1_000)
+	}
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = MaxOperationsTwoPointer(large, 500)
+	}
+}
+
+func TestMaxOperationsComplement(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		target   int
+		expected int
+	}{
+		{
+			name:     "Example 1",
+			nums:     []int{1, 2, 3, 4},
+			target:   5,
+			expected: 2,
+		},
+		{
+			name:     "Example 2",
+			nums:     []int{3, 1, 3, 4, 3},
+			target:   6,
+			expected: 1,
+		},
+		{
+			name:     "Example 3",
+			nums:     []int{3, 1, 3, 4, 3},
+			target:   7,
+			expected: 1,
+		},
+		{
+			name:     "Example 4",
+			nums:     []int{2, 2, 2, 3, 3},
+			target:   4,
+			expected: 1,
+		},
+		{
+			name:     "Example 5",
+			nums:     []int{1, 1, 1, 1},
+			target:   2,
+			expected: 2,
+		},
+		{
+			name:     "Example 6",
+			nums:     []int{1, 2, 3, 4, 5},
+			target:   5,
+			expected: 2,
+		},
+		{
+			name:     "Example 7",
+			nums:     []int{1, 2, 3, 4, 5},
+			target:   6,
+			expected: 2,
+		},
+		{
+			name:     "Example 8",
+			nums:     []int{1, 2, 3, 4, 5},
+			target:   7,
+			expected: 2,
+		},
+		{
+			name:     "Example 9",
+			nums:     []int{1, 2, 3, 4, 5},
+			target:   8,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MaxOperationsComplement(tt.nums, tt.target)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMaxOperationsComplement(b *testing.B) {
+	b.ReportAllocs()
+
+	large := make([]int, 10_000)
+	for i := range large {
+		large[i] = rand.Intn(1_000)
+	}
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = MaxOperationsComplement(large, 500)
 	}
 }

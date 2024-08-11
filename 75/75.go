@@ -1,6 +1,7 @@
 package seventyfive
 
 import (
+	"sort"
 	"strings"
 )
 
@@ -237,4 +238,53 @@ func MaxArea(height []int) int {
 	}
 
 	return maxArea
+}
+
+func MaxOperationsTwoPointer(nums []int, k int) int {
+	n := len(nums)
+	if n == 1 {
+		if nums[0] == k {
+			return 1
+		}
+		return 0
+	}
+
+	sort.Ints(nums)
+
+	var operations int
+	lp, rp := 0, n-1
+	for lp < rp {
+		sum := nums[lp] + nums[rp]
+		if sum == k {
+			operations++
+			lp++
+			rp--
+			continue
+		}
+
+		if sum > k {
+			rp--
+		} else {
+			lp++
+		}
+	}
+
+	return operations
+}
+
+func MaxOperationsComplement(nums []int, k int) int {
+	freq := make(map[int]int, len(nums)/2)
+	var operations int
+
+	for _, num := range nums {
+		complement := k - num
+		if count, exists := freq[complement]; exists && count > 0 {
+			operations++
+			freq[complement]--
+		} else {
+			freq[num]++
+		}
+	}
+
+	return operations
 }

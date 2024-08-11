@@ -3160,3 +3160,46 @@ func ReverseVowels(s string) string {
 
 	return string(res)
 }
+
+func ReverseWords(s string) string {
+	chars := []byte(s)
+
+	reverse := func(start, end int) {
+		for start < end {
+			chars[start], chars[end] = chars[end], chars[start]
+			start++
+			end--
+		}
+	}
+
+	n := len(chars)
+	reverse(0, n-1)
+
+	start, writeIdx := 0, 0
+	for start < n {
+		for start < n && chars[start] == ' ' {
+			start++
+		}
+
+		if start == n {
+			break
+		}
+
+		if writeIdx > 0 {
+			chars[writeIdx] = ' '
+			writeIdx++
+		}
+
+		end := start
+		for end < n && chars[end] != ' ' {
+			chars[writeIdx] = chars[end]
+			writeIdx++
+			end++
+		}
+
+		reverse(writeIdx-(end-start), writeIdx-1)
+		start = end
+	}
+
+	return string(chars[:writeIdx])
+}

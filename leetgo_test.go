@@ -5006,3 +5006,64 @@ func BenchmarkReverseVowels(b *testing.B) {
 		_ = ReverseVowels("ABCDEF")
 	}
 }
+
+func TestReverseWords(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		expected string
+	}{
+		{
+			name:     "Empty string",
+			s:        "",
+			expected: "",
+		},
+		{
+			name:     "Single word string",
+			s:        "Hello",
+			expected: "Hello",
+		},
+		{
+			name:     "Two word string",
+			s:        "Hello World",
+			expected: "World Hello",
+		},
+		{
+			name:     "Three word string",
+			s:        "The quick   brown fox",
+			expected: "fox brown quick The",
+		},
+		{
+			name:     "Four word string",
+			s:        "  The quick brown fox jumps  ",
+			expected: "jumps fox brown quick The",
+		},
+		{
+			name:     "Five word string",
+			s:        "  The quick brown fox jumps over",
+			expected: "over jumps fox brown quick The",
+		},
+		{
+			name:     "Six word string",
+			s:        "The quick brown fox jumps over the  ",
+			expected: "the over jumps fox brown quick The",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := ReverseWords(tt.s)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkReverseWords(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = ReverseWords("The quick brown fox jumps over the")
+	}
+}

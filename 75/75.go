@@ -309,3 +309,29 @@ func IncreasingTriplet(nums []int) bool {
 
 	return false
 }
+
+func IncreasingTripletDP(nums []int) bool {
+	n := len(nums)
+	if n < 3 {
+		return false
+	}
+
+	dp := make([]int, n)
+	for i := range n {
+		dp[i] = 1
+	}
+
+	for i := 1; i < n; i++ {
+		for j := 0; j < i; j++ {
+			if nums[i] > nums[j] {
+				dp[i] = max(dp[i], dp[j]+1)
+			}
+		}
+
+		if dp[i] >= 3 {
+			return true
+		}
+	}
+
+	return false
+}

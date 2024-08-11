@@ -1024,3 +1024,74 @@ func BenchmarkIncreasingTriplet(b *testing.B) {
 		_ = IncreasingTriplet([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	}
 }
+
+func TestIncreasingTripletDP(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected bool
+	}{
+		{
+			name:     "Example 1",
+			nums:     []int{1, 2, 3, 4, 5},
+			expected: true,
+		},
+		{
+			name:     "Example 2",
+			nums:     []int{5, 4, 3, 2, 1},
+			expected: false,
+		},
+		{
+			name:     "Example 3",
+			nums:     []int{2, 1, 5, 0, 4, 6},
+			expected: true,
+		},
+		{
+			name:     "Example 4",
+			nums:     []int{1, 2, 1, 2, 1, 2, 1, 2, 1, 2},
+			expected: false,
+		},
+		{
+			name:     "Example 5",
+			nums:     []int{1, 2, 3, 1, 2, 1, 2, 1, 2, 1},
+			expected: true,
+		},
+		{
+			name:     "Example 6",
+			nums:     []int{1, 2, 3, 4, 5, 6, 7, 8, 9},
+			expected: true,
+		},
+		{
+			name:     "Example 7",
+			nums:     []int{9, 8, 7, 6, 5, 4, 3, 2, 1},
+			expected: false,
+		},
+		{
+			name:     "Example 8",
+			nums:     []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+			expected: true,
+		},
+		{
+			name:     "Example 9",
+			nums:     []int{10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := IncreasingTripletDP(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkIncreasingTripletDP(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = IncreasingTripletDP([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+	}
+}

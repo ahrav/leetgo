@@ -1,0 +1,154 @@
+package seventyfive
+
+func Gcd(a, b int) int {
+	for b != 0 {
+		a, b = b, a%b
+	}
+	return a
+}
+
+func GcdOfStrings(str1 string, str2 string) string {
+	if str1+str2 != str2+str1 {
+		return ""
+	}
+
+	gcd := func(a, b int) int {
+		for b != 0 {
+			a, b = b, a%b
+		}
+		return a
+	}
+
+	return str1[:gcd(len(str1), len(str2))]
+}
+
+func KidsWithCandies(candies []int, extraCandies int) []bool {
+	maxV := candies[0]
+
+	n := len(candies)
+	for i := 1; i < n; i++ {
+		if candies[i] > maxV {
+			maxV = candies[i]
+		}
+	}
+
+	res := make([]bool, n)
+	for i := 0; i < n; i++ {
+		res[i] = candies[i]+extraCandies >= maxV
+	}
+
+	return res
+}
+
+func CanPlaceFlowers(flowerbed []int, n int) bool {
+	size := len(flowerbed)
+	if n == 0 || size == 0 {
+		return true
+	}
+
+	for i := 0; i < size; i++ {
+		if flowerbed[i] == 0 {
+			leftEmpty := (i == 0) || flowerbed[i-1] == 0
+			rightEmpty := (i == size-1) || flowerbed[i+1] == 0
+
+			if leftEmpty && rightEmpty {
+				flowerbed[i] = 1
+				i++
+				n--
+			}
+
+			if n == 0 {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func ReverseVowels(s string) string {
+	n := len(s)
+	if n < 2 {
+		return s
+	}
+
+	vowels := [128]bool{'A': true, 'E': true, 'I': true, 'O': true, 'U': true, 'a': true, 'e': true, 'i': true, 'o': true, 'u': true}
+
+	res := []byte(s)
+	lp, rp := 0, n-1
+	for lp < rp {
+		for lp < rp && !vowels[res[lp]] {
+			lp++
+		}
+		for lp < rp && !vowels[res[rp]] {
+			rp--
+		}
+
+		if lp < rp {
+			res[lp], res[rp] = res[rp], res[lp]
+			lp++
+			rp--
+		}
+	}
+
+	return string(res)
+}
+
+func ReverseWords(s string) string {
+	chars := []byte(s)
+
+	reverse := func(start, end int) {
+		for start < end {
+			chars[start], chars[end] = chars[end], chars[start]
+			start++
+			end--
+		}
+	}
+
+	n := len(chars)
+	reverse(0, n-1)
+
+	start, writeIdx := 0, 0
+	for start < n {
+		if chars[start] == ' ' {
+			start++
+			continue
+		}
+
+		if writeIdx != 0 {
+			chars[writeIdx] = ' '
+			writeIdx++
+		}
+
+		end := start
+		for end < n && chars[end] != ' ' {
+			chars[writeIdx] = chars[end]
+			end++
+			writeIdx++
+		}
+
+		reverse(writeIdx-(end-start), writeIdx-1)
+		start = end
+	}
+
+	return string(chars[:writeIdx])
+}
+
+func IsSubsequence(s string, t string) bool {
+	slen, tlen := len(s), len(t)
+	if slen > tlen {
+		return false
+	}
+
+	sp, tp := 0, 0
+	for sp < slen && tp < tlen {
+		if s[sp] == t[tp] {
+			sp++
+			tp++
+		} else {
+			tp++
+		}
+	}
+
+	return sp == slen
+}

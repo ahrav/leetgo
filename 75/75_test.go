@@ -1610,3 +1610,66 @@ func BenchmarkUniqueOccurrences(b *testing.B) {
 		_ = UniqueOccurrences([]int{1, 2, 2, 1, 1, 3})
 	}
 }
+
+func TestCloseStrings(t *testing.T) {
+	tests := []struct {
+		name     string
+		word1    string
+		word2    string
+		expected bool
+	}{
+		{
+			name:     "Identical strings",
+			word1:    "abc",
+			word2:    "abc",
+			expected: true,
+		},
+		{
+			name:     "Anagrams with same frequency",
+			word1:    "aabbcc",
+			word2:    "ccbbaa",
+			expected: true,
+		},
+		{
+			name:     "Different lengths",
+			word1:    "abc",
+			word2:    "abcd",
+			expected: false,
+		},
+		{
+			name:     "Same characters different frequency",
+			word1:    "aabbcc",
+			word2:    "aabbccc",
+			expected: false,
+		},
+		{
+			name:     "Different characters",
+			word1:    "abc",
+			word2:    "def",
+			expected: false,
+		},
+		{
+			name:     "Empty strings",
+			word1:    "",
+			word2:    "",
+			expected: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := CloseStrings(tt.word1, tt.word2)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkCloseStrings(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CloseStrings("aabbcc", "ccbbaa")
+	}
+}

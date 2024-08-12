@@ -513,3 +513,37 @@ func UniqueOccurrences(arr []int) bool {
 
 	return true
 }
+
+func CloseStrings(word1, word2 string) bool {
+	if len(word1) != len(word2) {
+		return false
+	}
+
+	const alphabet = 26
+	freq1, freq2 := make([]int, alphabet), make([]int, alphabet)
+	chars1, chars2 := make([]bool, alphabet), make([]bool, alphabet)
+
+	for i := range word1 {
+		freq1[word1[i]-'a']++
+		chars1[word1[i]-'a'] = true
+		freq2[word2[i]-'a']++
+		chars2[word2[i]-'a'] = true
+	}
+
+	for i := range alphabet {
+		if chars1[i] != chars2[i] {
+			return false
+		}
+	}
+
+	sort.Ints(freq1)
+	sort.Ints(freq2)
+
+	for i := range alphabet {
+		if freq1[i] != freq2[i] {
+			return false
+		}
+	}
+
+	return true
+}

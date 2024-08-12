@@ -1673,3 +1673,57 @@ func BenchmarkCloseStrings(b *testing.B) {
 		_ = CloseStrings("aabbcc", "ccbbaa")
 	}
 }
+
+func TestEqualPairs(t *testing.T) {
+	tests := []struct {
+		name     string
+		grid     [][]int
+		expected int
+	}{
+		{
+			name:     "Single element grid",
+			grid:     [][]int{{1}},
+			expected: 1,
+		},
+		{
+			name:     "All rows and columns equal",
+			grid:     [][]int{{1, 2}, {1, 2}},
+			expected: 0,
+		},
+		{
+			name:     "No equal rows and columns",
+			grid:     [][]int{{1, 2}, {3, 4}},
+			expected: 0,
+		},
+		{
+			name:     "Some equal rows and columns",
+			grid:     [][]int{{1, 2, 3}, {2, 5, 6}, {3, 2, 3}},
+			expected: 1,
+		},
+		{
+			name:     "Larger grid with multiple matches",
+			grid:     [][]int{{1, 2, 3, 4}, {2, 3, 4, 1}, {3, 4, 1, 2}, {4, 1, 2, 3}},
+			expected: 4,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := EqualPairs(tt.grid)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkEqualPairs(b *testing.B) {
+	b.ReportAllocs()
+
+	grid := [][]int{{1, 2, 3, 4}, {2, 3, 4, 1}, {3, 4, 1, 2}, {4, 1, 2, 3}}
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = EqualPairs(grid)
+	}
+}

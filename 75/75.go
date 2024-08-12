@@ -1,6 +1,7 @@
 package seventyfive
 
 import (
+	"encoding/binary"
 	"math"
 	"sort"
 	"strconv"
@@ -546,4 +547,34 @@ func CloseStrings(word1, word2 string) bool {
 	}
 
 	return true
+}
+
+func EqualPairs(grid [][]int) int {
+	n := len(grid)
+	rowMap := make(map[string]int)
+
+	// Pre-allocate a single buffer for encoding.
+	buf := make([]byte, n*4) // 4 bytes per int32.
+
+	// Encode and count rows.
+	for _, row := range grid {
+		for j, val := range row {
+			binary.LittleEndian.PutUint32(buf[j*4:], uint32(val))
+		}
+		rowMap[string(buf)]++
+	}
+
+	count := 0
+
+	// Process columns and check against encoded rows.
+	for col := 0; col < n; col++ {
+		for row := 0; row < n; row++ {
+			binary.LittleEndian.PutUint32(buf[row*4:], uint32(grid[row][col]))
+		}
+		if rowCount, exists := rowMap[string(buf)]; exists {
+			count += rowCount
+		}
+	}
+
+	return count
 }

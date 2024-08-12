@@ -1778,3 +1778,64 @@ func BenchmarkRemoveStars(b *testing.B) {
 		_ = RemoveStars("leet**cod*e")
 	}
 }
+
+func TestAsteroidsCollision(t *testing.T) {
+	tests := []struct {
+		name      string
+		asteroids []int
+		expected  []int
+	}{
+		{
+			name:      "Equal mass collision",
+			asteroids: []int{5, 10, -10},
+			expected:  []int{5},
+		},
+		{
+			name:      "All positive",
+			asteroids: []int{1, 2, 3, 4, 5},
+			expected:  []int{1, 2, 3, 4, 5},
+		},
+		{
+			name:      "All negative",
+			asteroids: []int{-1, -2, -3, -4, -5},
+			expected:  []int{-1, -2, -3, -4, -5},
+		},
+		{
+			name:      "Mixed collision",
+			asteroids: []int{10, 2, -5},
+			expected:  []int{10},
+		},
+		{
+			name:      "No collision",
+			asteroids: []int{10, -2, -5},
+			expected:  []int{10},
+		},
+		{
+			name:      "Multiple collisions",
+			asteroids: []int{8, -8, 10, -10, 5, -5},
+			expected:  []int{},
+		},
+		{
+			name:      "Large numbers",
+			asteroids: []int{1000, -1000, 500, -500},
+			expected:  []int{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := AsteroidCollision(tt.asteroids)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkAsteroidsCollision(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = AsteroidCollision([]int{10, -2, -5})
+	}
+}

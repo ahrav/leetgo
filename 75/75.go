@@ -591,3 +591,28 @@ func RemoveStars(s string) string {
 
 	return string(stack)
 }
+
+func AsteroidCollision(asteroids []int) []int {
+	stack := make([]int, 0, len(asteroids))
+	for _, astr := range asteroids {
+		for len(stack) > 0 && astr < 0 && stack[len(stack)-1] > 0 {
+			diff := astr + stack[len(stack)-1]
+			if diff == 0 {
+				stack = stack[:len(stack)-1]
+				astr = 0
+				break
+			}
+
+			if diff > 0 {
+				astr = 0
+				break
+			}
+			stack = stack[:len(stack)-1]
+		}
+		if astr != 0 {
+			stack = append(stack, astr)
+		}
+	}
+
+	return stack
+}

@@ -1308,3 +1308,66 @@ func BenchmarkFindDifference(b *testing.B) {
 		_ = FindDifference(nums1, nums2)
 	}
 }
+
+func TestMaxVowels(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		k        int
+		expected int
+	}{
+		{
+			name:     "All vowels",
+			s:        "aeiou",
+			k:        3,
+			expected: 3,
+		},
+		{
+			name:     "No vowels",
+			s:        "bcdfg",
+			k:        2,
+			expected: 0,
+		},
+		{
+			name:     "Mixed characters",
+			s:        "abciiidef",
+			k:        3,
+			expected: 3,
+		},
+		{
+			name:     "Single character",
+			s:        "a",
+			k:        1,
+			expected: 1,
+		},
+		{
+			name:     "Empty string",
+			s:        "",
+			k:        1,
+			expected: 0,
+		},
+		{
+			name:     "K greater than string length",
+			s:        "aeiou",
+			k:        5,
+			expected: 5,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MaxVowels(tt.s, tt.k)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMaxVowels(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MaxVowels("abciiidef", 3)
+	}
+}

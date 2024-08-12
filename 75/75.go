@@ -411,3 +411,32 @@ func FindDifference(nums1 []int, nums2 []int) [][]int {
 
 	return res
 }
+
+func MaxVowels(s string, k int) int {
+	if len(s) < 1 {
+		return 0
+	}
+
+	vowels := [26]bool{0: true, 'e' - 'a': true, 'i' - 'a': true, 'o' - 'a': true, 'u' - 'a': true}
+	var count int
+	for i := range k {
+		if vowels[s[i]-'a'] {
+			count++
+		}
+	}
+
+	maxVowels := count
+	for i := k; i < len(s); i++ {
+		if vowels[s[i-k]-'a'] {
+			count--
+		}
+		if vowels[s[i]-'a'] {
+			count++
+		}
+		if count > maxVowels {
+			maxVowels = count
+		}
+	}
+
+	return maxVowels
+}

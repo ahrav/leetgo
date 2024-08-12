@@ -1371,3 +1371,74 @@ func BenchmarkMaxVowels(b *testing.B) {
 		_ = MaxVowels("abciiidef", 3)
 	}
 }
+
+func TestLongestSubarray(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "All ones",
+			nums:     []int{1, 1, 1, 1, 1},
+			expected: 4,
+		},
+		{
+			name:     "Single zero",
+			nums:     []int{1, 0, 1, 1, 1},
+			expected: 4,
+		},
+		{
+			name:     "Multiple zeros",
+			nums:     []int{1, 0, 1, 0, 1},
+			expected: 2,
+		},
+		{
+			name:     "Leading zero",
+			nums:     []int{0, 1, 1, 1, 1},
+			expected: 4,
+		},
+		{
+			name:     "Trailing zero",
+			nums:     []int{1, 1, 1, 1, 0},
+			expected: 4,
+		},
+		{
+			name:     "All zeros",
+			nums:     []int{0, 0, 0, 0, 0},
+			expected: 0,
+		},
+		{
+			name:     "Empty array",
+			nums:     []int{},
+			expected: 0,
+		},
+		{
+			name:     "Single element one",
+			nums:     []int{1},
+			expected: 0,
+		},
+		{
+			name:     "Single element zero",
+			nums:     []int{0},
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := LongestSubarray(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkLongestSubarray(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = LongestSubarray([]int{1, 0, 1, 0, 1})
+	}
+}

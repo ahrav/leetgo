@@ -440,3 +440,30 @@ func MaxVowels(s string, k int) int {
 
 	return maxVowels
 }
+
+func LongestSubarray(nums []int) int {
+	n := len(nums)
+	if n < 1 {
+		return 0
+	}
+
+	var zeroCnt, maxWindow, left int
+	for right, num := range nums {
+		if num == 0 {
+			zeroCnt++
+		}
+
+		for zeroCnt > 1 {
+			if nums[left] == 0 {
+				zeroCnt--
+			}
+			left++
+		}
+
+		if window := right - left; window > maxWindow {
+			maxWindow = window
+		}
+	}
+
+	return min(maxWindow, n-1)
+}

@@ -596,19 +596,17 @@ func AsteroidCollision(asteroids []int) []int {
 	stack := make([]int, 0, len(asteroids))
 	for _, astr := range asteroids {
 		for len(stack) > 0 && astr < 0 && stack[len(stack)-1] > 0 {
-			diff := astr + stack[len(stack)-1]
-			if diff == 0 {
+			top := stack[len(stack)-1]
+			if top < -astr {
 				stack = stack[:len(stack)-1]
-				astr = 0
-				break
+				continue
 			}
-
-			if diff > 0 {
-				astr = 0
-				break
+			if top == -astr {
+				stack = stack[:len(stack)-1]
 			}
-			stack = stack[:len(stack)-1]
+			astr = 0
 		}
+
 		if astr != 0 {
 			stack = append(stack, astr)
 		}

@@ -467,3 +467,15 @@ func LongestSubarray(nums []int) int {
 
 	return min(maxWindow, n-1)
 }
+
+func LargestAltitude(gain []int) int {
+	var maxGain, currAlt int
+	for _, g := range gain {
+		currAlt += g
+		if currAlt > maxGain {
+			maxGain = currAlt
+		}
+	}
+
+	return maxGain
+}

@@ -1442,3 +1442,59 @@ func BenchmarkLongestSubarray(b *testing.B) {
 		_ = LongestSubarray([]int{1, 0, 1, 0, 1})
 	}
 }
+
+func TestLargestAltitude(t *testing.T) {
+	tests := []struct {
+		name     string
+		gain     []int
+		expected int
+	}{
+		{
+			name:     "All positive gains",
+			gain:     []int{1, 2, 3, 4},
+			expected: 10,
+		},
+		{
+			name:     "All negative gains",
+			gain:     []int{-1, -2, -3, -4},
+			expected: 0,
+		},
+		{
+			name:     "Mixed gains",
+			gain:     []int{-5, 1, 5, 0, -7},
+			expected: 1,
+		},
+		{
+			name:     "Single element positive",
+			gain:     []int{5},
+			expected: 5,
+		},
+		{
+			name:     "Single element negative",
+			gain:     []int{-5},
+			expected: 0,
+		},
+		{
+			name:     "Empty gain array",
+			gain:     []int{},
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := LargestAltitude(tt.gain)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkLargestAltitude(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = LargestAltitude([]int{-5, 1, 5, 0, -7})
+	}
+}

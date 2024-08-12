@@ -1241,3 +1241,70 @@ func BenchmarkLongestOnes(b *testing.B) {
 		_ = LongestOnes(nums, k)
 	}
 }
+
+func TestFindDifference(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums1    []int
+		nums2    []int
+		expected [][]int
+	}{
+		{
+			name:     "No difference",
+			nums1:    []int{1, 2, 3},
+			nums2:    []int{1, 2, 3},
+			expected: [][]int{{}, {}},
+		},
+		{
+			name:     "All elements different",
+			nums1:    []int{1, 2, 3},
+			nums2:    []int{4, 5, 6},
+			expected: [][]int{{1, 2, 3}, {4, 5, 6}},
+		},
+		{
+			name:     "Some elements different",
+			nums1:    []int{1, 2, 3, 4},
+			nums2:    []int{3, 4, 5, 6},
+			expected: [][]int{{1, 2}, {5, 6}},
+		},
+		{
+			name:     "Empty nums1",
+			nums1:    []int{},
+			nums2:    []int{1, 2, 3},
+			expected: [][]int{{}, {1, 2, 3}},
+		},
+		{
+			name:     "Empty nums2",
+			nums1:    []int{1, 2, 3},
+			nums2:    []int{},
+			expected: [][]int{{1, 2, 3}, {}},
+		},
+		{
+			name:     "Both empty",
+			nums1:    []int{},
+			nums2:    []int{},
+			expected: [][]int{{}, {}},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := FindDifference(tt.nums1, tt.nums2)
+			assert.ElementsMatch(t, tt.expected[0], actual[0])
+			assert.ElementsMatch(t, tt.expected[1], actual[1])
+		})
+	}
+}
+
+func BenchmarkFindDifference(b *testing.B) {
+	b.ReportAllocs()
+
+	nums1 := []int{1, 2, 3, 4}
+	nums2 := []int{3, 4, 5, 6}
+
+	for i := 0; i < b.N; i++ {
+		_ = FindDifference(nums1, nums2)
+	}
+}

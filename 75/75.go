@@ -389,3 +389,25 @@ func LongestOnes(nums []int, k int) int {
 
 	return maxWindow
 }
+
+func FindDifference(nums1 []int, nums2 []int) [][]int {
+	set := make(map[int16]uint8)
+	for _, num := range nums1 {
+		set[int16(num)] |= 1
+	}
+	for _, num := range nums2 {
+		set[int16(num)] |= 2
+	}
+
+	res := make([][]int, 2)
+	for k, v := range set {
+		switch v {
+		case 1:
+			res[0] = append(res[0], int(k))
+		case 2:
+			res[1] = append(res[1], int(k))
+		}
+	}
+
+	return res
+}

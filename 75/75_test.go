@@ -1498,3 +1498,115 @@ func BenchmarkLargestAltitude(b *testing.B) {
 		_ = LargestAltitude([]int{-5, 1, 5, 0, -7})
 	}
 }
+
+func TestPivotIndex(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "Example case",
+			nums:     []int{1, 7, 3, 6, 5, 6},
+			expected: 3,
+		},
+		{
+			name:     "No pivot index",
+			nums:     []int{1, 2, 3},
+			expected: -1,
+		},
+		{
+			name:     "Single element",
+			nums:     []int{1},
+			expected: 0,
+		},
+		{
+			name:     "All zeros",
+			nums:     []int{0, 0, 0, 0, 0},
+			expected: 0,
+		},
+		{
+			name:     "Negative numbers",
+			nums:     []int{-1, -1, -1, 0, 1, 1},
+			expected: 0,
+		},
+		{
+			name:     "Empty array",
+			nums:     []int{},
+			expected: -1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := PivotIndex(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkPivotIndex(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = PivotIndex([]int{1, 7, 3, 6, 5, 6})
+	}
+}
+
+func TestUniqueOccurrences(t *testing.T) {
+	tests := []struct {
+		name     string
+		arr      []int
+		expected bool
+	}{
+		{
+			name:     "All unique occurrences",
+			arr:      []int{1, 2, 2, 1, 1, 3},
+			expected: true,
+		},
+		{
+			name:     "Non-unique occurrences",
+			arr:      []int{1, 2, 2, 1, 1, 2},
+			expected: false,
+		},
+		{
+			name:     "Single element",
+			arr:      []int{1},
+			expected: true,
+		},
+		{
+			name:     "Empty array",
+			arr:      []int{},
+			expected: true,
+		},
+		{
+			name:     "All elements same",
+			arr:      []int{1, 1, 1, 1},
+			expected: true,
+		},
+		{
+			name:     "Negative numbers",
+			arr:      []int{-1, -1, -2, -2, -2},
+			expected: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := UniqueOccurrences(tt.arr)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkUniqueOccurrences(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = UniqueOccurrences([]int{1, 2, 2, 1, 1, 3})
+	}
+}

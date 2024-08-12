@@ -479,3 +479,37 @@ func LargestAltitude(gain []int) int {
 
 	return maxGain
 }
+
+func PivotIndex(nums []int) int {
+	var totalSum int
+	for _, num := range nums {
+		totalSum += num
+	}
+
+	leftSum := 0
+	for i, num := range nums {
+		if leftSum == totalSum-leftSum-num {
+			return i
+		}
+		leftSum += num
+	}
+
+	return -1
+}
+
+func UniqueOccurrences(arr []int) bool {
+	freq := make(map[int]int)
+	for _, val := range arr {
+		freq[val]++
+	}
+
+	set := make(map[int]struct{}, len(freq))
+	for _, val := range freq {
+		if _, ok := set[val]; ok {
+			return false
+		}
+		set[val] = struct{}{}
+	}
+
+	return true
+}

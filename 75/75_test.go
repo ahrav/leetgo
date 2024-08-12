@@ -1727,3 +1727,54 @@ func BenchmarkEqualPairs(b *testing.B) {
 		_ = EqualPairs(grid)
 	}
 }
+
+func TestRemoveStars(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "No stars",
+			input:    "abc",
+			expected: "abc",
+		},
+		{
+			name:     "Single star",
+			input:    "ab*c",
+			expected: "ac",
+		},
+		{
+			name:     "Multiple stars",
+			input:    "leet**cod*e",
+			expected: "lecoe",
+		},
+		{
+			name:     "Stars at the end",
+			input:    "erase*****",
+			expected: "",
+		},
+		{
+			name:     "Interleaved stars",
+			input:    "a*b*c*d*",
+			expected: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := RemoveStars(tt.input)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkRemoveStars(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = RemoveStars("leet**cod*e")
+	}
+}

@@ -578,3 +578,16 @@ func EqualPairs(grid [][]int) int {
 
 	return count
 }
+
+func RemoveStars(s string) string {
+	var stack []byte
+	for i := range s {
+		if s[i] == '*' {
+			stack = stack[:len(stack)-1]
+		} else {
+			stack = append(stack, s[i])
+		}
+	}
+
+	return string(stack)
+}

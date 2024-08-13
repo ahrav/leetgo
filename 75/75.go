@@ -814,3 +814,81 @@ func MaxDepth(root *TreeNode) int {
 
 	return dfs(root)
 }
+
+func LeafSimilar(root1 *TreeNode, root2 *TreeNode) bool {
+	var dfs func(*TreeNode, *[]int)
+	dfs = func(node *TreeNode, arr *[]int) {
+		if node == nil {
+			return
+		}
+
+		if node.Left == nil && node.Right == nil {
+			*arr = append(*arr, node.Val)
+		}
+
+		dfs(node.Left, arr)
+		dfs(node.Right, arr)
+
+	}
+
+	var leaves []int
+	dfs(root1, &leaves)
+	leaves2 := make([]int, 0, len(leaves))
+	dfs(root2, &leaves2)
+
+	if len(leaves) != len(leaves2) {
+		return false
+	}
+
+	for i, val := range leaves {
+		if val != leaves2[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
+func LeafSimilarConcurrent(root1 *TreeNode, root2 *TreeNode) bool {
+	var dfs func(*TreeNode, chan int)
+	dfs = func(node *TreeNode, c chan int) {
+		if node == nil {
+			return
+		}
+
+		if node.Left == nil && node.Right == nil {
+			c <- node.Val
+			return
+		}
+
+		dfs(node.Left, c)
+		dfs(node.Right, c)
+
+	}
+
+	chan1, chan2 := make(chan int, 1), make(chan int, 1)
+	go func() {
+		dfs(root1, chan1)
+		close(chan1)
+	}()
+	go func() {
+		dfs(root2, chan2)
+		close(chan2)
+	}()
+
+	for {
+		v1, ok1 := <-chan1
+		v2, ok2 := <-chan2
+
+		if !ok1 && !ok2 {
+			return true
+		}
+
+		if !ok1 || !ok2 {
+			return false
+		}
+		if v1 != v2 {
+			return false
+		}
+	}
+}

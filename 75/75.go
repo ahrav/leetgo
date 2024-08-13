@@ -716,3 +716,19 @@ func PredictPartyVictory(senate string) string {
 	}
 	return "Radiant"
 }
+
+func DeleteMiddle(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return nil
+	}
+
+	tmp := &ListNode{Next: head}
+	slow, fast := tmp, head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+
+	slow.Next = slow.Next.Next
+	return tmp.Next
+}

@@ -689,13 +689,13 @@ func (c *RecentCounter) Ping(t int) int {
 }
 
 func PredictPartyVictory(senate string) string {
-	var radiant, dire []int
+	var dire, radiant []int
 
 	for i, char := range senate {
-		if char == 'R' {
-			radiant = append(radiant, i)
-		} else {
+		if char == 'D' {
 			dire = append(dire, i)
+		} else {
+			radiant = append(radiant, i)
 		}
 	}
 
@@ -711,7 +711,7 @@ func PredictPartyVictory(senate string) string {
 		dire, radiant = dire[1:], radiant[1:]
 	}
 
-	if len(dire) > len(radiant) {
+	if len(dire) > 0 {
 		return "Dire"
 	}
 	return "Radiant"

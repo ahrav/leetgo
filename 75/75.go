@@ -617,33 +617,33 @@ func AsteroidCollision(asteroids []int) []int {
 
 func DecodeString(s string) string {
 	var (
-		stringStack []string
-		countStack  []int
+		countStack []int
+		strStack   []string
 	)
 
-	currString := ""
+	currStr := ""
 	k := 0
 	for _, char := range s {
 		if char >= '0' && char <= '9' {
 			k = k*10 + int(char-'0')
 		} else if char == '[' {
 			countStack = append(countStack, k)
-			stringStack = append(stringStack, currString)
-			currString = ""
+			strStack = append(strStack, currStr)
 			k = 0
+			currStr = ""
 		} else if char == ']' {
 			count := countStack[len(countStack)-1]
 			countStack = countStack[:len(countStack)-1]
 
-			decodedString := strings.Repeat(currString, count)
-			prevString := stringStack[len(stringStack)-1]
-			stringStack = stringStack[:len(stringStack)-1]
+			decodedStr := strings.Repeat(currStr, count)
+			prevStr := strStack[len(strStack)-1]
+			strStack = strStack[:len(strStack)-1]
 
-			currString = prevString + decodedString
+			currStr = prevStr + decodedStr
 		} else {
-			currString += string(char)
+			currStr += string(char)
 		}
 	}
 
-	return currString
+	return currStr
 }

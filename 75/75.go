@@ -792,3 +792,25 @@ func PairSum(head *ListNode) int {
 
 	return maxSum
 }
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func MaxDepth(root *TreeNode) int {
+	var dfs func(*TreeNode) int
+	dfs = func(node *TreeNode) int {
+		if node == nil {
+			return 0
+		}
+
+		lh := dfs(node.Left)
+		rh := dfs(node.Right)
+
+		return max(lh, rh) + 1
+	}
+
+	return dfs(root)
+}

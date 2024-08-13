@@ -751,3 +751,44 @@ func OddEvenList(head *ListNode) *ListNode {
 	odd.Next = evenHead
 	return head
 }
+
+func PairSum(head *ListNode) int {
+	if head == nil {
+		return 0
+	}
+
+	if head.Next == nil {
+		return head.Val
+	}
+
+	reverse := func(head *ListNode) *ListNode {
+		var prev *ListNode
+		curr := head
+		for curr != nil {
+			next := curr.Next
+			curr.Next = prev
+			prev = curr
+			curr = next
+		}
+		return prev
+	}
+
+	curr := head
+	slow, fast := curr, curr.Next
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+
+	var maxSum int
+	mid, start := reverse(slow.Next), head
+	for mid != nil {
+		if v := mid.Val + start.Val; v > maxSum {
+			maxSum = v
+		}
+		mid = mid.Next
+		start = start.Next
+	}
+
+	return maxSum
+}

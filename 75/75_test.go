@@ -1896,3 +1896,64 @@ func BenchmarkDecodeString(b *testing.B) {
 		_ = DecodeString("2[2[y]pq4[2[jk]e1[f]]]ef")
 	}
 }
+
+func TestPredictPartyVictory(t *testing.T) {
+	tests := []struct {
+		name     string
+		senate   string
+		expected string
+	}{
+		{
+			name:     "Radiant wins",
+			senate:   "RRDDD",
+			expected: "Radiant",
+		},
+		{
+			name:     "Dire wins",
+			senate:   "RDDDR",
+			expected: "Dire",
+		},
+		{
+			name:     "Radiant wins with alternating",
+			senate:   "RDRDR",
+			expected: "Radiant",
+		},
+		{
+			name:     "Dire wins with alternating",
+			senate:   "DRDRD",
+			expected: "Dire",
+		},
+		{
+			name:     "Single Radiant",
+			senate:   "R",
+			expected: "Radiant",
+		},
+		{
+			name:     "Single Dire",
+			senate:   "D",
+			expected: "Dire",
+		},
+		{
+			name:     "Equal number of Radiant and Dire",
+			senate:   "RDRD",
+			expected: "Radiant",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := PredictPartyVictory(tt.senate)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkPredictPartyVictory(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = PredictPartyVictory("RRDDD")
+	}
+}

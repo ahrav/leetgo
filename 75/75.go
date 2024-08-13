@@ -687,3 +687,32 @@ func (c *RecentCounter) Ping(t int) int {
 
 	return len(c.arr)
 }
+
+func PredictPartyVictory(senate string) string {
+	var radiant, dire []int
+
+	for i, char := range senate {
+		if char == 'R' {
+			radiant = append(radiant, i)
+		} else {
+			dire = append(dire, i)
+		}
+	}
+
+	n := len(senate)
+	for len(dire) > 0 && len(radiant) > 0 {
+		d, r := dire[0], radiant[0]
+		if d < r {
+			dire = append(dire, d+n)
+		} else {
+			radiant = append(radiant, r+n)
+		}
+
+		dire, radiant = dire[1:], radiant[1:]
+	}
+
+	if len(dire) > len(radiant) {
+		return "Dire"
+	}
+	return "Radiant"
+}

@@ -1839,3 +1839,60 @@ func BenchmarkAsteroidsCollision(b *testing.B) {
 		_ = AsteroidCollision([]int{10, -2, -5})
 	}
 }
+
+func TestDecodeString(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{
+			name:     "Single set of brackets",
+			input:    "3[a]",
+			expected: "aaa",
+		},
+		{
+			name:     "Nested brackets",
+			input:    "3[a2[b]]",
+			expected: "abbabbabb",
+		},
+		{
+			name:     "Multiple sets of brackets",
+			input:    "2[abc]3[cd]ef",
+			expected: "abcabccdcdcdef",
+		},
+		{
+			name:     "Empty string",
+			input:    "",
+			expected: "",
+		},
+		{
+			name:     "No brackets",
+			input:    "abc",
+			expected: "abc",
+		},
+		{
+			name:  "Complex nested brackets",
+			input: "2[2[y]pq4[2[jk]e1[f]]]ef",
+			expected: "yypqjkjkefjkjkefjkjkefjkjkefyy" +
+				"pqjkjkefjkjkefjkjkefjkjkefef",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := DecodeString(tt.input)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkDecodeString(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = DecodeString("2[2[y]pq4[2[jk]e1[f]]]ef")
+	}
+}

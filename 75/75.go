@@ -669,3 +669,21 @@ func ReverseList(head *ListNode) *ListNode {
 
 	return prev
 }
+
+type RecentCounter struct {
+	arr []int
+}
+
+func RecentCounterConstructor() RecentCounter {
+	return RecentCounter{arr: make([]int, 0)}
+}
+
+func (c *RecentCounter) Ping(t int) int {
+	c.arr = append(c.arr, t)
+
+	for len(c.arr) > 0 && c.arr[0] < t-3000 {
+		c.arr = c.arr[1:]
+	}
+
+	return len(c.arr)
+}

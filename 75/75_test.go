@@ -2915,3 +2915,60 @@ func BenchmarkDeleteNode(b *testing.B) {
 		_ = DeleteNode(root, 5)
 	}
 }
+
+func TestCanVisitAllRooms(t *testing.T) {
+	tests := []struct {
+		name     string
+		rooms    [][]int
+		expected bool
+	}{
+		{
+			name:     "EmptyRooms",
+			rooms:    [][]int{},
+			expected: true,
+		},
+		{
+			name:     "SingleRoom",
+			rooms:    [][]int{{}},
+			expected: true,
+		},
+		{
+			name:     "AllKeys",
+			rooms:    [][]int{{1}, {2}, {3}, {}},
+			expected: true,
+		},
+		{
+			name:     "MissingKey",
+			rooms:    [][]int{{1, 3}, {3, 0, 1}, {2}, {0}},
+			expected: false,
+		},
+		{
+			name:     "CircularKeys",
+			rooms:    [][]int{{1}, {2}, {0}},
+			expected: true,
+		},
+		{
+			name:     "Disconnected",
+			rooms:    [][]int{{1}, {2}, {}, {3}},
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := CanVisitAllRooms(tt.rooms)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkCanVisitAllRooms(b *testing.B) {
+	b.ReportAllocs()
+
+	rooms := [][]int{{1, 3}, {3, 0, 1}, {2}, {0}}
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = CanVisitAllRooms(rooms)
+	}
+}

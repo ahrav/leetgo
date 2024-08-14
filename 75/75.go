@@ -1104,3 +1104,33 @@ func DeleteNode(root *TreeNode, key int) *TreeNode {
 
 	return root
 }
+
+func CanVisitAllRooms(rooms [][]int) bool {
+	n := len(rooms)
+	if n < 1 {
+		return true
+	}
+
+	visited := make([]bool, n)
+	var dfs func(int)
+	dfs = func(room int) {
+		if visited[room] {
+			return
+		}
+
+		visited[room] = true
+		for _, key := range rooms[room] {
+			dfs(key)
+		}
+	}
+
+	dfs(0)
+
+	for _, k := range visited {
+		if !k {
+			return false
+		}
+	}
+
+	return true
+}

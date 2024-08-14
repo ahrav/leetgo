@@ -937,3 +937,49 @@ func PathSum(root *TreeNode, targetSum int) int {
 
 	return dfs(root, 0)
 }
+
+func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	if root == nil || p == nil || q == nil {
+		return root
+	}
+
+	left := LowestCommonAncestor(root.Left, p, q)
+	right := LowestCommonAncestor(root.Right, p, q)
+
+	if left == nil && right == nil {
+		return root
+	}
+
+	if left == nil {
+		return left
+	}
+	return right
+}
+
+func LongestZigZag(root *TreeNode) int {
+	var maxLen int
+
+	var dfs func(*TreeNode, bool, int)
+	dfs = func(node *TreeNode, isLeft bool, length int) {
+		if node == nil {
+			return
+		}
+
+		if length > maxLen {
+			maxLen = length
+		}
+
+		if isLeft {
+			dfs(node.Right, false, length+1)
+			dfs(node.Left, true, 1)
+		} else {
+			dfs(node.Left, true, length+1)
+			dfs(node.Right, false, 1)
+		}
+	}
+
+	dfs(root.Left, true, 1)
+	dfs(root.Right, false, 1)
+
+	return maxLen
+}

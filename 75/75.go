@@ -1159,3 +1159,34 @@ func FindCircleNum(isConnected [][]int) int {
 
 	return provinceCount
 }
+
+func MinReorder(n int, connections [][]int) int {
+	adj := make([][]int, n)
+	directedEdges := make(map[[2]int]struct{}, n)
+	for _, conn := range connections {
+		u, v := conn[0], conn[1]
+		adj[u] = append(adj[u], v)
+		adj[v] = append(adj[v], u)
+		directedEdges[[2]int{u, v}] = struct{}{}
+	}
+
+	var dfs func(int, int) int
+	dfs = func(node, parent int) int {
+		reversals := 0
+		for _, neighbor := range adj[node] {
+			if neighbor == parent {
+				continue
+			}
+
+			if _, ok := directedEdges[[2]int{node, neighbor}]; ok {
+				reversals++
+			}
+
+			reversals += dfs(neighbor, node)
+		}
+
+		return reversals
+	}
+
+	return dfs(0, -1)
+}

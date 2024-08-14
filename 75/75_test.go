@@ -3040,3 +3040,79 @@ func BenchmarkFindCircleNum(b *testing.B) {
 		_ = FindCircleNum(isConnected)
 	}
 }
+
+func TestMinReorder(t *testing.T) {
+	tests := []struct {
+		name        string
+		n           int
+		connections [][]int
+		expected    int
+	}{
+		{
+			name:        "AllEdgesReordered",
+			n:           3,
+			connections: [][]int{{0, 1}, {1, 2}},
+			expected:    2,
+		},
+		{
+			name:        "NoEdgesReordered",
+			n:           3,
+			connections: [][]int{{1, 0}, {2, 1}},
+			expected:    0,
+		},
+		{
+			name:        "ReorderMixedEdges",
+			n:           4,
+			connections: [][]int{{0, 1}, {2, 0}, {3, 2}},
+			expected:    1,
+		},
+		{
+			name:        "ReorderSingleNode",
+			n:           1,
+			connections: [][]int{},
+			expected:    0,
+		},
+		{
+			name:        "ReorderDisconnectedGraph",
+			n:           4,
+			connections: [][]int{{0, 1}, {2, 3}},
+			expected:    1,
+		},
+		{
+			name: "ReorderThreeNodes",
+			n:    6,
+			connections: [][]int{
+				{0, 1},
+				{1, 3},
+				{2, 3},
+				{4, 0},
+				{4, 5},
+			},
+			expected: 3,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := MinReorder(tt.n, tt.connections)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinReorder(b *testing.B) {
+	b.ReportAllocs()
+
+	connections := [][]int{
+		{0, 1},
+		{1, 3},
+		{2, 3},
+		{4, 0},
+		{4, 5},
+	}
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = MinReorder(6, connections)
+	}
+}

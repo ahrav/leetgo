@@ -1076,7 +1076,6 @@ func DeleteNode(root *TreeNode, key int) *TreeNode {
 		for curr.Left != nil {
 			curr = curr.Left
 		}
-
 		return curr
 	}
 

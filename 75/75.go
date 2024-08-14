@@ -1030,3 +1030,38 @@ func RightSideView(root *TreeNode) []int {
 
 	return res
 }
+
+func MaxLevelSum(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	minLevel, currLevel, maxSum := 1, 1, root.Val
+	queue := []*TreeNode{root}
+
+	for len(queue) > 0 {
+		level := len(queue)
+
+		levelSum := 0
+		for i := 0; i < level; i++ {
+			curr := queue[0]
+			queue = queue[1:]
+
+			levelSum += curr.Val
+			if curr.Left != nil {
+				queue = append(queue, curr.Left)
+			}
+			if curr.Right != nil {
+				queue = append(queue, curr.Right)
+			}
+		}
+
+		if levelSum > maxSum {
+			maxSum = levelSum
+			minLevel = currLevel
+		}
+		currLevel++
+	}
+
+	return minLevel
+}

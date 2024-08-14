@@ -2734,3 +2734,99 @@ func BenchmarkRightSideView(b *testing.B) {
 		_ = RightSideView(root)
 	}
 }
+
+func TestMaxLevelSumInEmptyTree(t *testing.T) {
+	root := (*TreeNode)(nil)
+	expected := 0
+
+	actual := MaxLevelSum(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestMaxLevelSumInSingleNodeTree(t *testing.T) {
+	root := &TreeNode{Val: 1}
+	expected := 1
+
+	actual := MaxLevelSum(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestMaxLevelSumInBalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{Val: 4},
+			Right: &TreeNode{Val: 5},
+		},
+		Right: &TreeNode{
+			Val:   3,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 7},
+		},
+	}
+	expected := 3
+
+	actual := MaxLevelSum(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestMaxLevelSumInUnbalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val:  4,
+				Left: &TreeNode{Val: 8},
+			},
+		},
+		Right: &TreeNode{Val: 3},
+	}
+	expected := 4
+
+	actual := MaxLevelSum(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestMaxLevelSumWithNegativeValues(t *testing.T) {
+	root := &TreeNode{
+		Val: -1,
+		Left: &TreeNode{
+			Val:   -2,
+			Left:  &TreeNode{Val: -4},
+			Right: &TreeNode{Val: -5},
+		},
+		Right: &TreeNode{
+			Val:   -3,
+			Left:  &TreeNode{Val: -6},
+			Right: &TreeNode{Val: -7},
+		},
+	}
+	expected := 1
+
+	actual := MaxLevelSum(root)
+	assert.Equal(t, expected, actual)
+}
+
+func BenchmarkMaxLevelSum(b *testing.B) {
+	b.ReportAllocs()
+
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{Val: 4},
+			Right: &TreeNode{Val: 5},
+		},
+		Right: &TreeNode{
+			Val:   3,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 7},
+		},
+	}
+
+	for i := 0; i < b.N; i++ {
+		_ = MaxLevelSum(root)
+	}
+}

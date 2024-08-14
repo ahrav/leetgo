@@ -1002,3 +1002,31 @@ func SearchBST(root *TreeNode, val int) *TreeNode {
 	}
 	return SearchBST(root.Right, val)
 }
+
+func RightSideView(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+
+	var res []int
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		level := len(queue)
+
+		res = append(res, queue[len(queue)-1].Val)
+		for i := 0; i < level; i++ {
+			curr := queue[0]
+			queue = queue[1:]
+
+			if curr.Left != nil {
+				queue = append(queue, curr.Left)
+			}
+			if curr.Right != nil {
+				queue = append(queue, curr.Right)
+			}
+		}
+
+	}
+
+	return res
+}

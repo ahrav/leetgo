@@ -2643,3 +2643,94 @@ func BenchmarkSearchBST(b *testing.B) {
 		_ = SearchBST(root, 3)
 	}
 }
+
+func TestRightSideViewOfEmptyTree(t *testing.T) {
+	root := (*TreeNode)(nil)
+	expected := []int(nil)
+
+	actual := RightSideView(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestRightSideViewOfSingleNodeTree(t *testing.T) {
+	root := &TreeNode{Val: 1}
+	expected := []int{1}
+
+	actual := RightSideView(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestRightSideViewOfBalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{Val: 4},
+			Right: &TreeNode{Val: 5},
+		},
+		Right: &TreeNode{
+			Val:   3,
+			Right: &TreeNode{Val: 6},
+		},
+	}
+	expected := []int{1, 3, 6}
+
+	actual := RightSideView(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestRightSideViewOfUnbalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val:  3,
+				Left: &TreeNode{Val: 4},
+			},
+		},
+	}
+	expected := []int{1, 2, 3, 4}
+
+	actual := RightSideView(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestRightSideViewWithNilNodes(t *testing.T) {
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val:   2,
+			Right: &TreeNode{Val: 5},
+		},
+		Right: &TreeNode{
+			Val:   3,
+			Right: &TreeNode{Val: 4},
+		},
+	}
+	expected := []int{1, 3, 4}
+
+	actual := RightSideView(root)
+	assert.Equal(t, expected, actual)
+}
+
+func BenchmarkRightSideView(b *testing.B) {
+	b.ReportAllocs()
+
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{Val: 4},
+			Right: &TreeNode{Val: 5},
+		},
+		Right: &TreeNode{
+			Val:   3,
+			Right: &TreeNode{Val: 6},
+		},
+	}
+
+	for i := 0; i < b.N; i++ {
+		_ = RightSideView(root)
+	}
+}

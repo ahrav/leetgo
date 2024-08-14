@@ -1133,3 +1133,29 @@ func CanVisitAllRooms(rooms [][]int) bool {
 
 	return true
 }
+
+func FindCircleNum(isConnected [][]int) int {
+	n := len(isConnected)
+
+	visited := make([]bool, n)
+	var dfs func(int)
+	dfs = func(city int) {
+		visited[city] = true
+
+		for i := 0; i < n; i++ {
+			if isConnected[city][i] == 1 && !visited[i] {
+				dfs(i)
+			}
+		}
+	}
+
+	var provinces int
+	for i := 0; i < n; i++ {
+		if !visited[i] {
+			provinces++
+			dfs(i)
+		}
+	}
+
+	return provinces
+}

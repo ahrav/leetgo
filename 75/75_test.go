@@ -2972,3 +2972,71 @@ func BenchmarkCanVisitAllRooms(b *testing.B) {
 		_ = CanVisitAllRooms(rooms)
 	}
 }
+
+func TestFindCircleNum(t *testing.T) {
+	tests := []struct {
+		name        string
+		isConnected [][]int
+		expected    int
+	}{
+		{
+			name:        "NoProvincesInEmptyGraph",
+			isConnected: [][]int{},
+			expected:    0,
+		},
+		{
+			name:        "SingleProvinceInSingleCity",
+			isConnected: [][]int{{1}},
+			expected:    1,
+		},
+		{
+			name: "MultipleProvincesInDisconnectedGraph",
+			isConnected: [][]int{
+				{1, 0, 0},
+				{0, 1, 0},
+				{0, 0, 1},
+			},
+			expected: 3,
+		},
+		{
+			name: "SingleProvinceInFullyConnectedGraph",
+			isConnected: [][]int{
+				{1, 1, 1},
+				{1, 1, 1},
+				{1, 1, 1},
+			},
+			expected: 1,
+		},
+		{
+			name: "MultipleProvincesInPartiallyConnectedGraph",
+			isConnected: [][]int{
+				{1, 1, 0},
+				{1, 1, 0},
+				{0, 0, 1},
+			},
+			expected: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := FindCircleNum(tt.isConnected)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkFindCircleNum(b *testing.B) {
+	b.ReportAllocs()
+
+	isConnected := [][]int{
+		{1, 1, 0},
+		{1, 1, 0},
+		{0, 0, 1},
+	}
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = FindCircleNum(isConnected)
+	}
+}

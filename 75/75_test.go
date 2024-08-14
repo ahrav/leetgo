@@ -2458,3 +2458,79 @@ func BenchmarkLowestCommonAncestor(b *testing.B) {
 		_ = LowestCommonAncestor(root, p, q)
 	}
 }
+
+func TestLongestZigZagInEmptyTree(t *testing.T) {
+	root := (*TreeNode)(nil)
+	expected := 0
+
+	actual := LongestZigZag(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLongestZigZagInSingleNodeTree(t *testing.T) {
+	root := &TreeNode{Val: 1}
+	expected := 0
+
+	actual := LongestZigZag(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLongestZigZagInBalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{Val: 4},
+			Right: &TreeNode{Val: 5},
+		},
+		Right: &TreeNode{
+			Val:   3,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 7},
+		},
+	}
+	expected := 2
+
+	actual := LongestZigZag(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLongestZigZagInUnbalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val: 3,
+				Left: &TreeNode{
+					Val:  4,
+					Left: &TreeNode{Val: 5},
+				},
+			},
+		},
+	}
+	expected := 1
+
+	actual := LongestZigZag(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLongestZigZagWithNegativeValues(t *testing.T) {
+	root := &TreeNode{
+		Val: -1,
+		Left: &TreeNode{
+			Val:   -2,
+			Left:  &TreeNode{Val: -3},
+			Right: &TreeNode{Val: -4},
+		},
+		Right: &TreeNode{
+			Val:   -5,
+			Left:  &TreeNode{Val: -6},
+			Right: &TreeNode{Val: -7},
+		},
+	}
+	expected := 2
+
+	actual := LongestZigZag(root)
+	assert.Equal(t, expected, actual)
+}

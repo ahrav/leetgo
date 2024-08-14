@@ -961,6 +961,10 @@ func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 }
 
 func LongestZigZag(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+
 	var maxLen int
 
 	var dfs func(*TreeNode, bool, int)

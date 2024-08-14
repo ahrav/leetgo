@@ -2830,3 +2830,88 @@ func BenchmarkMaxLevelSum(b *testing.B) {
 		_ = MaxLevelSum(root)
 	}
 }
+
+func TestDeleteNodeInEmptyTree(t *testing.T) {
+	root := (*TreeNode)(nil)
+	key := 5
+	expected := (*TreeNode)(nil)
+
+	actual := DeleteNode(root, key)
+	assert.Equal(t, expected, actual)
+}
+
+func TestDeleteNodeLeafNode(t *testing.T) {
+	root := &TreeNode{Val: 5}
+	key := 5
+	expected := (*TreeNode)(nil)
+
+	actual := DeleteNode(root, key)
+	assert.Equal(t, expected, actual)
+}
+
+func TestDeleteNodeSingleChild(t *testing.T) {
+	root := &TreeNode{
+		Val:  5,
+		Left: &TreeNode{Val: 3},
+	}
+	key := 5
+	expected := root.Left
+
+	actual := DeleteNode(root, key)
+	assert.Equal(t, expected, actual)
+}
+
+func TestDeleteNodeTwoChildren(t *testing.T) {
+	root := &TreeNode{
+		Val:  5,
+		Left: &TreeNode{Val: 3},
+		Right: &TreeNode{
+			Val:  7,
+			Left: &TreeNode{Val: 6},
+		},
+	}
+	key := 5
+	expected := &TreeNode{
+		Val:   6,
+		Left:  &TreeNode{Val: 3},
+		Right: &TreeNode{Val: 7},
+	}
+
+	actual := DeleteNode(root, key)
+	assert.Equal(t, expected, actual)
+}
+
+func TestDeleteNodeNonExistentKey(t *testing.T) {
+	root := &TreeNode{
+		Val:   5,
+		Left:  &TreeNode{Val: 3},
+		Right: &TreeNode{Val: 7},
+	}
+	key := 10
+	expected := root
+
+	actual := DeleteNode(root, key)
+	assert.Equal(t, expected, actual)
+}
+
+func BenchmarkDeleteNode(b *testing.B) {
+	b.ReportAllocs()
+
+	root := &TreeNode{
+		Val:  5,
+		Left: &TreeNode{Val: 3},
+		Right: &TreeNode{
+			Val:  7,
+			Left: &TreeNode{Val: 6},
+			Right: &TreeNode{
+				Val:   8,
+				Left:  &TreeNode{Val: 9},
+				Right: &TreeNode{Val: 9},
+			},
+		},
+	}
+
+	for i := 0; i < b.N; i++ {
+		_ = DeleteNode(root, 5)
+	}
+}

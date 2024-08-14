@@ -1065,3 +1065,43 @@ func MaxLevelSum(root *TreeNode) int {
 
 	return minLevel
 }
+
+func DeleteNode(root *TreeNode, key int) *TreeNode {
+	if root == nil {
+		return root
+	}
+
+	findMin := func(node *TreeNode) *TreeNode {
+		curr := node
+		for curr.Left != nil {
+			curr = curr.Left
+		}
+
+		return curr
+	}
+
+	if root.Val > key {
+		root.Left = DeleteNode(root.Left, key)
+	} else if root.Val < key {
+		root.Right = DeleteNode(root.Right, key)
+	} else {
+		if root.Left == nil && root.Right == nil { // Leaf node
+			return nil
+		}
+
+		// Single child.
+		if root.Left == nil {
+			return root.Right
+		}
+		if root.Right == nil {
+			return root.Left
+		}
+
+		// 2 children.
+		successor := findMin(root.Right)
+		root.Val = successor.Val
+		root.Right = DeleteNode(root.Right, successor.Val)
+	}
+
+	return root
+}

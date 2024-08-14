@@ -1142,20 +1142,20 @@ func FindCircleNum(isConnected [][]int) int {
 	dfs = func(city int) {
 		visited[city] = true
 
-		for i := 0; i < n; i++ {
-			if isConnected[city][i] == 1 && !visited[i] {
-				dfs(i)
+		for neighbor := 0; neighbor < n; neighbor++ {
+			if isConnected[city][neighbor] == 1 && !visited[neighbor] {
+				dfs(neighbor)
 			}
 		}
 	}
 
-	var provinces int
-	for i := 0; i < n; i++ {
-		if !visited[i] {
-			provinces++
-			dfs(i)
+	var provinceCount int
+	for city := 0; city < n; city++ {
+		if !visited[city] {
+			provinceCount++
+			dfs(city)
 		}
 	}
 
-	return provinces
+	return provinceCount
 }

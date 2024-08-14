@@ -1957,3 +1957,84 @@ func BenchmarkPredictPartyVictory(b *testing.B) {
 		_ = PredictPartyVictory("RRDDD")
 	}
 }
+
+func TestMaxDepthOfEmptyTree(t *testing.T) {
+	root := (*TreeNode)(nil)
+	expected := 0
+
+	actual := MaxDepth(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestMaxDepthOfSingleNodeTree(t *testing.T) {
+	root := &TreeNode{Val: 1}
+	expected := 1
+
+	actual := MaxDepth(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestMaxDepthOfBalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val: 4,
+			},
+			Right: &TreeNode{
+				Val: 5,
+			},
+		},
+		Right: &TreeNode{
+			Val: 3,
+		},
+	}
+	expected := 3
+
+	actual := MaxDepth(root)
+	assert.Equal(t, expected, actual)
+}
+
+func BenchmarkMaxDepth(b *testing.B) {
+	b.ReportAllocs()
+
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val: 4,
+			},
+			Right: &TreeNode{
+				Val: 5,
+			},
+		},
+		Right: &TreeNode{
+			Val: 3,
+		},
+	}
+
+	for i := 0; i < b.N; i++ {
+		_ = MaxDepth(root)
+	}
+}
+
+func TestMaxDepthOfUnbalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val: 3,
+				Left: &TreeNode{
+					Val: 4,
+				},
+			},
+		},
+	}
+	expected := 4
+
+	actual := MaxDepth(root)
+	assert.Equal(t, expected, actual)
+}

@@ -983,3 +983,14 @@ func LongestZigZag(root *TreeNode) int {
 
 	return maxLen
 }
+
+func SearchBST(root *TreeNode, val int) *TreeNode {
+	if root == nil || root.Val == val {
+		return root
+	}
+
+	if root.Val > val {
+		return SearchBST(root.Left, val)
+	}
+	return SearchBST(root.Right, val)
+}

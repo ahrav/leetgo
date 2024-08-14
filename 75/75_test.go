@@ -2260,3 +2260,109 @@ func BenchmarkGoodNodes(b *testing.B) {
 		_ = GoodNodes(root)
 	}
 }
+
+func TestPathSumInEmptyTree(t *testing.T) {
+	root := (*TreeNode)(nil)
+	expected := 0
+
+	actual := PathSum(root, 10)
+	assert.Equal(t, expected, actual)
+}
+
+func TestPathSumSingleNodeTree(t *testing.T) {
+	root := &TreeNode{Val: 10}
+	expected := 1
+
+	actual := PathSum(root, 10)
+	assert.Equal(t, expected, actual)
+}
+
+func TestPathSumNoMatchingPath(t *testing.T) {
+	root := &TreeNode{
+		Val: 5,
+		Left: &TreeNode{
+			Val:   3,
+			Left:  &TreeNode{Val: 2},
+			Right: &TreeNode{Val: 1},
+		},
+		Right: &TreeNode{
+			Val:   8,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 9},
+		},
+	}
+	expected := 0
+
+	actual := PathSum(root, 20)
+	assert.Equal(t, expected, actual)
+}
+
+func TestPathSumMultipleMatchingPaths(t *testing.T) {
+	root := &TreeNode{
+		Val: 5,
+		Left: &TreeNode{
+			Val: 4,
+			Left: &TreeNode{
+				Val:   11,
+				Left:  &TreeNode{Val: 7},
+				Right: &TreeNode{Val: 2},
+			},
+		},
+		Right: &TreeNode{
+			Val:  8,
+			Left: &TreeNode{Val: 13},
+			Right: &TreeNode{
+				Val:   4,
+				Right: &TreeNode{Val: 1},
+			},
+		},
+	}
+	expected := 2
+
+	actual := PathSum(root, 22)
+	assert.Equal(t, expected, actual)
+}
+
+func TestPathSumNegativeValues(t *testing.T) {
+	root := &TreeNode{
+		Val: -2,
+		Left: &TreeNode{
+			Val: -3,
+		},
+		Right: &TreeNode{
+			Val: -1,
+		},
+	}
+	expected := 1
+
+	actual := PathSum(root, -5)
+	assert.Equal(t, expected, actual)
+}
+
+func BenchmarkPathSum(b *testing.B) {
+	b.ReportAllocs()
+
+	root := &TreeNode{
+		Val: 5,
+		Left: &TreeNode{
+			Val: 4,
+			Left: &TreeNode{
+				Val:   11,
+				Left:  &TreeNode{Val: 7},
+				Right: &TreeNode{Val: 2},
+			},
+		},
+		Right: &TreeNode{
+			Val:  8,
+			Left: &TreeNode{Val: 13},
+			Right: &TreeNode{
+				Val:   4,
+				Right: &TreeNode{Val: 1},
+			},
+		},
+	}
+
+	for i := 0; i < b.N; i++ {
+		_ = PathSum(root, 22)
+	}
+}

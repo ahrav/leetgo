@@ -2169,3 +2169,94 @@ func BenchmarkLeafSimilar(b *testing.B) {
 		_ = LeafSimilar(root1, root2)
 	}
 }
+
+func TestGoodNodesInEmptyTree(t *testing.T) {
+	root := (*TreeNode)(nil)
+	expected := 0
+
+	actual := GoodNodes(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestGoodNodesInSingleNodeTree(t *testing.T) {
+	root := &TreeNode{Val: 1}
+	expected := 1
+
+	actual := GoodNodes(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestGoodNodesInBalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:  1,
+			Left: &TreeNode{Val: 3},
+		},
+		Right: &TreeNode{
+			Val:   4,
+			Left:  &TreeNode{Val: 1},
+			Right: &TreeNode{Val: 5},
+		},
+	}
+	expected := 4
+
+	actual := GoodNodes(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestGoodNodesInUnbalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val: 3,
+			Left: &TreeNode{
+				Val:  4,
+				Left: &TreeNode{Val: 2},
+			},
+		},
+	}
+	expected := 3
+
+	actual := GoodNodes(root)
+	assert.Equal(t, expected, actual)
+}
+
+func TestGoodNodesWithNegativeValues(t *testing.T) {
+	root := &TreeNode{
+		Val: -1,
+		Left: &TreeNode{
+			Val:  -2,
+			Left: &TreeNode{Val: -3},
+		},
+		Right: &TreeNode{
+			Val:   -4,
+			Right: &TreeNode{Val: -5},
+		},
+	}
+	expected := 1
+
+	actual := GoodNodes(root)
+	assert.Equal(t, expected, actual)
+}
+
+func BenchmarkGoodNodes(b *testing.B) {
+	b.ReportAllocs()
+
+	root := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:  1,
+			Left: &TreeNode{Val: 3},
+		},
+		Right: &TreeNode{
+			Val:   4,
+			Left:  &TreeNode{Val: 1},
+			Right: &TreeNode{Val: 5},
+		},
+	}
+
+	for i := 0; i < b.N; i++ {
+		_ = GoodNodes(root)
+	}
+}

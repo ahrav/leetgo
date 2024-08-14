@@ -894,6 +894,10 @@ func LeafSimilarConcurrent(root1 *TreeNode, root2 *TreeNode) bool {
 }
 
 func GoodNodes(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+
 	var dfs func(*TreeNode, int) int
 	dfs = func(node *TreeNode, maxSoFar int) int {
 		if node == nil {

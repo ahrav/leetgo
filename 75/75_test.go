@@ -2366,3 +2366,95 @@ func BenchmarkPathSum(b *testing.B) {
 		_ = PathSum(root, 22)
 	}
 }
+
+func TestLowestCommonAncestorInBalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:   5,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 2},
+		},
+		Right: &TreeNode{
+			Val:   1,
+			Left:  &TreeNode{Val: 0},
+			Right: &TreeNode{Val: 8},
+		},
+	}
+	p := root.Left
+	q := root.Right
+	expected := root
+
+	actual := LowestCommonAncestor(root, p, q)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLowestCommonAncestorInUnbalancedTree(t *testing.T) {
+	root := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:   5,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 2},
+		},
+	}
+	p := root.Left
+	q := root.Left.Right
+	expected := root.Left
+
+	actual := LowestCommonAncestor(root, p, q)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLowestCommonAncestorWithOneNode(t *testing.T) {
+	root := &TreeNode{Val: 1}
+	p := root
+	q := root
+	expected := root
+
+	actual := LowestCommonAncestor(root, p, q)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLowestCommonAncestorWithNilNodes(t *testing.T) {
+	root := &TreeNode{Val: 1}
+	p := (*TreeNode)(nil)
+	q := (*TreeNode)(nil)
+
+	actual := LowestCommonAncestor(root, p, q)
+	assert.Nil(t, actual)
+}
+
+func TestLowestCommonAncestorWithNilRoot(t *testing.T) {
+	root := (*TreeNode)(nil)
+	p := &TreeNode{Val: 1}
+	q := &TreeNode{Val: 2}
+	expected := (*TreeNode)(nil)
+
+	actual := LowestCommonAncestor(root, p, q)
+	assert.Equal(t, expected, actual)
+}
+
+func BenchmarkLowestCommonAncestor(b *testing.B) {
+	b.ReportAllocs()
+
+	root := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:   5,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 2},
+		},
+		Right: &TreeNode{
+			Val:   1,
+			Left:  &TreeNode{Val: 0},
+			Right: &TreeNode{Val: 8},
+		},
+	}
+	p := root.Left
+	q := root.Right
+
+	for i := 0; i < b.N; i++ {
+		_ = LowestCommonAncestor(root, p, q)
+	}
+}

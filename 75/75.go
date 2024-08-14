@@ -943,18 +943,18 @@ func PathSum(root *TreeNode, targetSum int) int {
 }
 
 func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
-	if root == nil || p == nil || q == nil {
+	if root == nil || root == p || root == q {
 		return root
 	}
 
 	left := LowestCommonAncestor(root.Left, p, q)
 	right := LowestCommonAncestor(root.Right, p, q)
 
-	if left == nil && right == nil {
+	if left != nil && right != nil {
 		return root
 	}
 
-	if left == nil {
+	if left != nil {
 		return left
 	}
 	return right

@@ -2534,3 +2534,112 @@ func TestLongestZigZagWithNegativeValues(t *testing.T) {
 	actual := LongestZigZag(root)
 	assert.Equal(t, expected, actual)
 }
+
+func BenchmarkLongestZigZag(b *testing.B) {
+	b.ReportAllocs()
+
+	root := &TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{Val: 4},
+			Right: &TreeNode{Val: 5},
+		},
+		Right: &TreeNode{
+			Val:   3,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 7},
+		},
+	}
+
+	for i := 0; i < b.N; i++ {
+		_ = LongestZigZag(root)
+	}
+}
+
+func TestSearchBSTInEmptyTree(t *testing.T) {
+	root := (*TreeNode)(nil)
+	val := 5
+	expected := (*TreeNode)(nil)
+
+	actual := SearchBST(root, val)
+	assert.Equal(t, expected, actual)
+}
+
+func TestSearchBSTSingleNodeTree(t *testing.T) {
+	root := &TreeNode{Val: 5}
+	val := 5
+	expected := root
+
+	actual := SearchBST(root, val)
+	assert.Equal(t, expected, actual)
+}
+
+func TestSearchBSTValueExists(t *testing.T) {
+	root := &TreeNode{
+		Val: 4,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{Val: 1},
+			Right: &TreeNode{Val: 3},
+		},
+		Right: &TreeNode{Val: 7},
+	}
+	val := 3
+	expected := root.Left.Right
+
+	actual := SearchBST(root, val)
+	assert.Equal(t, expected, actual)
+}
+
+func TestSearchBSTValueDoesNotExist(t *testing.T) {
+	root := &TreeNode{
+		Val: 4,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{Val: 1},
+			Right: &TreeNode{Val: 3},
+		},
+		Right: &TreeNode{Val: 7},
+	}
+	val := 5
+	expected := (*TreeNode)(nil)
+
+	actual := SearchBST(root, val)
+	assert.Equal(t, expected, actual)
+}
+
+func TestSearchBSTValueInRightSubtree(t *testing.T) {
+	root := &TreeNode{
+		Val: 4,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{Val: 1},
+			Right: &TreeNode{Val: 3},
+		},
+		Right: &TreeNode{Val: 7},
+	}
+	val := 7
+	expected := root.Right
+
+	actual := SearchBST(root, val)
+	assert.Equal(t, expected, actual)
+}
+
+func BenchmarkSearchBST(b *testing.B) {
+	b.ReportAllocs()
+
+	root := &TreeNode{
+		Val: 4,
+		Left: &TreeNode{
+			Val:   2,
+			Left:  &TreeNode{Val: 1},
+			Right: &TreeNode{Val: 3},
+		},
+		Right: &TreeNode{Val: 7},
+	}
+
+	for i := 0; i < b.N; i++ {
+		_ = SearchBST(root, 3)
+	}
+}

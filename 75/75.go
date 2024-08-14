@@ -1125,7 +1125,6 @@ func CanVisitAllRooms(rooms [][]int) bool {
 	}
 
 	dfs(0)
-
 	for _, k := range visited {
 		if !k {
 			return false

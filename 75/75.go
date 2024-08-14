@@ -1184,7 +1184,6 @@ func MinReorder(n int, connections [][]int) int {
 
 			reversals += dfs(neighbor, node)
 		}
-
 		return reversals
 	}
 

@@ -2038,3 +2038,134 @@ func TestMaxDepthOfUnbalancedTree(t *testing.T) {
 	actual := MaxDepth(root)
 	assert.Equal(t, expected, actual)
 }
+
+func TestLeafSimilarTreesWithSameLeaves(t *testing.T) {
+	root1 := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:   5,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 2, Left: &TreeNode{Val: 7}, Right: &TreeNode{Val: 4}},
+		},
+		Right: &TreeNode{
+			Val:   1,
+			Left:  &TreeNode{Val: 9},
+			Right: &TreeNode{Val: 8},
+		},
+	}
+	root2 := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:   5,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 2, Left: &TreeNode{Val: 7}, Right: &TreeNode{Val: 4}},
+		},
+		Right: &TreeNode{
+			Val:   1,
+			Left:  &TreeNode{Val: 9},
+			Right: &TreeNode{Val: 8},
+		},
+	}
+	expected := true
+
+	actual := LeafSimilar(root1, root2)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLeafSimilarTreesWithDifferentLeaves(t *testing.T) {
+	root1 := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:   5,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 2, Left: &TreeNode{Val: 7}, Right: &TreeNode{Val: 4}},
+		},
+		Right: &TreeNode{
+			Val:   1,
+			Left:  &TreeNode{Val: 9},
+			Right: &TreeNode{Val: 8},
+		},
+	}
+	root2 := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:   5,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 2, Left: &TreeNode{Val: 7}, Right: &TreeNode{Val: 10}},
+		},
+		Right: &TreeNode{
+			Val:   1,
+			Left:  &TreeNode{Val: 9},
+			Right: &TreeNode{Val: 8},
+		},
+	}
+	expected := false
+
+	actual := LeafSimilar(root1, root2)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLeafSimilarEmptyTrees(t *testing.T) {
+	root1 := (*TreeNode)(nil)
+	root2 := (*TreeNode)(nil)
+	expected := true
+
+	actual := LeafSimilar(root1, root2)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLeafSimilarOneEmptyTree(t *testing.T) {
+	root1 := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:   5,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 2, Left: &TreeNode{Val: 7}, Right: &TreeNode{Val: 4}},
+		},
+		Right: &TreeNode{
+			Val:   1,
+			Left:  &TreeNode{Val: 9},
+			Right: &TreeNode{Val: 8},
+		},
+	}
+	root2 := (*TreeNode)(nil)
+	expected := false
+
+	actual := LeafSimilar(root1, root2)
+	assert.Equal(t, expected, actual)
+}
+
+func BenchmarkLeafSimilar(b *testing.B) {
+	b.ReportAllocs()
+
+	root1 := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:   5,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 2, Left: &TreeNode{Val: 7}, Right: &TreeNode{Val: 4}},
+		},
+		Right: &TreeNode{
+			Val:   1,
+			Left:  &TreeNode{Val: 9},
+			Right: &TreeNode{Val: 8},
+		},
+	}
+	root2 := &TreeNode{
+		Val: 3,
+		Left: &TreeNode{
+			Val:   5,
+			Left:  &TreeNode{Val: 6},
+			Right: &TreeNode{Val: 2, Left: &TreeNode{Val: 7}, Right: &TreeNode{Val: 4}},
+		},
+		Right: &TreeNode{
+			Val:   1,
+			Left:  &TreeNode{Val: 9},
+			Right: &TreeNode{Val: 8},
+		},
+	}
+
+	for i := 0; i < b.N; i++ {
+		_ = LeafSimilar(root1, root2)
+	}
+}

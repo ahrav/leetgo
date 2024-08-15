@@ -1335,36 +1335,36 @@ func GuessNumber(n int) int {
 
 type SmallestInfiniteSet struct {
 	heap *MinHeap
-	m    map[int]struct{}
+	arr  [1001]int
 }
 
-func Constructor() SmallestInfiniteSet {
+func SmallestInfiniteSetConstructor() SmallestInfiniteSet {
 	h := new(MinHeap)
 	heap.Init(h)
 
-	m := make(map[int]struct{}, 1000)
+	var arr [1001]int
 
 	for i := 1; i <= 1000; i++ {
 		heap.Push(h, i)
-		m[i] = struct{}{}
+		arr[i] = 1
 	}
 
 	return SmallestInfiniteSet{
 		heap: h,
-		m:    m,
+		arr:  arr,
 	}
 }
 
-func (this *SmallestInfiniteSet) PopSmallest() int {
-	v := heap.Pop(this.heap)
-	delete(this.m, v.(int))
+func (s *SmallestInfiniteSet) PopSmallest() int {
+	v := heap.Pop(s.heap)
+	s.arr[v.(int)] = 0
 	return v.(int)
 }
 
-func (this *SmallestInfiniteSet) AddBack(num int) {
-	if _, ok := this.m[num]; ok {
+func (s *SmallestInfiniteSet) AddBack(num int) {
+	if s.arr[num] == 1 {
 		return
 	}
-	heap.Push(this.heap, num)
-	this.m[num] = struct{}{}
+	heap.Push(s.heap, num)
+	s.arr[num] = 1
 }

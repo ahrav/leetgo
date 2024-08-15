@@ -1570,7 +1570,7 @@ func LetterCombinations(digits string) []string {
 		}
 
 		letters := mapping[digits[index]]
-		for i := 0; i < len(letters); i++ {
+		for i := range letters {
 			curr[index] = letters[i]
 			backtrack(index + 1)
 		}

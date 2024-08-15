@@ -3366,3 +3366,74 @@ func BenchmarkFindKthLargest(b *testing.B) {
 		_ = FindKthLargest(nums, k)
 	}
 }
+
+func TestSmallestInfiniteSetConstructorCreatesSetWithAllNumbers(t *testing.T) {
+	t.Parallel()
+
+	s := SmallestInfiniteSetConstructor()
+	for i := 1; i <= 1000; i++ {
+		assert.Equal(t, 1, s.arr[i])
+	}
+}
+
+func TestPopSmallestReturnsSmallestNumber(t *testing.T) {
+	t.Parallel()
+
+	s := SmallestInfiniteSetConstructor()
+	assert.Equal(t, 1, s.PopSmallest())
+	assert.Equal(t, 0, s.arr[1])
+}
+
+func TestPopSmallestRemovesNumberFromSet(t *testing.T) {
+	t.Parallel()
+
+	s := SmallestInfiniteSetConstructor()
+	s.PopSmallest()
+	assert.Equal(t, 0, s.arr[1])
+}
+
+func TestAddBackReinsertsNumberIntoSet(t *testing.T) {
+	t.Parallel()
+
+	s := SmallestInfiniteSetConstructor()
+	s.PopSmallest()
+	s.AddBack(1)
+	assert.Equal(t, 1, s.arr[1])
+}
+
+func TestAddBackDoesNotReinsertExistingNumber(t *testing.T) {
+	t.Parallel()
+
+	s := SmallestInfiniteSetConstructor()
+	s.AddBack(1)
+	assert.Equal(t, 1, s.arr[1])
+}
+
+func TestPopSmallestAfterAddBack(t *testing.T) {
+	t.Parallel()
+
+	s := SmallestInfiniteSetConstructor()
+	s.PopSmallest()
+	s.AddBack(1)
+	assert.Equal(t, 1, s.PopSmallest())
+}
+
+func TestPopSmallestMultipleTimes(t *testing.T) {
+	t.Parallel()
+
+	s := SmallestInfiniteSetConstructor()
+	assert.Equal(t, 1, s.PopSmallest())
+	assert.Equal(t, 2, s.PopSmallest())
+	assert.Equal(t, 3, s.PopSmallest())
+}
+
+func TestAddBackAndPopSmallest(t *testing.T) {
+	t.Parallel()
+
+	s := SmallestInfiniteSetConstructor()
+	s.PopSmallest()
+	s.PopSmallest()
+	s.AddBack(1)
+	assert.Equal(t, 1, s.PopSmallest())
+	assert.Equal(t, 3, s.PopSmallest())
+}

@@ -3299,3 +3299,70 @@ func BenchmarkNearestExit(b *testing.B) {
 		_ = NearestExit(maze, entrance)
 	}
 }
+
+func TestFindKthLargest(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected int
+	}{
+		{
+			name:     "kth largest in sorted array",
+			nums:     []int{1, 2, 3, 4, 5},
+			k:        2,
+			expected: 4,
+		},
+		{
+			name:     "kth largest in reverse sorted array",
+			nums:     []int{5, 4, 3, 2, 1},
+			k:        3,
+			expected: 3,
+		},
+		{
+			name:     "kth largest in array with duplicates",
+			nums:     []int{3, 2, 3, 1, 2, 4, 5, 5, 6},
+			k:        4,
+			expected: 4,
+		},
+		{
+			name:     "kth largest in array with negative numbers",
+			nums:     []int{-1, -2, -3, -4, -5},
+			k:        1,
+			expected: -1,
+		},
+		{
+			name:     "kth largest in array with mixed numbers",
+			nums:     []int{3, 2, 1, 5, 6, 4},
+			k:        2,
+			expected: 5,
+		},
+		{
+			name:     "kth largest in single element array",
+			nums:     []int{1},
+			k:        1,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := FindKthLargest(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkFindKthLargest(b *testing.B) {
+	b.ReportAllocs()
+
+	nums := []int{3, 2, 3, 1, 2, 4, 5, 5, 6}
+	k := 4
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = FindKthLargest(nums, k)
+	}
+}

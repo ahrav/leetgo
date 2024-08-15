@@ -1383,7 +1383,7 @@ func MaxScore(nums1 []int, nums2 []int, k int) int64 {
 	h := new(MinHeap)
 	heap.Init(h)
 
-	var sum, maxSum int
+	var sum, maxScore int
 	for _, pair := range pairs {
 		heap.Push(h, pair[1])
 		sum += pair[1]
@@ -1394,11 +1394,11 @@ func MaxScore(nums1 []int, nums2 []int, k int) int64 {
 
 		if h.Len() == k {
 			score := sum * pair[0]
-			if score > maxSum {
-				maxSum = score
+			if score > maxScore {
+				maxScore = score
 			}
 		}
 	}
 
-	return int64(maxSum)
+	return int64(maxScore)
 }

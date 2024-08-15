@@ -1541,3 +1541,41 @@ func FindPeakElement(nums []int) int {
 
 	return left
 }
+
+func LetterCombinations(digits string) []string {
+	n := len(digits)
+	if n == 0 {
+		return nil
+	}
+
+	mapping := map[byte]string{
+		'2': "abc",
+		'3': "def",
+		'4': "ghi",
+		'5': "jkl",
+		'6': "mno",
+		'7': "pqrs",
+		'8': "tuv",
+		'9': "wxyz",
+	}
+
+	var res []string
+	curr := make([]byte, n)
+
+	var backtrack func(int)
+	backtrack = func(index int) {
+		if index == n {
+			res = append(res, string(curr))
+			return
+		}
+
+		letters := mapping[digits[index]]
+		for i := 0; i < len(letters); i++ {
+			curr[index] = letters[i]
+			backtrack(index + 1)
+		}
+	}
+
+	backtrack(0)
+	return res
+}

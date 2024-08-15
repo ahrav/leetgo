@@ -2,6 +2,7 @@ package seventyfive
 
 import (
 	"math/rand"
+	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -3750,5 +3751,56 @@ func BenchmarkFindPeakElement(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_ = FindPeakElement([]int{1, 3, 2, 4, 1})
+	}
+}
+
+func TestLetterCombinations(t *testing.T) {
+	tests := []struct {
+		name     string
+		digits   string
+		expected []string
+	}{
+		{
+			name:     "Empty input",
+			digits:   "",
+			expected: nil,
+		},
+		{
+			name:     "Single digit",
+			digits:   "2",
+			expected: []string{"a", "b", "c"},
+		},
+		{
+			name:     "Two digits",
+			digits:   "23",
+			expected: []string{"ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"},
+		},
+		{
+			name:     "Three digits",
+			digits:   "456",
+			expected: []string{"gjm", "gjn", "gjo", "gkm", "gkn", "gko", "glm", "gln", "glo", "hjm", "hjn", "hjo", "hkm", "hkn", "hko", "hlm", "hln", "hlo", "ijm", "ijn", "ijo", "ikm", "ikn", "iko", "ilm", "iln", "ilo"},
+		},
+		{
+			name:     "Digits with no mapping",
+			digits:   "01",
+			expected: nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := LetterCombinations(tt.digits)
+			if !reflect.DeepEqual(result, tt.expected) {
+				t.Errorf("LetterCombinations(%s) = %v, want %v", tt.digits, result, tt.expected)
+			}
+		})
+	}
+}
+
+func BenchmarkLetterCombinations(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = LetterCombinations("456")
 	}
 }

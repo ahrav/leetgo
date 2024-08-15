@@ -1304,3 +1304,31 @@ func FindKthLargest(nums []int, k int) int {
 
 	return (*h)[0]
 }
+
+func guessNumber(n int) int {
+	guess := func(num int) int {
+		pick := 6
+		if num == pick {
+			return 0
+		} else if num > pick {
+			return -1
+		}
+		return 1
+	}
+
+	low, high := 0, n
+	for low <= high {
+		mid := low + (high-low)/2
+		val := guess(mid)
+
+		if val == 0 {
+			return mid
+		} else if val == 1 {
+			low = mid + 1
+		} else {
+			high = mid - 1
+		}
+	}
+
+	return -1
+}

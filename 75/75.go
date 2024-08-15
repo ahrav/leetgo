@@ -1473,3 +1473,31 @@ func TotalCost(costs []int, k int, candidates int) int64 {
 
 	return int64(totalCost)
 }
+
+func MinEatingSpeed(piles []int, h int) int {
+	canFinish := func(rate int) bool {
+		var hours int
+		for _, pile := range piles {
+			hours += (rate + pile - 1) / rate
+		}
+		return hours <= h
+	}
+
+	minV, maxV := 1, 0
+	for _, pile := range piles {
+		if pile > maxV {
+			maxV = pile
+		}
+	}
+
+	for minV < maxV {
+		mid := minV + (maxV-minV)/2
+		if canFinish(mid) {
+			maxV = mid
+		} else {
+			minV = mid + 1
+		}
+	}
+
+	return minV
+}

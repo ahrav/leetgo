@@ -3566,3 +3566,60 @@ func BenchmarkTotalCost(b *testing.B) {
 		_ = TotalCost(costs, k, candidates)
 	}
 }
+
+func TestMinEatingSpeed(t *testing.T) {
+	tests := []struct {
+		name     string
+		piles    []int
+		h        int
+		expected int
+	}{
+		{
+			name:     "Single pile, exact hours",
+			piles:    []int{5},
+			h:        5,
+			expected: 1,
+		},
+		{
+			name:     "Single pile, more hours",
+			piles:    []int{5},
+			h:        10,
+			expected: 1,
+		},
+		{
+			name:     "Single pile, less hours",
+			piles:    []int{5},
+			h:        1,
+			expected: 5,
+		},
+		{
+			name:     "Multiple piles, exact hours",
+			piles:    []int{3, 6, 7, 11},
+			h:        8,
+			expected: 4,
+		},
+		{
+			name:     "Empty piles",
+			piles:    []int{},
+			h:        5,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MinEatingSpeed(tt.piles, tt.h)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinEatingSpeed(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MinEatingSpeed([]int{3, 6, 7, 11}, 8)
+	}
+}

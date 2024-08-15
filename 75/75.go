@@ -1305,7 +1305,7 @@ func FindKthLargest(nums []int, k int) int {
 	return (*h)[0]
 }
 
-func guessNumber(n int) int {
+func GuessNumber(n int) int {
 	guess := func(num int) int {
 		pick := 6
 		if num == pick {
@@ -1331,4 +1331,40 @@ func guessNumber(n int) int {
 	}
 
 	return -1
+}
+
+type SmallestInfiniteSet struct {
+	heap *MinHeap
+	m    map[int]struct{}
+}
+
+func Constructor() SmallestInfiniteSet {
+	h := new(MinHeap)
+	heap.Init(h)
+
+	m := make(map[int]struct{}, 1000)
+
+	for i := 1; i <= 1000; i++ {
+		heap.Push(h, i)
+		m[i] = struct{}{}
+	}
+
+	return SmallestInfiniteSet{
+		heap: h,
+		m:    m,
+	}
+}
+
+func (this *SmallestInfiniteSet) PopSmallest() int {
+	v := heap.Pop(this.heap)
+	delete(this.m, v.(int))
+	return v.(int)
+}
+
+func (this *SmallestInfiniteSet) AddBack(num int) {
+	if _, ok := this.m[num]; ok {
+		return
+	}
+	heap.Push(this.heap, num)
+	this.m[num] = struct{}{}
 }

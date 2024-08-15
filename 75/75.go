@@ -1402,3 +1402,74 @@ func MaxScore(nums1 []int, nums2 []int, k int) int64 {
 
 	return int64(maxScore)
 }
+
+type Worker struct {
+	cost  int
+	index int
+}
+
+type MinWorkerHeap []Worker
+
+func (h MinWorkerHeap) Len() int { return len(h) }
+
+func (h MinWorkerHeap) Less(i, j int) bool {
+	if h[i].cost == h[j].cost {
+		return h[i].index < h[j].index
+	}
+	return h[i].cost < h[j].cost
+}
+
+func (h MinWorkerHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+
+func (h *MinWorkerHeap) Push(x any) { *h = append(*h, x.(Worker)) }
+
+func (h *MinWorkerHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[:n-1]
+	return x
+}
+
+func TotalCost(costs []int, k int, candidates int) int64 {
+	if candidates == 0 {
+		return 0
+	}
+
+	n := len(costs)
+
+	lh, rh := new(MinWorkerHeap), new(MinWorkerHeap)
+	heap.Init(lh)
+	heap.Init(rh)
+
+	lp, rp := 0, n-1
+	for i := 0; i < candidates && lp <= rp; i++ {
+		heap.Push(lh, Worker{costs[lp], lp})
+		lp++
+	}
+	for i := 0; i < candidates && lp <= rp; i++ {
+		heap.Push(rh, Worker{costs[rp], rp})
+		rp--
+	}
+
+	var totalCost int
+	for i := 0; i < k; i++ {
+		if rh.Len() == 0 || (lh.Len() > 0 && (*lh)[0].cost <= (*rh)[0].cost) {
+			worker := heap.Pop(lh).(Worker)
+			totalCost += worker.cost
+			if lp <= rp {
+				heap.Push(lh, Worker{costs[lp], lp})
+				lp++
+			}
+		} else {
+			worker := heap.Pop(rh).(Worker)
+			totalCost += worker.cost
+			if lp <= rp {
+				heap.Push(rh, Worker{costs[rp], rp})
+				rp--
+			}
+		}
+	}
+
+	return int64(totalCost)
+}

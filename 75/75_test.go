@@ -3498,3 +3498,71 @@ func BenchmarkMaxScore(b *testing.B) {
 		_ = MaxScore(nums1, nums2, k)
 	}
 }
+
+func TestTotalCost(t *testing.T) {
+	tests := []struct {
+		name       string
+		costs      []int
+		k          int
+		candidates int
+		expected   int64
+	}{
+		{
+			name:       "Equal costs",
+			costs:      []int{5, 5, 5, 5, 5},
+			k:          3,
+			candidates: 2,
+			expected:   15,
+		},
+		{
+			name:       "Different costs",
+			costs:      []int{1, 2, 3, 4, 5},
+			k:          3,
+			candidates: 2,
+			expected:   6,
+		},
+		{
+			name:       "Single candidate",
+			costs:      []int{1, 2, 3, 4, 5},
+			k:          1,
+			candidates: 1,
+			expected:   1,
+		},
+		{
+			name:       "More candidates than costs",
+			costs:      []int{1, 2, 3},
+			k:          2,
+			candidates: 5,
+			expected:   3,
+		},
+		{
+			name:       "Zero candidates",
+			costs:      []int{1, 2, 3, 4, 5},
+			k:          3,
+			candidates: 0,
+			expected:   0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := TotalCost(tt.costs, tt.k, tt.candidates)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkTotalCost(b *testing.B) {
+	b.ReportAllocs()
+
+	costs := []int{1, 2, 3, 4, 5}
+	k := 3
+	candidates := 2
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = TotalCost(costs, k, candidates)
+	}
+}

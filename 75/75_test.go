@@ -2956,6 +2956,8 @@ func TestCanVisitAllRooms(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			actual := CanVisitAllRooms(tt.rooms)
 			assert.Equal(t, tt.expected, actual)
 		})
@@ -3020,6 +3022,8 @@ func TestFindCircleNum(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			actual := FindCircleNum(tt.isConnected)
 			assert.Equal(t, tt.expected, actual)
 		})
@@ -3094,6 +3098,8 @@ func TestMinReorder(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			actual := MinReorder(tt.n, tt.connections)
 			assert.Equal(t, tt.expected, actual)
 		})
@@ -3186,6 +3192,8 @@ func TestOrangesRotting(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			actual := OrangesRotting(tt.grid)
 			assert.Equal(t, tt.expected, actual)
 		})
@@ -3204,5 +3212,90 @@ func BenchmarkOrangesRotting(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_ = OrangesRotting(grid)
+	}
+}
+
+func TestNearestExit(t *testing.T) {
+	tests := []struct {
+		name     string
+		maze     [][]byte
+		entrance []int
+		expected int
+	}{
+		{
+			name: "SinglePathToExit",
+			maze: [][]byte{
+				{'+', '+', '.', '+'},
+				{'.', '.', '.', '+'},
+				{'+', '+', '+', '.'},
+			},
+			entrance: []int{1, 0},
+			expected: 3,
+		},
+		{
+			name: "NoExit",
+			maze: [][]byte{
+				{'+', '+', '+'},
+				{'.', '.', '.'},
+				{'+', '+', '+'},
+			},
+			entrance: []int{1, 0},
+			expected: 2,
+		},
+		{
+			name: "MultiplePathsToExit",
+			maze: [][]byte{
+				{'+', '.', '+', '+', '+', '+', '+'},
+				{'+', '.', '.', '.', '.', '.', '+'},
+				{'+', '+', '+', '+', '.', '+', '+'},
+			},
+			entrance: []int{1, 1},
+			expected: 1,
+		},
+		{
+			name: "ExitOnEdge",
+			maze: [][]byte{
+				{'+', '+', '+'},
+				{'.', '.', '.'},
+				{'+', '+', '+'},
+			},
+			entrance: []int{1, 2},
+			expected: 2,
+		},
+		{
+			name: "LargeMaze",
+			maze: [][]byte{
+				{'+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+'},
+				{'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
+				{'+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+'},
+			},
+			entrance: []int{1, 0},
+			expected: 19,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := NearestExit(tt.maze, tt.entrance)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkNearestExit(b *testing.B) {
+	b.ReportAllocs()
+
+	maze := [][]byte{
+		{'+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+'},
+		{'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
+		{'+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+'},
+	}
+	entrance := []int{1, 1}
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = NearestExit(maze, entrance)
 	}
 }

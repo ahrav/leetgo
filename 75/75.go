@@ -1237,3 +1237,40 @@ func OrangesRotting(grid [][]int) int {
 	}
 	return -1
 }
+
+func NearestExit(maze [][]byte, entrance []int) int {
+	type Coord struct{ x, y int }
+
+	directions := []Coord{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
+	rows, cols := len(maze), len(maze[0])
+
+	queue := []Coord{{entrance[0], entrance[1]}}
+	maze[entrance[0]][entrance[1]] = '+'
+
+	steps := 0
+
+	for len(queue) > 0 {
+		level := len(queue)
+		for i := 0; i < level; i++ {
+			curr := queue[0]
+			queue = queue[1:]
+
+			currX, currY := curr.x, curr.y
+
+			for _, dir := range directions {
+				newX, newY := currX+dir.x, currY+dir.y
+				if newX >= 0 && newX < rows && newY >= 0 && newY < cols && maze[newX][newY] == '.' {
+					if newX == 0 || newX == rows-1 || newY == 0 || newY == cols-1 {
+						return steps + 1
+					}
+
+					queue = append(queue, Coord{newX, newY})
+					maze[newX][newY] = '+'
+				}
+			}
+		}
+		steps++
+	}
+
+	return -1
+}

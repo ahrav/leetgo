@@ -1368,3 +1368,37 @@ func (s *SmallestInfiniteSet) AddBack(num int) {
 	heap.Push(s.heap, num)
 	s.arr[num] = 1
 }
+
+func MaxScore(nums1 []int, nums2 []int, k int) int64 {
+	n := len(nums1)
+	pairs := make([][2]int, n)
+	for i := range nums1 {
+		pairs[i] = [2]int{nums2[i], nums1[i]}
+	}
+
+	sort.Slice(pairs, func(i, j int) bool {
+		return pairs[i][0] > pairs[j][0]
+	})
+
+	h := new(MinHeap)
+	heap.Init(h)
+
+	var sum, maxSum int
+	for _, pair := range pairs {
+		heap.Push(h, pair[1])
+		sum += pair[1]
+
+		if h.Len() > k {
+			sum -= heap.Pop(h).(int)
+		}
+
+		if h.Len() == k {
+			score := sum * pair[0]
+			if score > maxSum {
+				maxSum = score
+			}
+		}
+	}
+
+	return int64(maxSum)
+}

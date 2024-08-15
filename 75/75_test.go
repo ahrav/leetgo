@@ -3437,3 +3437,64 @@ func TestAddBackAndPopSmallest(t *testing.T) {
 	assert.Equal(t, 1, s.PopSmallest())
 	assert.Equal(t, 3, s.PopSmallest())
 }
+
+func TestMaxScore(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums1    []int
+		nums2    []int
+		k        int
+		expected int64
+	}{
+		{
+			name:     "equal length arrays",
+			nums1:    []int{1, 2, 3, 4, 5},
+			nums2:    []int{5, 4, 3, 2, 1},
+			k:        3,
+			expected: int64(18),
+		},
+		{
+			name:     "single element arrays",
+			nums1:    []int{1},
+			nums2:    []int{1},
+			k:        1,
+			expected: int64(1),
+		},
+		{
+			name:     "k equal to zero",
+			nums1:    []int{1, 2, 3},
+			nums2:    []int{3, 2, 1},
+			k:        0,
+			expected: int64(0),
+		},
+		{
+			name:     "negative values",
+			nums1:    []int{-1, -2, -3},
+			nums2:    []int{-3, -2, -1},
+			k:        2,
+			expected: int64(10),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MaxScore(tt.nums1, tt.nums2, tt.k)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMaxScore(b *testing.B) {
+	b.ReportAllocs()
+
+	nums1 := []int{1, 2, 3, 4, 5}
+	nums2 := []int{5, 4, 3, 2, 1}
+	k := 3
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = MaxScore(nums1, nums2, k)
+	}
+}

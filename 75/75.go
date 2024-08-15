@@ -1593,7 +1593,7 @@ func CombinationSum3(k int, n int) [][]int {
 			return
 		}
 
-		if count > k || remaining < 0 {
+		if remaining < 0 || count > k {
 			return
 		}
 

@@ -3116,3 +3116,93 @@ func BenchmarkMinReorder(b *testing.B) {
 		_ = MinReorder(6, connections)
 	}
 }
+
+func TestOrangesRotting(t *testing.T) {
+	tests := []struct {
+		name     string
+		grid     [][]int
+		expected int
+	}{
+		{
+			name: "All fresh oranges",
+			grid: [][]int{
+				{1, 1, 1},
+				{1, 1, 1},
+				{1, 1, 1},
+			},
+			expected: -1,
+		},
+		{
+			name: "All rotten oranges",
+			grid: [][]int{
+				{2, 2, 2},
+				{2, 2, 2},
+				{2, 2, 2},
+			},
+			expected: 0,
+		},
+		{
+			name: "Mixed fresh and rotten oranges",
+			grid: [][]int{
+				{2, 1, 1},
+				{1, 1, 0},
+				{0, 1, 1},
+			},
+			expected: 4,
+		},
+		{
+			name: "No oranges",
+			grid: [][]int{
+				{0, 0, 0},
+				{0, 0, 0},
+				{0, 0, 0},
+			},
+			expected: 0,
+		},
+		{
+			name: "Single fresh orange",
+			grid: [][]int{
+				{1},
+			},
+			expected: -1,
+		},
+		{
+			name: "Single rotten orange",
+			grid: [][]int{
+				{2},
+			},
+			expected: 0,
+		},
+		{
+			name: "Fresh oranges surrounded by empty cells",
+			grid: [][]int{
+				{0, 1, 0},
+				{0, 1, 0},
+				{0, 1, 0},
+			},
+			expected: -1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := OrangesRotting(tt.grid)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkOrangesRotting(b *testing.B) {
+	b.ReportAllocs()
+
+	grid := [][]int{
+		{2, 1, 1},
+		{1, 1, 0},
+		{0, 1, 1},
+	}
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = OrangesRotting(grid)
+	}
+}

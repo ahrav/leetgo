@@ -1189,3 +1189,51 @@ func MinReorder(n int, connections [][]int) int {
 
 	return dfs(0, -1)
 }
+
+func OrangesRotting(grid [][]int) int {
+	type Coord struct{ x, y int }
+
+	var queue []Coord
+	freshCnt := 0
+
+	for i := range grid {
+		for j := range grid[i] {
+			if grid[i][j] == 1 {
+				freshCnt++
+			} else if grid[i][j] == 2 {
+				queue = append(queue, Coord{i, j})
+			}
+		}
+	}
+
+	if freshCnt == 0 {
+		return 0
+	}
+
+	minutes := -1
+	rows, cols := len(grid), len(grid[0])
+	directions := []Coord{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
+	for len(queue) > 0 {
+		level := len(queue)
+		for i := 0; i < level; i++ {
+			curr := queue[0]
+			queue = queue[1:]
+
+			currX, currY := curr.x, curr.y
+			for _, dir := range directions {
+				newX, newY := currX+dir.x, currY+dir.y
+				if newX >= 0 && newX < rows && newY >= 0 && newY < cols && grid[newX][newY] == 1 {
+					freshCnt--
+					grid[newX][newY] = 2
+					queue = append(queue, Coord{newX, newY})
+				}
+			}
+		}
+		minutes++
+	}
+
+	if freshCnt == 0 {
+		return minutes
+	}
+	return -1
+}

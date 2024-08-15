@@ -1579,3 +1579,31 @@ func LetterCombinations(digits string) []string {
 	backtrack(0)
 	return res
 }
+
+func CombinationSum3(k int, n int) [][]int {
+	var res [][]int
+	var combination []int
+
+	var backtrack func(int, int, int)
+	backtrack = func(start, remaining, count int) {
+		if remaining == 0 && count == k {
+			tmp := make([]int, len(combination))
+			copy(tmp, combination)
+			res = append(res, tmp)
+			return
+		}
+
+		if count > k || remaining < 0 {
+			return
+		}
+
+		for i := start; i <= 9; i++ {
+			combination = append(combination, i)
+			backtrack(i+1, remaining-i, count+1)
+			combination = combination[:len(combination)-1]
+		}
+	}
+
+	backtrack(1, n, 0)
+	return res
+}

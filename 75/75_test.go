@@ -3804,3 +3804,54 @@ func BenchmarkLetterCombinations(b *testing.B) {
 		_ = LetterCombinations("456")
 	}
 }
+
+func TestCombinationSum3(t *testing.T) {
+	tests := []struct {
+		name     string
+		k        int
+		n        int
+		expected [][]int
+	}{
+		{
+			name:     "SingleCombination",
+			k:        3,
+			n:        7,
+			expected: [][]int{{1, 2, 4}},
+		},
+		{
+			name:     "MultipleCombinations",
+			k:        3,
+			n:        9,
+			expected: [][]int{{1, 2, 6}, {1, 3, 5}, {2, 3, 4}},
+		},
+		{
+			name:     "NoCombinations",
+			k:        4,
+			n:        1,
+			expected: [][]int{},
+		},
+		{
+			name:     "SingleElementCombination",
+			k:        1,
+			n:        9,
+			expected: [][]int{{9}},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := CombinationSum3(tt.k, tt.n)
+			assert.ElementsMatch(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkCombinationSum3(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CombinationSum3(3, 9)
+	}
+}

@@ -3623,3 +3623,132 @@ func BenchmarkMinEatingSpeed(b *testing.B) {
 		_ = MinEatingSpeed([]int{3, 6, 7, 11}, 8)
 	}
 }
+
+func TestSuccessfulPairs(t *testing.T) {
+	tests := []struct {
+		name     string
+		spells   []int
+		potions  []int
+		success  int64
+		expected []int
+	}{
+		{
+			name:     "All pairs successful",
+			spells:   []int{10, 20},
+			potions:  []int{2, 3, 4},
+			success:  20,
+			expected: []int{3, 3},
+		},
+		{
+			name:     "No pairs successful",
+			spells:   []int{1, 2},
+			potions:  []int{1, 1, 1},
+			success:  10,
+			expected: []int{0, 0},
+		},
+		{
+			name:     "Mixed success",
+			spells:   []int{5, 1},
+			potions:  []int{1, 2, 3},
+			success:  5,
+			expected: []int{3, 0},
+		},
+		{
+			name:     "Empty spells",
+			spells:   []int{},
+			potions:  []int{1, 2, 3},
+			success:  5,
+			expected: []int{},
+		},
+		{
+			name:     "Empty potions",
+			spells:   []int{1, 2, 3},
+			potions:  []int{},
+			success:  5,
+			expected: []int{0, 0, 0},
+		},
+		{
+			name:     "Large numbers",
+			spells:   []int{100000, 200000},
+			potions:  []int{100000, 200000},
+			success:  10000000000,
+			expected: []int{2, 2},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := SuccessfulPairs(tt.spells, tt.potions, tt.success)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkSuccessfulPairs(b *testing.B) {
+	b.ReportAllocs()
+
+	spells := []int{10, 20}
+	potions := []int{2, 3, 4}
+	success := int64(20)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		_ = SuccessfulPairs(spells, potions, success)
+	}
+}
+
+func TestFindPeakElement(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected any // int or []int
+	}{
+		{
+			name:     "Single element",
+			nums:     []int{1},
+			expected: 0,
+		},
+		{
+			name:     "Multiple peaks",
+			nums:     []int{1, 3, 2, 4, 1},
+			expected: []int{1, 3}, // Both 1 and 3 are valid peaks
+		},
+		{
+			name:     "Descending order",
+			nums:     []int{5, 4, 3, 2, 1},
+			expected: 0,
+		},
+		{
+			name:     "Ascending order",
+			nums:     []int{1, 2, 3, 4, 5},
+			expected: 4,
+		},
+		{
+			name:     "Plateau",
+			nums:     []int{1, 2, 2, 3, 3, 2, 1},
+			expected: []int{3, 4}, // Both 3 and 4 are valid peaks
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := FindPeakElement(tt.nums)
+			switch expected := tt.expected.(type) {
+			case int:
+				assert.Equal(t, expected, actual)
+			case []int:
+				assert.Contains(t, expected, actual)
+			}
+		})
+	}
+}
+
+func BenchmarkFindPeakElement(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = FindPeakElement([]int{1, 3, 2, 4, 1})
+	}
+}

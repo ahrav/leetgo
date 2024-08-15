@@ -1501,3 +1501,43 @@ func MinEatingSpeed(piles []int, h int) int {
 
 	return minV
 }
+
+func SuccessfulPairs(spells, potions []int, success int64) []int {
+	n, m := len(spells), len(potions)
+	sort.Ints(potions)
+
+	successCount := func(spell int) int {
+		left, right := 0, m-1
+		for left <= right {
+			mid := left + (right-left)/2
+			if int64(potions[mid]*spell) >= success {
+				right = mid - 1
+			} else {
+				left = mid + 1
+			}
+		}
+
+		return m - left
+	}
+
+	res := make([]int, 0, n)
+	for _, spell := range spells {
+		res = append(res, successCount(spell))
+	}
+
+	return res
+}
+
+func FindPeakElement(nums []int) int {
+	left, right := 0, len(nums)-1
+	for left < right {
+		mid := left + (right-left)/2
+		if nums[mid] > nums[mid+1] {
+			right = mid
+		} else {
+			left = mid + 1
+		}
+	}
+
+	return left
+}

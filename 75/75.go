@@ -1679,11 +1679,11 @@ func Rob(nums []int) int {
 		return nums[0]
 	}
 
-	prev2, prev1 := 0, nums[0]
+	prev2, prev := 0, nums[0]
 	for i := 1; i < n; i++ {
-		curr := max(prev1, prev2+nums[i])
-		prev2, prev1 = prev1, curr
+		curr := max(prev, nums[i]+prev2)
+		prev2, prev = prev, curr
 	}
 
-	return prev1
+	return prev
 }

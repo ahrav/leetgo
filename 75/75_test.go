@@ -4240,3 +4240,99 @@ func BenchmarkSingleNumber(b *testing.B) {
 		_ = SingleNumber([]int{4, 1, 2, 1, 2})
 	}
 }
+
+func TestUniquePaths2DP(t *testing.T) {
+	tests := []struct {
+		name     string
+		m, n     int
+		expected int
+	}{
+		{"SingleCellGrid", 1, 1, 1},
+		{"SingleRowGrid", 1, 5, 1},
+		{"SingleColumnGrid", 5, 1, 1},
+		{"SmallGrid", 3, 3, 6},
+		{"LargeGrid", 10, 10, 48620},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := UniquePaths2DP(tt.m, tt.n)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkUniquePaths2DP(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = UniquePaths2DP(10, 10)
+	}
+}
+
+func TestUniquePaths1DP(t *testing.T) {
+	tests := []struct {
+		name     string
+		m, n     int
+		expected int
+	}{
+		{"SingleCellGrid", 1, 1, 1},
+		{"SingleRowGrid", 1, 5, 1},
+		{"SingleColumnGrid", 5, 1, 1},
+		{"SmallGrid", 3, 3, 6},
+		{"LargeGrid", 10, 10, 48620},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := UniquePaths1DP(tt.m, tt.n)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkUniquePaths1DP(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = UniquePaths1DP(10, 10)
+	}
+}
+
+func TestLongestCommonSubsequence(t *testing.T) {
+	tests := []struct {
+		name     string
+		text1    string
+		text2    string
+		expected int
+	}{
+		{"EmptyStrings", "", "", 0},
+		{"OneEmptyString", "abc", "", 0},
+		{"NoCommonSubsequence", "abc", "def", 0},
+		{"IdenticalStrings", "abc", "abc", 3},
+		{"PartialMatch", "abcde", "ace", 3},
+		{"InterleavedMatch", "abc", "bac", 2},
+		{"LongStrings", "abcdefghijklmnopqrstuvwxyz", "acegikmoqsuwy", 13},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := LongestCommonSubsequence(tt.text1, tt.text2)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkLongestCommonSubsequence(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = LongestCommonSubsequence("abcdefghijklmnopqrstuvwxyz", "acegikmoqsuwy")
+	}
+}

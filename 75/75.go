@@ -1717,3 +1717,65 @@ func SingleNumber(nums []int) int {
 	}
 	return res
 }
+
+func UniquePaths2DP(m int, n int) int {
+	if m == 1 && n == 1 {
+		return 1
+	}
+
+	dp := make([][]int, m)
+	for i := range dp {
+		dp[i] = make([]int, n)
+	}
+
+	for i := 1; i < n; i++ {
+		dp[0][i] = 1
+	}
+
+	for j := 1; j < m; j++ {
+		dp[j][0] = 1
+	}
+
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			dp[i][j] = dp[i-1][j] + dp[i][j-1]
+		}
+	}
+
+	return dp[m-1][n-1]
+}
+
+func UniquePaths1DP(m int, n int) int {
+	dp := make([]int, n)
+	for i := range n {
+		dp[i] = 1
+	}
+
+	for i := 1; i < m; i++ {
+		for j := 1; j < n; j++ {
+			dp[j] += dp[j-1]
+		}
+	}
+
+	return dp[n-1]
+}
+
+func LongestCommonSubsequence(text1, text2 string) int {
+	m, n := len(text1), len(text2)
+	dp := make([][]int, m+1)
+	for i := range dp {
+		dp[i] = make([]int, n+1)
+	}
+
+	for i := 1; i <= m; i++ {
+		for j := 1; j <= n; j++ {
+			if text1[i-1] == text2[j-1] {
+				dp[i][j] = dp[i-1][j-1] + 1
+			} else {
+				dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+			}
+		}
+	}
+
+	return dp[m][n]
+}

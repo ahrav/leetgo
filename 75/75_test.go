@@ -3977,3 +3977,115 @@ func BenchmarkTribonacciMemo(b *testing.B) {
 		_ = TribonacciMemo(30)
 	}
 }
+
+func TestMinCostClimbingStairsDP(t *testing.T) {
+	tests := []struct {
+		name     string
+		cost     []int
+		expected int
+	}{
+		{
+			name:     "TwoSteps",
+			cost:     []int{10, 15},
+			expected: 10,
+		},
+		{
+			name:     "ThreeSteps",
+			cost:     []int{10, 15, 20},
+			expected: 15,
+		},
+		{
+			name:     "MultipleSteps",
+			cost:     []int{1, 100, 1, 1, 1, 100, 1, 1, 100, 1},
+			expected: 6,
+		},
+		{
+			name:     "AllEqualSteps",
+			cost:     []int{5, 5, 5, 5, 5, 5},
+			expected: 15,
+		},
+		{
+			name:     "IncreasingSteps",
+			cost:     []int{1, 2, 3, 4, 5, 6},
+			expected: 9,
+		},
+		{
+			name:     "DecreasingSteps",
+			cost:     []int{6, 5, 4, 3, 2, 1},
+			expected: 9,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MinCostClimbingStairsDP(tt.cost)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinCostClimbingStairsDP(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MinCostClimbingStairsDP([]int{1, 100, 1, 1, 1, 100, 1, 1, 100, 1})
+	}
+}
+
+func TestMinCostClimbingStairsMemo(t *testing.T) {
+	tests := []struct {
+		name     string
+		cost     []int
+		expected int
+	}{
+		{
+			name:     "TwoSteps",
+			cost:     []int{10, 15},
+			expected: 10,
+		},
+		{
+			name:     "ThreeSteps",
+			cost:     []int{10, 15, 20},
+			expected: 15,
+		},
+		{
+			name:     "MultipleSteps",
+			cost:     []int{1, 100, 1, 1, 1, 100, 1, 1, 100, 1},
+			expected: 6,
+		},
+		{
+			name:     "AllEqualSteps",
+			cost:     []int{5, 5, 5, 5, 5, 5},
+			expected: 15,
+		},
+		{
+			name:     "IncreasingSteps",
+			cost:     []int{1, 2, 3, 4, 5, 6},
+			expected: 9,
+		},
+		{
+			name:     "DecreasingSteps",
+			cost:     []int{6, 5, 4, 3, 2, 1},
+			expected: 9,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MinCostClimbingStairsMemo(tt.cost)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinCostClimbingStairsMemo(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MinCostClimbingStairsMemo([]int{1, 100, 1, 1, 1, 100, 1, 1, 100, 1})
+	}
+}

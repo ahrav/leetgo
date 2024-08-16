@@ -1647,3 +1647,29 @@ func TribonacciMemo(n int) int {
 
 	return c
 }
+
+func MinCostClimbingStairsDP(cost []int) int {
+	n := len(cost)
+
+	dp := make([]int, n)
+	dp[0], dp[1] = cost[0], cost[1]
+
+	for i := 2; i < n; i++ {
+		dp[i] = min(dp[i-1], dp[i-2]) + cost[i]
+	}
+
+	return min(dp[n-1], dp[n-2])
+}
+
+func MinCostClimbingStairsMemo(cost []int) int {
+	n := len(cost)
+
+	prev2, prev1 := cost[0], cost[1]
+
+	for i := 2; i < n; i++ {
+		curr := cost[i] + min(prev1, prev2)
+		prev2, prev1 = prev1, curr
+	}
+
+	return min(prev1, prev2)
+}

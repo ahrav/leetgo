@@ -1707,6 +1707,5 @@ func CountBits(n int) []int {
 	for i := 1; i <= n; i++ {
 		res[i] = res[i>>1] + (i & 1)
 	}
-
 	return res
 }

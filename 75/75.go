@@ -1687,3 +1687,17 @@ func Rob(nums []int) int {
 
 	return prev
 }
+
+func NumTilings(n int) int {
+	const mod int = 1_000_000_007
+
+	dp := make([]int, max(n, 3))
+	dp[0], dp[1], dp[2] = 1, 2, 5
+
+	i := 3
+	for i < n {
+		dp[i] = ((dp[i-1] * 2) + dp[i-3]) % mod
+		i++
+	}
+	return dp[n-1]
+}

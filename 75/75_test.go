@@ -4140,3 +4140,36 @@ func BenchmarkRob(b *testing.B) {
 		_ = Rob([]int{1, 2, 3, 1, 11, 8, 4, 3})
 	}
 }
+
+func TestNumTilings(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected int
+	}{
+		{"n_is_1", 1, 1},
+		{"n_is_2", 2, 2},
+		{"n_is_3", 3, 5},
+		{"n_is_4", 4, 11},
+		{"n_is_5", 5, 24},
+		{"n_is_10", 10, 1255},
+		{"n_is_1000", 1000, 979232805},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := NumTilings(tt.n)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkNumTilings(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = NumTilings(10)
+	}
+}

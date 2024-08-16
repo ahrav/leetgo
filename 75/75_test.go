@@ -3855,3 +3855,125 @@ func BenchmarkCombinationSum3(b *testing.B) {
 		_ = CombinationSum3(3, 9)
 	}
 }
+
+func TestTribonacciDP(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected int
+	}{
+		{
+			name:     "Zero",
+			n:        0,
+			expected: 0,
+		},
+		{
+			name:     "One",
+			n:        1,
+			expected: 1,
+		},
+		{
+			name:     "Two",
+			n:        2,
+			expected: 1,
+		},
+		{
+			name:     "Three",
+			n:        3,
+			expected: 2,
+		},
+		{
+			name:     "Four",
+			n:        4,
+			expected: 4,
+		},
+		{
+			name:     "Ten",
+			n:        10,
+			expected: 149,
+		},
+		{
+			name:     "Thirty",
+			n:        30,
+			expected: 29249425,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := TribonacciDP(tt.n)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkTribonacciDP(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = TribonacciDP(30)
+	}
+}
+
+func TestTribonacciMemo(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected int
+	}{
+		{
+			name:     "Zero",
+			n:        0,
+			expected: 0,
+		},
+		{
+			name:     "One",
+			n:        1,
+			expected: 1,
+		},
+		{
+			name:     "Two",
+			n:        2,
+			expected: 1,
+		},
+		{
+			name:     "Three",
+			n:        3,
+			expected: 2,
+		},
+		{
+			name:     "Four",
+			n:        4,
+			expected: 4,
+		},
+		{
+			name:     "Ten",
+			n:        10,
+			expected: 149,
+		},
+		{
+			name:     "Thirty",
+			n:        30,
+			expected: 29249425,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := TribonacciMemo(tt.n)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkTribonacciMemo(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = TribonacciMemo(30)
+	}
+}

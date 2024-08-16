@@ -1607,3 +1607,43 @@ func CombinationSum3(k int, n int) [][]int {
 	backtrack(1, n, 0)
 	return res
 }
+
+func TribonacciDP(n int) int {
+	if n == 0 {
+		return 0
+	}
+
+	dp := make([]int, max(n+1, 3))
+	dp[0], dp[1], dp[2] = 0, 1, 1
+	if n < 2 {
+		return dp[n]
+	}
+
+	for i := 3; i <= n; i++ {
+		val := 0
+		for j := i - 3; j < i; j++ {
+			val += dp[j]
+		}
+		dp[i] = val
+	}
+
+	return dp[n]
+}
+
+func TribonacciMemo(n int) int {
+	if n == 0 {
+		return 0
+	}
+	if n == 1 || n == 2 {
+		return 1
+	}
+
+	a, b, c := 0, 1, 1
+
+	for i := 3; i <= n; i++ {
+		next := a + b + c
+		a, b, c = b, c, next
+	}
+
+	return c
+}

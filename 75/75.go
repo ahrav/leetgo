@@ -1672,3 +1672,18 @@ func MinCostClimbingStairsMemo(cost []int) int {
 
 	return min(prev1, prev2)
 }
+
+func Rob(nums []int) int {
+	n := len(nums)
+	if n == 1 {
+		return nums[0]
+	}
+
+	prev2, prev1 := 0, nums[0]
+	for i := 1; i < n; i++ {
+		curr := max(prev1, prev2+nums[i])
+		prev2, prev1 = prev1, curr
+	}
+
+	return prev1
+}

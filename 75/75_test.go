@@ -4089,3 +4089,54 @@ func BenchmarkMinCostClimbingStairsMemo(b *testing.B) {
 		_ = MinCostClimbingStairsMemo([]int{1, 100, 1, 1, 1, 100, 1, 1, 100, 1})
 	}
 }
+
+func TestRob(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "SingleHouse",
+			nums:     []int{5},
+			expected: 5,
+		},
+		{
+			name:     "TwoHouses",
+			nums:     []int{5, 10},
+			expected: 10,
+		},
+		{
+			name:     "MultipleHouses",
+			nums:     []int{1, 2, 3, 1},
+			expected: 4,
+		},
+		{
+			name:     "NonAdjacentHouses",
+			nums:     []int{2, 7, 9, 3, 1},
+			expected: 12,
+		},
+		{
+			name:     "AllHousesWithSameValue",
+			nums:     []int{4, 4, 4, 4, 4},
+			expected: 12,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := Rob(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkRob(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = Rob([]int{1, 2, 3, 1, 11, 8, 4, 3})
+	}
+}

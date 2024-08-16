@@ -4209,3 +4209,34 @@ func BenchmarkCountBits(b *testing.B) {
 		_ = CountBits(512)
 	}
 }
+
+func TestSingleNumber(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"SingleElement", []int{1}, 1},
+		{"MultipleElements", []int{4, 1, 2, 1, 2}, 4},
+		{"NegativeNumbers", []int{-1, -1, -2}, -2},
+		{"WithZero", []int{0, 1, 0}, 1},
+		{"AllDuplicates", []int{2, 2, 3, 3, 4, 4, 5}, 5},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := SingleNumber(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkSingleNumber(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = SingleNumber([]int{4, 1, 2, 1, 2})
+	}
+}

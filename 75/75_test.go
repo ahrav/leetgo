@@ -4173,3 +4173,39 @@ func BenchmarkNumTilings(b *testing.B) {
 		_ = NumTilings(10)
 	}
 }
+
+func TestCountBits(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected []int
+	}{
+		{"zero", 0, []int{0}},
+		{"one", 1, []int{0, 1}},
+		{"two", 2, []int{0, 1, 1}},
+		{"three", 3, []int{0, 1, 1, 2}},
+		{"four", 4, []int{0, 1, 1, 2, 1}},
+		{"five", 5, []int{0, 1, 1, 2, 1, 2}},
+		{"six", 6, []int{0, 1, 1, 2, 1, 2, 2}},
+		{"seven", 7, []int{0, 1, 1, 2, 1, 2, 2, 3}},
+		{"eight", 8, []int{0, 1, 1, 2, 1, 2, 2, 3, 1}},
+		{"large_number", 15, []int{0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := CountBits(tt.n)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkCountBits(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CountBits(512)
+	}
+}

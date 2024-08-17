@@ -4336,3 +4336,34 @@ func BenchmarkLongestCommonSubsequence(b *testing.B) {
 		_ = LongestCommonSubsequence("abcdefghijklmnopqrstuvwxyz", "acegikmoqsuwy")
 	}
 }
+
+func TestMaxProfit(t *testing.T) {
+	tests := []struct {
+		name     string
+		prices   []int
+		fee      int
+		expected int
+	}{
+		{"WithSingleTransaction", []int{1, 3, 2, 8, 4, 9}, 2, 8},
+		{"WithNoProfit", []int{9, 8, 7, 6, 5, 4}, 1, 0},
+		{"WithMultipleTransactions", []int{1, 3, 7, 5, 10, 3}, 3, 6},
+		{"WithHighFee", []int{1, 3, 2, 8, 4, 9}, 10, 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MaxProfit(tt.prices, tt.fee)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMaxProfit(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MaxProfit([]int{1, 3, 7, 5, 10, 3}, 3)
+	}
+}

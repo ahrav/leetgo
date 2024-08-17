@@ -1779,3 +1779,15 @@ func LongestCommonSubsequence(text1, text2 string) int {
 
 	return dp[m][n]
 }
+
+func MaxProfit(prices []int, fee int) int {
+	n := len(prices)
+
+	hold, notHold := -prices[0], 0
+	for i := 1; i < n; i++ {
+		hold = max(hold, notHold-prices[i])
+		notHold = max(notHold, hold+prices[i]-fee)
+	}
+
+	return notHold
+}

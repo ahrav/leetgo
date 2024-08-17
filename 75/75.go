@@ -1798,17 +1798,17 @@ func DeleteAndEarn(nums []int) int {
 		return nums[0]
 	}
 
-	maxPoints := math.MinInt
+	maxV := math.MinInt
 	m := make(map[int]int)
 	for _, num := range nums {
 		m[num] += num
-		if num > maxPoints {
-			maxPoints = num
+		if num > maxV {
+			maxV = num
 		}
 	}
 
 	prev2, prev1 := 0, m[1]
-	for i := 2; i <= maxPoints; i++ {
+	for i := 2; i <= maxV; i++ {
 		prev2, prev1 = prev1, max(prev1, prev2+m[i])
 	}
 

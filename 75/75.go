@@ -1814,3 +1814,21 @@ func DeleteAndEarn(nums []int) int {
 
 	return prev1
 }
+
+func MaximumScore(nums, multipliers []int) int {
+	n, m := len(nums), len(multipliers)
+	dp := make([][]int, m+1)
+	for i := range dp {
+		dp[i] = make([]int, m+1)
+	}
+
+	for i := m - 1; i >= 0; i-- {
+		for left := i; left >= 0; left-- {
+			multiplier := multipliers[i]
+			right := n - 1 - (i - left)
+			dp[i][left] = max(multiplier*nums[left]+dp[i+1][left+1], multiplier*nums[right]+dp[i+1][left])
+		}
+	}
+
+	return dp[0][0]
+}

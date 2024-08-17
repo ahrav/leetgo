@@ -4399,3 +4399,35 @@ func BenchmarkDeleteAndEarn(b *testing.B) {
 		_ = DeleteAndEarn([]int{3, 4, 2, 2, 3, 4})
 	}
 }
+
+func TestMaximumScore(t *testing.T) {
+	tests := []struct {
+		name        string
+		nums        []int
+		multipliers []int
+		expected    int
+	}{
+		{"AllPositive", []int{1, 2, 3}, []int{3, 2, 1}, 14},
+		{"MixedValues", []int{-1, -2, 3}, []int{3, -2, 1}, 12},
+		{"AllNegative", []int{-1, -2, -3}, []int{-3, -2, -1}, 14},
+		{"SingleElement", []int{5}, []int{2}, 10},
+		{"EmptyMultipliers", []int{1, 2, 3}, []int{}, 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MaximumScore(tt.nums, tt.multipliers)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMaximumScore(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MaximumScore([]int{1, 2, 3}, []int{3, 2, 1})
+	}
+}

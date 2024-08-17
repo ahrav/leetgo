@@ -4431,3 +4431,72 @@ func BenchmarkMaximumScore(b *testing.B) {
 		_ = MaximumScore([]int{1, 2, 3}, []int{3, 2, 1})
 	}
 }
+
+func TestMinDistance(t *testing.T) {
+	tests := []struct {
+		name     string
+		word1    string
+		word2    string
+		expected int
+	}{
+		{
+			name:     "Both strings empty",
+			word1:    "",
+			word2:    "",
+			expected: 0,
+		},
+		{
+			name:     "First string empty",
+			word1:    "",
+			word2:    "abc",
+			expected: 3,
+		},
+		{
+			name:     "Second string empty",
+			word1:    "abc",
+			word2:    "",
+			expected: 3,
+		},
+		{
+			name:     "Both strings same",
+			word1:    "abc",
+			word2:    "abc",
+			expected: 0,
+		},
+		{
+			name:     "Different strings",
+			word1:    "horse",
+			word2:    "ros",
+			expected: 3,
+		},
+		{
+			name:     "One character difference",
+			word1:    "intention",
+			word2:    "execution",
+			expected: 5,
+		},
+		{
+			name:     "Completely different strings",
+			word1:    "abcdef",
+			word2:    "ghijkl",
+			expected: 6,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MinDistance(tt.word1, tt.word2)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinDistance(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MinDistance("intention", "execution")
+	}
+}

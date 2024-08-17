@@ -1860,3 +1860,48 @@ func MinDistance(word1 string, word2 string) int {
 
 	return dp[m][n]
 }
+
+func MinFlips(a int, b int, c int) int {
+	flips := 0
+
+	for i := 0; i < 64; i++ {
+		bitA, bitB, bitC := (a>>i)&1, (b>>i)&1, (c>>i)&1
+
+		if bitC == 0 {
+			if bitA == 1 {
+				flips++
+			}
+			if bitB == 1 {
+				flips++
+			}
+		} else {
+			if bitA == 0 && bitB == 0 {
+				flips++
+			}
+		}
+	}
+
+	return flips
+}
+
+func MaximalSquare(matrix [][]byte) int {
+	rows, cols := len(matrix), len(matrix[0])
+	dp := make([][]int, rows+1)
+	for i := range dp {
+		dp[i] = make([]int, cols+1)
+	}
+
+	maxSide := 0
+	for i := 1; i <= rows; i++ {
+		for j := 1; j <= cols; j++ {
+			if matrix[i-1][j-1] == '1' {
+				dp[i][j] = min(dp[i][j-1], dp[i-1][j], dp[i-1][j-1]) + 1
+				if dp[i][j] > maxSide {
+					maxSide = dp[i][j]
+				}
+			}
+		}
+	}
+
+	return maxSide * maxSide
+}

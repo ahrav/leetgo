@@ -4500,3 +4500,85 @@ func BenchmarkMinDistance(b *testing.B) {
 		_ = MinDistance("intention", "execution")
 	}
 }
+
+func TestMinFlips(t *testing.T) {
+	tests := []struct {
+		name     string
+		a, b, c  int
+		expected int
+	}{
+		{"AllBitsMatch", 0b1010, 0b0101, 0b1111, 0},
+		{"AllBitsDifferent", 0b1111, 0b0000, 0b0000, 4},
+		{"SomeBitsDifferent", 0b1100, 0b0011, 0b1111, 0},
+		{"SomeBitsNeedFlipping", 0b1100, 0b0011, 0b0000, 4},
+		{"SingleBit", 0b1, 0b0, 0b1, 0},
+		{"SingleBitDifferent", 0b1, 0b0, 0b0, 1},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MinFlips(tt.a, tt.b, tt.c)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinFlips(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MinFlips(0b1100, 0b0011, 0b0000)
+	}
+}
+
+func TestMaximalSquare(t *testing.T) {
+	tests := []struct {
+		name     string
+		matrix   [][]byte
+		expected int
+	}{
+		{"SingleElementOne", [][]byte{{'1'}}, 1},
+		{"SingleElementZero", [][]byte{{'0'}}, 0},
+		{"AllOnes", [][]byte{
+			{'1', '1'},
+			{'1', '1'},
+		}, 4},
+		{"MixedElements", [][]byte{
+			{'1', '0', '1', '0', '0'},
+			{'1', '0', '1', '1', '1'},
+			{'1', '1', '1', '1', '1'},
+			{'1', '0', '0', '1', '0'},
+		}, 4},
+		{"NoOnes", [][]byte{
+			{'0', '0', '0'},
+			{'0', '0', '0'},
+			{'0', '0', '0'},
+		}, 0},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := MaximalSquare(tt.matrix)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMaximalSquare(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = MaximalSquare([][]byte{
+			{'1', '0', '1', '0', '0'},
+			{'1', '0', '1', '1', '1'},
+			{'1', '1', '1', '1', '1'},
+			{'1', '0', '0', '1', '0'},
+		})
+	}
+}

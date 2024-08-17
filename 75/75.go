@@ -1791,3 +1791,26 @@ func MaxProfit(prices []int, fee int) int {
 
 	return notHold
 }
+
+func DeleteAndEarn(nums []int) int {
+	n := len(nums)
+	if n == 1 {
+		return nums[0]
+	}
+
+	maxPoints := math.MinInt
+	m := make(map[int]int)
+	for _, num := range nums {
+		m[num] += num
+		if num > maxPoints {
+			maxPoints = num
+		}
+	}
+
+	prev2, prev1 := 0, m[1]
+	for i := 2; i <= maxPoints; i++ {
+		prev2, prev1 = prev1, max(prev1, prev2+m[i])
+	}
+
+	return prev1
+}

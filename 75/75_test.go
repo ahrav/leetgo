@@ -4367,3 +4367,35 @@ func BenchmarkMaxProfit(b *testing.B) {
 		_ = MaxProfit([]int{1, 3, 7, 5, 10, 3}, 3)
 	}
 }
+
+func TestDeleteAndEarn(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"SingleElement", []int{5}, 5},
+		{"AllSameElements", []int{3, 3, 3}, 9},
+		{"NoAdjacentElements", []int{2, 4, 6}, 12},
+		{"WithAdjacentElements", []int{3, 4, 2}, 6},
+		{"WithNegativeValues", []int{-1, -2, -3}, 0},
+		{"WithMixedValues", []int{3, 4, 2, 2, 3, 4}, 12},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := DeleteAndEarn(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkDeleteAndEarn(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = DeleteAndEarn([]int{3, 4, 2, 2, 3, 4})
+	}
+}

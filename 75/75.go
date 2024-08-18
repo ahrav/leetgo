@@ -1905,3 +1905,56 @@ func MaximalSquare(matrix [][]byte) int {
 
 	return maxSide * maxSide
 }
+
+type TrieNode struct {
+	children [26]*TrieNode
+	// children    map[rune]*TrieNode // Use for more flexible use cases
+	isEndOfWord bool
+}
+
+type Trie struct {
+	root *TrieNode
+}
+
+func TrieConstructor() Trie { return Trie{root: new(TrieNode)} }
+
+func (t *Trie) Insert(word string) {
+	node := t.root
+	for _, char := range word {
+		c := char - 'a'
+		child := node.children[c]
+		if child == nil {
+			node.children[c] = new(TrieNode)
+		}
+		node = node.children[c]
+	}
+	node.isEndOfWord = true
+}
+
+func (t *Trie) Search(word string) bool {
+	node := t.root
+	for _, char := range word {
+		c := char - 'a'
+		child := node.children[c]
+		if child == nil {
+			return false
+		}
+		node = child
+	}
+
+	return node.isEndOfWord
+}
+
+func (t *Trie) StartsWith(prefix string) bool {
+	node := t.root
+	for _, char := range prefix {
+		c := char - 'a'
+		child := node.children[c]
+		if child == nil {
+			return false
+		}
+		node = child
+	}
+
+	return true
+}

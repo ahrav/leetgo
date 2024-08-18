@@ -2086,3 +2086,20 @@ func DailyTemperatures(temperatures []int) []int {
 
 	return res
 }
+
+type StockSpanner struct{ stack []struct{ price, span int } }
+
+func StockSpannerConstructor() StockSpanner { return StockSpanner{} }
+
+func (sp *StockSpanner) Next(price int) int {
+	span := 1
+
+	for len(sp.stack) > 0 && sp.stack[len(sp.stack)-1].price <= price {
+		span += sp.stack[len(sp.stack)-1].span
+		sp.stack = sp.stack[:len(sp.stack)-1]
+	}
+
+	sp.stack = append(sp.stack, struct{ price, span int }{price, span})
+
+	return span
+}

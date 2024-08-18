@@ -4696,3 +4696,60 @@ func BenchmarkEraseOverlapIntervals(b *testing.B) {
 		_ = EraseOverlapIntervals([][]int{{1, 3}, {2, 4}, {3, 5}})
 	}
 }
+
+func TestFindMinArrowShots(t *testing.T) {
+	tests := []struct {
+		name     string
+		points   [][]int
+		expected int
+	}{
+		{
+			name:     "NoPoints",
+			points:   [][]int{},
+			expected: 0,
+		},
+		{
+			name:     "SinglePoint",
+			points:   [][]int{{1, 2}},
+			expected: 1,
+		},
+		{
+			name:     "NonOverlappingPoints",
+			points:   [][]int{{1, 2}, {3, 4}, {5, 6}},
+			expected: 3,
+		},
+		{
+			name:     "OverlappingPoints",
+			points:   [][]int{{1, 6}, {2, 8}, {7, 12}},
+			expected: 2,
+		},
+		{
+			name:     "NestedPoints",
+			points:   [][]int{{1, 10}, {2, 5}, {6, 9}},
+			expected: 2,
+		},
+		{
+			name:     "MixedPoints",
+			points:   [][]int{{1, 2}, {2, 3}, {3, 4}, {4, 5}},
+			expected: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := FindMinArrowShots(tt.points)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkFindMinArrowShots(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = FindMinArrowShots([][]int{{1, 6}, {2, 8}, {7, 12}})
+	}
+}

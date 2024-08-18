@@ -912,22 +912,21 @@ func CoinChange(coins []int, total int) int {
 	dp := make([]int, total+1)
 	dp[0] = 0
 	for i := 1; i <= total; i++ {
-		dp[i] = math.MaxInt64
+		dp[i] = math.MaxInt
 	}
 
-	for val := range total + 1 {
+	for i := 1; i <= total; i++ {
 		for _, coin := range coins {
-			if coin <= val {
-				dp[val] = min(dp[val], dp[val-coin]+1)
+			if coin <= i && dp[i-coin] != math.MaxInt {
+				dp[i] = min(dp[i], dp[i-coin]+1)
 			}
 		}
 	}
 
 	res := dp[total]
-	if res < 0 {
+	if res == math.MaxInt {
 		return -1
 	}
-
 	return res
 }
 

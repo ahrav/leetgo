@@ -2020,3 +2020,25 @@ func SuggestedProducts(products []string, searchWord string) [][]string {
 
 	return res
 }
+
+func EraseOverlapIntervals(intervals [][]int) int {
+	n := len(intervals)
+	if n == 0 || n == 1 {
+		return 0
+	}
+
+	sort.Slice(intervals, func(i, j int) bool {
+		return intervals[i][1] < intervals[j][1]
+	})
+
+	cnt := 1
+	prevEnd := intervals[0][1]
+	for i := 1; i < n; i++ {
+		if intervals[i][0] >= prevEnd {
+			cnt++
+			prevEnd = intervals[i][1]
+		}
+	}
+
+	return n - cnt
+}

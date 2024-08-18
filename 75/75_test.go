@@ -4634,3 +4634,65 @@ func BenchmarkSuggestedProducts(b *testing.B) {
 		_ = SuggestedProducts([]string{"apple", "applet", "apricot", "banana", "carrot"}, "app")
 	}
 }
+
+func TestEraseOverlapIntervals(t *testing.T) {
+	tests := []struct {
+		name      string
+		intervals [][]int
+		expected  int
+	}{
+		{
+			name:      "no intervals",
+			intervals: [][]int{},
+			expected:  0,
+		},
+		{
+			name:      "single interval",
+			intervals: [][]int{{1, 2}},
+			expected:  0,
+		},
+		{
+			name:      "non-overlapping intervals",
+			intervals: [][]int{{1, 2}, {3, 4}, {5, 6}},
+			expected:  0,
+		},
+		{
+			name:      "overlapping intervals",
+			intervals: [][]int{{1, 3}, {2, 4}, {3, 5}},
+			expected:  1,
+		},
+		{
+			name:      "fully overlapping intervals",
+			intervals: [][]int{{1, 4}, {2, 3}, {3, 5}},
+			expected:  1,
+		},
+		{
+			name:      "partially overlapping intervals",
+			intervals: [][]int{{1, 2}, {2, 3}, {3, 4}, {1, 3}},
+			expected:  1,
+		},
+		{
+			name:      "complex overlapping intervals",
+			intervals: [][]int{{1, 2}, {1, 3}, {2, 3}, {3, 4}, {2, 4}},
+			expected:  2,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := EraseOverlapIntervals(tt.intervals)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkEraseOverlapIntervals(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = EraseOverlapIntervals([][]int{{1, 3}, {2, 4}, {3, 5}})
+	}
+}

@@ -2031,14 +2031,14 @@ func EraseOverlapIntervals(intervals [][]int) int {
 		return intervals[i][1] < intervals[j][1]
 	})
 
-	cnt := 1
-	prevEnd := intervals[0][1]
+	nonOverlapCnt := 1
+	end := intervals[0][1]
 	for i := 1; i < n; i++ {
-		if intervals[i][0] >= prevEnd {
-			cnt++
-			prevEnd = intervals[i][1]
+		if intervals[i][0] >= end {
+			nonOverlapCnt++
+			end = intervals[i][1]
 		}
 	}
 
-	return n - cnt
+	return n - nonOverlapCnt
 }

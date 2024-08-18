@@ -4753,3 +4753,55 @@ func BenchmarkFindMinArrowShots(b *testing.B) {
 		_ = FindMinArrowShots([][]int{{1, 6}, {2, 8}, {7, 12}})
 	}
 }
+
+func TestDailyTemperatures(t *testing.T) {
+	tests := []struct {
+		name         string
+		temperatures []int
+		expected     []int
+	}{
+		{
+			name:         "SingleElement",
+			temperatures: []int{30},
+			expected:     []int{0},
+		},
+		{
+			name:         "IncreasingOrder",
+			temperatures: []int{30, 40, 50, 60},
+			expected:     []int{1, 1, 1, 0},
+		},
+		{
+			name:         "DecreasingOrder",
+			temperatures: []int{60, 50, 40, 30},
+			expected:     []int{0, 0, 0, 0},
+		},
+		{
+			name:         "MixedOrder",
+			temperatures: []int{30, 60, 90, 70, 80, 50, 60},
+			expected:     []int{1, 1, 0, 1, 0, 1, 0},
+		},
+		{
+			name:         "AllSame",
+			temperatures: []int{50, 50, 50, 50},
+			expected:     []int{0, 0, 0, 0},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := DailyTemperatures(tt.temperatures)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkDailyTemperatures(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = DailyTemperatures([]int{30, 60, 90, 70, 80, 50, 60})
+	}
+}

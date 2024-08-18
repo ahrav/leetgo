@@ -2100,6 +2100,5 @@ func (sp *StockSpanner) Next(price int) int {
 	}
 
 	sp.stack = append(sp.stack, struct{ price, span int }{price, span})
-
 	return span
 }

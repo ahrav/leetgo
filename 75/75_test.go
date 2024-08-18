@@ -4582,3 +4582,55 @@ func BenchmarkMaximalSquare(b *testing.B) {
 		})
 	}
 }
+
+func TestSuggestedProducts(t *testing.T) {
+	tests := []struct {
+		name       string
+		products   []string
+		searchWord string
+		expected   [][]string
+	}{
+		{
+			name:       "EmptyProducts",
+			products:   []string{},
+			searchWord: "apple",
+			expected:   nil,
+		},
+		{
+			name:       "ExactMatches",
+			products:   []string{"apple", "applet", "apricot"},
+			searchWord: "apple",
+			expected:   [][]string{{"apple", "applet", "apricot"}, {"apple", "applet", "apricot"}, {"apple", "applet"}, {"apple", "applet"}, {"apple", "applet"}},
+		},
+		{
+			name:       "PartialMatches",
+			products:   []string{"apple", "applet", "apricot", "banana", "carrot"},
+			searchWord: "app",
+			expected:   [][]string{{"apple", "applet", "apricot"}, {"apple", "applet", "apricot"}, {"apple", "applet"}},
+		},
+		{
+			name:       "MoreThanThreeMatches",
+			products:   []string{"apple", "applet", "apricot", "apricotpie", "apricotjam"},
+			searchWord: "ap",
+			expected:   [][]string{{"apple", "applet", "apricot"}, {"apple", "applet", "apricot"}},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := SuggestedProducts(tt.products, tt.searchWord)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkSuggestedProducts(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = SuggestedProducts([]string{"apple", "applet", "apricot", "banana", "carrot"}, "app")
+	}
+}

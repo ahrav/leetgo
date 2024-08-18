@@ -4,6 +4,7 @@ import (
 	"container/heap"
 	"encoding/binary"
 	"math"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -1957,4 +1958,65 @@ func (t *Trie) StartsWith(prefix string) bool {
 	}
 
 	return true
+}
+
+func (t *Trie) Matches(prefix string) []string {
+	var res []string
+
+	node := t.root
+	for _, char := range prefix {
+		c := char - 'a'
+		child := node.children[c]
+		if child == nil {
+			return res
+		}
+		node = child
+	}
+
+	var dfs func(*TrieNode, []byte)
+	dfs = func(node *TrieNode, bytes []byte) {
+		if node == nil || len(res) >= 3 {
+			return
+		}
+
+		if node.isEndOfWord {
+			res = append(res, string(bytes))
+		}
+
+		for idx, child := range node.children {
+			if child != nil {
+				// b := append(bytes, byte('a'+idx))
+				dfs(child, append(bytes, byte('a'+idx)))
+			}
+		}
+	}
+	dfs(node, []byte(prefix))
+
+	return res
+}
+
+func SuggestedProducts(products []string, searchWord string) [][]string {
+	if len(products) == 0 {
+		return nil
+	}
+
+	slices.Sort(products)
+
+	trie := TrieConstructor()
+	for _, product := range products {
+		trie.Insert(product)
+	}
+
+	res := make([][]string, len(searchWord))
+
+	for idx := range searchWord {
+		matches := trie.Matches(searchWord[0 : idx+1])
+		if len(matches) >= 3 {
+			res[idx] = matches[:3]
+		} else {
+			res[idx] = matches
+		}
+	}
+
+	return res
 }

@@ -16,3 +16,22 @@ func GetRow(index int) []int {
 
 	return currRow
 }
+
+func MyPow(x float64, n int) float64 {
+	if n == 0 {
+		return 1
+	}
+
+	if n < 0 {
+		x = 1 / x
+		n = -n
+	}
+
+	half := MyPow(x, n/2)
+
+	if n%2 == 0 {
+		return half * half
+	} else {
+		return half * half * x
+	}
+}

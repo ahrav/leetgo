@@ -4805,3 +4805,78 @@ func BenchmarkDailyTemperatures(b *testing.B) {
 		_ = DailyTemperatures([]int{30, 60, 90, 70, 80, 50, 60})
 	}
 }
+
+func TestCalcEquation(t *testing.T) {
+	tests := []struct {
+		name      string
+		equations [][]string
+		values    []float64
+		queries   [][]string
+		expected  []float64
+	}{
+		{
+			name:      "BasicDivision",
+			equations: [][]string{{"a", "b"}, {"b", "c"}},
+			values:    []float64{2.0, 3.0},
+			queries:   [][]string{{"a", "c"}},
+			expected:  []float64{6.0},
+		},
+		{
+			name:      "InverseDivision",
+			equations: [][]string{{"a", "b"}, {"b", "c"}},
+			values:    []float64{2.0, 3.0},
+			queries:   [][]string{{"c", "a"}},
+			expected:  []float64{1.0 / 6.0},
+		},
+		{
+			name:      "SelfDivision",
+			equations: [][]string{{"a", "b"}, {"b", "c"}},
+			values:    []float64{2.0, 3.0},
+			queries:   [][]string{{"a", "a"}},
+			expected:  []float64{1.0},
+		},
+		{
+			name:      "DisconnectedGraph",
+			equations: [][]string{{"a", "b"}, {"c", "d"}},
+			values:    []float64{2.0, 3.0},
+			queries:   [][]string{{"a", "d"}},
+			expected:  []float64{-1.0},
+		},
+		{
+			name:      "NonExistentNodes",
+			equations: [][]string{{"a", "b"}, {"b", "c"}},
+			values:    []float64{2.0, 3.0},
+			queries:   [][]string{{"x", "y"}},
+			expected:  []float64{-1.0},
+		},
+		{
+			name:      "MultipleQueries",
+			equations: [][]string{{"a", "b"}, {"b", "c"}},
+			values:    []float64{2.0, 3.0},
+			queries:   [][]string{{"a", "c"}, {"b", "a"}, {"a", "a"}, {"x", "y"}},
+			expected:  []float64{6.0, 0.5, 1.0, -1.0},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := CalcEquation(tt.equations, tt.values, tt.queries)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkCalcEquation(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = CalcEquation(
+			[][]string{{"a", "b"}, {"b", "c"}},
+			[]float64{2.0, 3.0},
+			[][]string{{"a", "c"}, {"b", "a"}, {"a", "a"}, {"x", "y"}},
+		)
+	}
+}

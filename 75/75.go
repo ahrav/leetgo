@@ -2102,3 +2102,53 @@ func (sp *StockSpanner) Next(price int) int {
 	sp.stack = append(sp.stack, struct{ price, span int }{price, span})
 	return span
 }
+
+func CalcEquation(equations [][]string, values []float64, queries [][]string) []float64 {
+	graph := make(map[string]map[string]float64)
+	for i, eq := range equations {
+		a, b := eq[0], eq[1]
+		if _, ok := graph[a]; !ok {
+			graph[a] = make(map[string]float64)
+		}
+		if _, ok := graph[b]; !ok {
+			graph[b] = make(map[string]float64)
+		}
+
+		graph[a][b] = values[i]
+		graph[b][a] = 1 / values[i]
+	}
+
+	visited := make(map[string]struct{})
+
+	var dfs func(string, string) float64
+	dfs = func(start, end string) float64 {
+		if _, ok := graph[start]; !ok {
+			return -1
+		}
+
+		if start == end {
+			return 1
+		}
+
+		visited[start] = struct{}{}
+		for neighbor, val := range graph[start] {
+			if _, ok := visited[neighbor]; !ok {
+				if result := dfs(neighbor, end); result != -1 {
+					return result * val
+				}
+			}
+		}
+
+		return -1
+	}
+
+	result := make([]float64, 0, len(queries))
+	for _, query := range queries {
+		for k := range visited {
+			delete(visited, k)
+		}
+		result = append(result, dfs(query[0], query[1]))
+	}
+
+	return result
+}

@@ -138,3 +138,76 @@ func BenchmarkMyPow(b *testing.B) {
 		MyPow(2.0, 3)
 	}
 }
+
+func TestKthGrammar(t *testing.T) {
+	tests := []struct {
+		name     string
+		n, k     int
+		expected int
+	}{
+		{
+			name:     "FirstSymbol",
+			n:        1,
+			k:        1,
+			expected: 0,
+		},
+		{
+			name:     "SecondRowFirstSymbol",
+			n:        2,
+			k:        1,
+			expected: 0,
+		},
+		{
+			name:     "SecondRowSecondSymbol",
+			n:        2,
+			k:        2,
+			expected: 1,
+		},
+		{
+			name:     "ThirdRowFirstSymbol",
+			n:        3,
+			k:        1,
+			expected: 0,
+		},
+		{
+			name:     "ThirdRowSecondSymbol",
+			n:        3,
+			k:        2,
+			expected: 1,
+		},
+		{
+			name:     "ThirdRowThirdSymbol",
+			n:        3,
+			k:        3,
+			expected: 1,
+		},
+		{
+			name:     "ThirdRowFourthSymbol",
+			n:        3,
+			k:        4,
+			expected: 0,
+		},
+		{
+			name:     "FourthRowFifthSymbol",
+			n:        4,
+			k:        5,
+			expected: 1,
+		},
+		{
+			name:     "LargeNAndK",
+			n:        10,
+			k:        512,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := KthGrammar(tt.n, tt.k)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}

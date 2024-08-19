@@ -35,3 +35,18 @@ func MyPow(x float64, n int) float64 {
 		return half * half * x
 	}
 }
+
+func KthGrammar(n, k int) int {
+	if n == 1 {
+		return 0
+	}
+
+	length := 1 << (n - 1)
+	mid := length / 2
+
+	if k <= mid {
+		return KthGrammar(n-1, k)
+	} else {
+		return 1 - KthGrammar(n-1, k-mid)
+	}
+}

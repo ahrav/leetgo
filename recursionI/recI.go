@@ -50,3 +50,54 @@ func KthGrammar(n, k int) int {
 		return 1 - KthGrammar(n-1, k-mid)
 	}
 }
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func GenerateTrees(n int) []*TreeNode {
+	if n == 0 {
+		return nil
+	}
+
+	dp := make([][][]*TreeNode, n+1)
+	for i := range dp {
+		dp[i] = make([][]*TreeNode, n+1)
+	}
+
+	var generateTrees func(start, end int) []*TreeNode
+	generateTrees = func(start, end int) []*TreeNode {
+		if start > end {
+			return []*TreeNode{nil}
+		}
+
+		if dp[start][end] != nil {
+			return dp[start][end]
+		}
+
+		var allTrees []*TreeNode
+
+		for i := start; i <= end; i++ {
+			leftTrees := generateTrees(start, i-1)
+			rightTrees := generateTrees(i+1, end)
+
+			for _, left := range leftTrees {
+				for _, right := range rightTrees {
+					tree := &TreeNode{Val: i}
+					tree.Left = left
+					tree.Right = right
+
+					allTrees = append(allTrees, tree)
+				}
+			}
+		}
+
+		dp[start][end] = allTrees
+
+		return allTrees
+	}
+
+	return generateTrees(1, n)
+}

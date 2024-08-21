@@ -3101,3 +3101,29 @@ func PartitionString(s string) int {
 
 	return cnt
 }
+
+func MinSwapsNoWrap(data []int) int {
+	onesCnt := 0
+	for _, v := range data {
+		onesCnt += v
+	}
+
+	if onesCnt == 1 {
+		return 0
+	}
+
+	currSum := 0
+	for i := 0; i < onesCnt; i++ {
+		currSum += data[i]
+	}
+
+	minSwaps := onesCnt - currSum
+	for i := onesCnt; i < len(data); i++ {
+		currSum += data[i] - data[i-onesCnt]
+		if swaps := onesCnt - currSum; swaps < minSwaps {
+			minSwaps = swaps
+		}
+	}
+
+	return minSwaps
+}

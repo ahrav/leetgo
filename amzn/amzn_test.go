@@ -4762,3 +4762,33 @@ func BenchmarkPartitionString(b *testing.B) {
 		_ = PartitionString("abacabadabacaba")
 	}
 }
+
+func TestMinSwapsNoWrap(t *testing.T) {
+	tests := []struct {
+		name     string
+		data     []int
+		expected int
+	}{
+		{"SingleOne", []int{0, 1, 0, 0, 0}, 0},
+		{"AllOnes", []int{1, 1, 1, 1, 1}, 0},
+		{"NoOnes", []int{0, 0, 0, 0, 0}, 0},
+		{"Mixed", []int{1, 0, 1, 0, 1, 0, 1}, 2},
+		{"EdgeCase", []int{1, 0, 0, 1, 0, 1, 0, 1, 0, 1}, 2},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := MinSwapsNoWrap(tt.data)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinSwapsNoWrap(b *testing.B) {
+	data := []int{1, 0, 1, 0, 1, 0, 1, 0, 1, 0}
+	for i := 0; i < b.N; i++ {
+		_ = MinSwapsNoWrap(data)
+	}
+}

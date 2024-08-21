@@ -1565,19 +1565,43 @@ func MergeIntervals(intervals [][]int) [][]int {
 		return intervals[i][0] < intervals[j][0]
 	})
 
-	result := [][]int{intervals[0]}
+	result := intervals[:0]
+	result = append(result, []int{intervals[0][0], intervals[0][1]})
 	for i := 1; i < len(intervals); i++ {
 		last := result[len(result)-1]
 		curr := intervals[i]
 
 		if curr[0] <= last[1] {
-			if curr[1] > last[1] {
-				last[1] = curr[1]
-			}
+			last[1] = max(last[1], curr[1])
 		} else {
 			result = append(result, []int{curr[0], curr[1]})
 		}
 	}
+
+	return result
+}
+
+func MergeIntervals2(intervals [][]int) [][]int {
+	n := len(intervals)
+	if n < 2 {
+		return intervals
+	}
+
+	sort.Slice(intervals, func(i, j int) bool {
+		return intervals[i][0] < intervals[j][0]
+	})
+
+	result := intervals[:0]
+	start, end := intervals[0][0], intervals[0][1]
+	for i := 1; i < n; i++ {
+		if intervals[i][0] <= end {
+			end = max(end, intervals[i][1])
+		} else {
+			result = append(result, []int{start, end})
+			start, end = intervals[i][0], intervals[i][1]
+		}
+	}
+	result = append(result, []int{start, end})
 
 	return result
 }
@@ -3126,4 +3150,31 @@ func MinSwapsNoWrap(data []int) int {
 	}
 
 	return minSwaps
+}
+
+type Node2 struct {
+	Val    int
+	Left   *Node2
+	Right  *Node2
+	Parent *Node2
+}
+
+func LowestCommonAncestorWithParent(p, q *Node2) *Node2 {
+	a, b := p, q
+
+	for a != b {
+		if a != nil {
+			a = a.Parent
+		} else {
+			a = q
+		}
+
+		if b != nil {
+			b = b.Parent
+		} else {
+			b = p
+		}
+	}
+
+	return a
 }

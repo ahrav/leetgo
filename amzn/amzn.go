@@ -3065,3 +3065,39 @@ func SpiralOrder(matrix [][]int) []int {
 
 	return result
 }
+
+func KthFactor(n, k int) int {
+	var factors []int
+
+	for i := 1; i*i <= n; i++ {
+		if n%i == 0 {
+			factors = append(factors, i)
+
+			if i != n/i { // Make sure we avoid adding perfect squares twice
+				factors = append(factors, n/i)
+			}
+		}
+	}
+
+	sort.Ints(factors)
+	if len(factors) >= k {
+		return factors[k-1]
+	}
+
+	return -1
+}
+
+func PartitionString(s string) int {
+	cnt, mask := 1, 0
+
+	for i := range s {
+		bitPos := 1 << (s[i] - 'a')
+		if bitPos&mask != 0 {
+			cnt++
+			mask = 0
+		}
+		mask |= bitPos
+	}
+
+	return cnt
+}

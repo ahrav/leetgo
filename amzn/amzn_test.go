@@ -4635,3 +4635,130 @@ func BenchmarkSpiralOrder(b *testing.B) {
 		_ = SpiralOrder([][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}})
 	}
 }
+
+func TestKthFactor(t *testing.T) {
+	tests := []struct {
+		name     string
+		n, k     int
+		expected int
+	}{
+		{
+			name:     "First factor of 12",
+			n:        12,
+			k:        1,
+			expected: 1,
+		},
+		{
+			name:     "Second factor of 12",
+			n:        12,
+			k:        2,
+			expected: 2,
+		},
+		{
+			name:     "Third factor of 12",
+			n:        12,
+			k:        3,
+			expected: 3,
+		},
+		{
+			name:     "Fourth factor of 12",
+			n:        12,
+			k:        4,
+			expected: 4,
+		},
+		{
+			name:     "Fifth factor of 12",
+			n:        12,
+			k:        5,
+			expected: 6,
+		},
+		{
+			name:     "Sixth factor of 12",
+			n:        12,
+			k:        6,
+			expected: 12,
+		},
+		{
+			name:     "K greater than number of factors",
+			n:        12,
+			k:        7,
+			expected: -1,
+		},
+		{
+			name:     "First factor of prime number",
+			n:        13,
+			k:        1,
+			expected: 1,
+		},
+		{
+			name:     "Second factor of prime number",
+			n:        13,
+			k:        2,
+			expected: 13,
+		},
+		{
+			name:     "K greater than number of factors for prime number",
+			n:        13,
+			k:        3,
+			expected: -1,
+		},
+		{
+			name:     "First factor of 1",
+			n:        1,
+			k:        1,
+			expected: 1,
+		},
+		{
+			name:     "K greater than number of factors for 1",
+			n:        1,
+			k:        2,
+			expected: -1,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := KthFactor(tt.n, tt.k)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkKthFactor(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		_ = KthFactor(1000, 3)
+	}
+}
+
+func TestPartitionStringSingleCharacter(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int
+	}{
+		{"SingleCharacter", "a", 1},
+		{"AllUniqueCharacters", "abcdef", 1},
+		{"AllSameCharacters", "aaaaaa", 6},
+		{"MixedCharacters", "abac", 2},
+		{"LongStringWithRepeats", "abacabadabacaba", 8},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := PartitionString(tt.input)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkPartitionString(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		_ = PartitionString("abacabadabacaba")
+	}
+}

@@ -3194,12 +3194,14 @@ func AppendCharacters(s string, t string) int {
 
 func MaximumSubarraySum(nums []int, k int) int64 {
 	n := len(nums)
-	if n < k {
+
+	if k > n {
 		return 0
 	}
 
-	maxSum, currSum := 0, 0
+	currSum, maxSum := 0, 0
 	seenCnt := make(map[int]int, k)
+
 	for i := 0; i < k; i++ {
 		currSum += nums[i]
 		seenCnt[nums[i]]++

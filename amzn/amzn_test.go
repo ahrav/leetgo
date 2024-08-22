@@ -4855,3 +4855,52 @@ func BenchmarkMinSwapsNoWrap(b *testing.B) {
 		_ = MinSwapsNoWrap(data)
 	}
 }
+
+func TestAppendCharacters(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		t        string
+		expected int
+	}{
+		{"BothEmpty", "", "", 0},
+		{"EmptyS", "", "abc", 3},
+		{"EmptyT", "abc", "", 0},
+		{"NoAppendNeeded", "abc", "abc", 0},
+		{"AppendNeeded", "abc", "abcd", 1},
+		{"PartialMatch", "abcde", "ace", 0},
+		{"NoMatch", "abc", "def", 3},
+		{"LongerS", "abcdefgh", "aceg", 0},
+		{"LongerT", "ace", "abcdefgh", 7},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := AppendCharacters(tt.s, tt.t)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkAppendCharacters(b *testing.B) {
+	tests := []struct {
+		name string
+		s    string
+		t    string
+	}{
+		{"BothEmpty", "", ""},
+		{"EmptyS", "", "abc"},
+		{"EmptyT", "abc", ""},
+		{"LongerT", "ace", "abcdefgh"},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = AppendCharacters(tt.s, tt.t)
+			}
+		})
+	}
+}

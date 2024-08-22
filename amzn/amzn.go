@@ -3178,3 +3178,17 @@ func LowestCommonAncestorWithParent(p, q *Node2) *Node2 {
 
 	return a
 }
+
+func AppendCharacters(s string, t string) int {
+	i, j := 0, 0
+
+	for i < len(s) && j < len(t) {
+		if s[i] == t[j] {
+			j++
+		}
+
+		i++
+	}
+
+	return len(t) - j
+}

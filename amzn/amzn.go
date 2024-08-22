@@ -3186,9 +3186,44 @@ func AppendCharacters(s string, t string) int {
 		if s[i] == t[j] {
 			j++
 		}
-
 		i++
 	}
 
 	return len(t) - j
+}
+
+func MaximumSubarraySum(nums []int, k int) int64 {
+	n := len(nums)
+	if n < k {
+		return 0
+	}
+
+	maxSum, currSum := 0, 0
+	seenCnt := make(map[int]int, k)
+	for i := 0; i < k; i++ {
+		currSum += nums[i]
+		seenCnt[nums[i]]++
+	}
+
+	if len(seenCnt) == k {
+		maxSum = currSum
+	}
+
+	for i := k; i < n; i++ {
+		currSum -= nums[i-k]
+		seenCnt[nums[i-k]]--
+
+		if seenCnt[nums[i-k]] == 0 {
+			delete(seenCnt, nums[i-k])
+		}
+
+		currSum += nums[i]
+		seenCnt[nums[i]]++
+
+		if len(seenCnt) == k && currSum > maxSum {
+			maxSum = currSum
+		}
+	}
+
+	return int64(maxSum)
 }

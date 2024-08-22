@@ -4904,3 +4904,51 @@ func BenchmarkAppendCharacters(b *testing.B) {
 		})
 	}
 }
+
+func TestMaximumSubarraySum(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected int64
+	}{
+		{"AllUnique", []int{1, 2, 3, 4, 5}, 3, 12},
+		{"SomeDuplicates", []int{1, 2, 2, 3, 4}, 3, 9},
+		{"AllDuplicates", []int{1, 1, 1, 1, 1}, 2, 0},
+		{"EmptyArray", []int{}, 3, 0},
+		{"SingleElement", []int{1}, 1, 1},
+		{"KGreaterThanArrayLength", []int{1, 2}, 3, 0},
+		{"KEqualToArrayLength", []int{1, 2, 3}, 3, 6},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := MaximumSubarraySum(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMaximumSubarraySum(b *testing.B) {
+	tests := []struct {
+		name string
+		nums []int
+		k    int
+	}{
+		{"SmallArray", []int{1, 2, 3, 4, 5}, 3},
+		{"MediumArray", []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 5},
+		{"LargeArray", make([]int, 1000), 500},
+		{"AllUnique", []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 10},
+		{"AllSame", []int{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, 5},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = MaximumSubarraySum(tt.nums, tt.k)
+			}
+		})
+	}
+}

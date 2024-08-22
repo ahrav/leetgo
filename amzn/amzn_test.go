@@ -4998,3 +4998,99 @@ func BenchmarkFirstMissingPositive(b *testing.B) {
 		})
 	}
 }
+
+func TestNumberOfWaysSlice(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int64
+	}{
+		{"AllZeros", "0000", 0},
+		{"AllOnes", "1111", 0},
+		{"Alternating01", "010101", 8},
+		{"Random", "001101", 6},
+		{"Alternating10", "101010", 8},
+		{"MixedPattern", "1001001", 12},
+		{"SingleZero", "0", 0},
+		{"SingleOne", "1", 0},
+		{"EmptyString", "", 0},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := NumberOfWaysSlice(tt.input)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkNumberOfWaysSlice(b *testing.B) {
+	tests := []struct {
+		name string
+		s    string
+	}{
+		{"SmallString", "010101"},
+		{"MediumString", "010101010101010101010101010101"},
+		{"LargeString", strings.Repeat("01", 1000)},
+		{"AllZeros", strings.Repeat("0", 1000)},
+		{"AllOnes", strings.Repeat("1", 1000)},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = NumberOfWaysSlice(tt.s)
+			}
+		})
+	}
+}
+
+func TestNumberOfWaysCounters(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int64
+	}{
+		{"AllZeros", "0000", 0},
+		{"AllOnes", "1111", 0},
+		{"Alternating01", "010101", 8},
+		{"Random", "001101", 6},
+		{"Alternating10", "101010", 8},
+		{"MixedPattern", "1001001", 12},
+		{"SingleZero", "0", 0},
+		{"SingleOne", "1", 0},
+		{"EmptyString", "", 0},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := NumberOfWaysCounters(tt.input)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkNumberOfWaysCounters(b *testing.B) {
+	tests := []struct {
+		name string
+		s    string
+	}{
+		{"SmallString", "010101"},
+		{"MediumString", "010101010101010101010101010101"},
+		{"LargeString", strings.Repeat("01", 1000)},
+		{"AllZeros", strings.Repeat("0", 1000)},
+		{"AllOnes", strings.Repeat("1", 1000)},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = NumberOfWaysCounters(tt.s)
+			}
+		})
+	}
+}

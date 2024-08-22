@@ -3249,3 +3249,57 @@ func FirstMissingPositive(nums []int) int {
 
 	return n + 1
 }
+
+func NumberOfWaysSlice(s string) int64 {
+	n := len(s)
+
+	zeros, ones := make([]int64, n+1), make([]int64, n+1)
+	for i, c := range s {
+		zeros[i+1] = zeros[i]
+		ones[i+1] = ones[i]
+		if c == '0' {
+			zeros[i+1]++
+		} else {
+			ones[i+1]++
+		}
+	}
+
+	var result int64
+	for i := 1; i < n; i++ {
+		if s[i] == '0' {
+			result += ones[i] * (ones[n] - ones[i])
+		} else {
+			result += zeros[i] * (zeros[n] - zeros[i])
+		}
+	}
+
+	return result
+}
+
+func NumberOfWaysCounters(s string) int64 {
+	var zeroBefore, zeroAfter, onesBefore, onesAfter int64
+	for _, c := range s {
+		if c == '0' {
+			zeroAfter++
+		} else {
+			onesAfter++
+		}
+	}
+
+	var result int64
+	for _, c := range s {
+		if c == '0' {
+			result += onesBefore * onesAfter
+
+			zeroAfter--
+			zeroBefore++
+		} else {
+			result += zeroBefore * zeroAfter
+
+			onesAfter--
+			onesBefore++
+		}
+	}
+
+	return result
+}

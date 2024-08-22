@@ -4952,3 +4952,49 @@ func BenchmarkMaximumSubarraySum(b *testing.B) {
 		})
 	}
 }
+
+func TestFirstMissingPositive(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"NoMissingPositive", []int{1, 2, 3}, 4},
+		{"SingleElement", []int{1}, 2},
+		{"UnorderedElements", []int{3, 4, -1, 1}, 2},
+		{"AllNegatives", []int{-1, -2, -3}, 1},
+		{"MixedElements", []int{7, 8, 9, 11, 12}, 1},
+		{"Duplicates", []int{1, 1, 2, 2}, 3},
+		{"EmptyArray", []int{}, 1},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := FirstMissingPositive(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkFirstMissingPositive(b *testing.B) {
+	tests := []struct {
+		name string
+		nums []int
+	}{
+		{"SmallArray", []int{3, 4, -1, 1}},
+		{"MediumArray", make([]int, 1000)},
+		{"LargeArray", make([]int, 100000)},
+		{"AllPositive", []int{1, 2, 3, 4, 5}},
+		{"AllNegative", []int{-1, -2, -3, -4, -5}},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = FirstMissingPositive(tt.nums)
+			}
+		})
+	}
+}

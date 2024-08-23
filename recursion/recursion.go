@@ -262,3 +262,31 @@ func Subsets(nums []int) [][]int {
 
 	return result
 }
+
+// SubsetsWithDup - https://leetcode.com/problems/subsets-ii/
+func SubsetsWithDup(nums []int) [][]int {
+	n := len(nums)
+
+	var result [][]int
+
+	var backtrack func(start, end int, tmp []int)
+	backtrack = func(start, end int, tmp []int) {
+		t := make([]int, len(tmp))
+		copy(t, tmp)
+		result = append(result, t)
+
+		for i := start; i < end; i++ {
+			if i > start && nums[i] == nums[i-1] {
+				continue
+			}
+			tmp = append(tmp, nums[i])
+			backtrack(i+1, end, tmp)
+			tmp = tmp[:len(tmp)-1]
+		}
+	}
+
+	sort.Ints(nums)
+	backtrack(0, n, []int{})
+
+	return result
+}

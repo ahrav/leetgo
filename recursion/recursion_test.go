@@ -640,3 +640,85 @@ func BenchmarkSubsetsWithDup(b *testing.B) {
 		})
 	}
 }
+
+func TestPartition(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected [][]string
+	}{
+		{
+			name:     "EmptyString",
+			input:    "",
+			expected: [][]string{{}},
+		},
+		{
+			name:     "SingleCharacter",
+			input:    "a",
+			expected: [][]string{{"a"}},
+		},
+		{
+			name:     "TwoCharactersPalindrome",
+			input:    "aa",
+			expected: [][]string{{"a", "a"}, {"aa"}},
+		},
+		{
+			name:     "TwoCharactersNonPalindrome",
+			input:    "ab",
+			expected: [][]string{{"a", "b"}},
+		},
+		{
+			name:     "ThreeCharactersPalindrome",
+			input:    "aba",
+			expected: [][]string{{"a", "b", "a"}, {"aba"}},
+		},
+		{
+			name:     "ThreeCharactersNonPalindrome",
+			input:    "abc",
+			expected: [][]string{{"a", "b", "c"}},
+		},
+		{
+			name:     "MultiplePalindromes",
+			input:    "aab",
+			expected: [][]string{{"a", "a", "b"}, {"aa", "b"}},
+		},
+		{
+			name:     "LongStringWithPalindromes",
+			input:    "aabb",
+			expected: [][]string{{"a", "a", "b", "b"}, {"a", "a", "bb"}, {"aa", "b", "b"}, {"aa", "bb"}},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := Partition(tt.input)
+			assert.ElementsMatch(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkPartition(b *testing.B) {
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{"EmptyString", ""},
+		{"SingleCharacter", "a"},
+		{"TwoCharactersPalindrome", "aa"},
+		{"TwoCharactersNonPalindrome", "ab"},
+		{"ThreeCharactersPalindrome", "aba"},
+		{"ThreeCharactersNonPalindrome", "abc"},
+		{"MultiplePalindromes", "aab"},
+		{"LongStringWithPalindromes", "aabb"},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = Partition(tt.input)
+			}
+		})
+	}
+}

@@ -290,3 +290,42 @@ func SubsetsWithDup(nums []int) [][]int {
 
 	return result
 }
+
+// Partition - https://leetcode.com/problems/palindrome-partitioning/
+func Partition(s string) [][]string {
+	isPalindrome := func(s string) bool {
+		for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+			if s[i] != s[j] {
+				return false
+			}
+		}
+		return true
+	}
+
+	n := len(s)
+
+	var result [][]string
+
+	var backtrack func(start, end int, tmp []string)
+	backtrack = func(start, end int, tmp []string) {
+		if start == end {
+			t := make([]string, len(tmp))
+			copy(t, tmp)
+			result = append(result, t)
+			return
+		}
+
+		for i := start; i < end; i++ {
+			curr := s[start : i+1]
+			if isPalindrome(curr) {
+				tmp = append(tmp, curr)
+				backtrack(i+1, end, tmp)
+				tmp = tmp[:len(tmp)-1]
+			}
+		}
+	}
+
+	backtrack(0, n, []string{})
+
+	return result
+}

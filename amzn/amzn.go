@@ -3277,10 +3277,10 @@ func NumberOfWaysSlice(s string) int64 {
 }
 
 func NumberOfWaysCounters(s string) int64 {
-	var zeroBefore, zeroAfter, onesBefore, onesAfter int64
+	var zerosAfter, zerosBefore, onesAfter, onesBefore int64
 	for _, c := range s {
 		if c == '0' {
-			zeroAfter++
+			zerosAfter++
 		} else {
 			onesAfter++
 		}
@@ -3291,10 +3291,10 @@ func NumberOfWaysCounters(s string) int64 {
 		if c == '0' {
 			result += onesBefore * onesAfter
 
-			zeroAfter--
-			zeroBefore++
+			zerosAfter--
+			zerosBefore++
 		} else {
-			result += zeroBefore * zeroAfter
+			result += zerosBefore * zerosAfter
 
 			onesAfter--
 			onesBefore++

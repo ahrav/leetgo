@@ -1,6 +1,8 @@
 package recursion
 
-import "sort"
+import (
+	"sort"
+)
 
 func GetRow(index int) []int {
 	if index == 0 {
@@ -233,6 +235,30 @@ func CombinationSum2(candidates []int, target int) [][]int {
 
 	sort.Ints(candidates)
 	backtrack(0, n, 0)
+
+	return result
+}
+
+// Subsets - https://leetcode.com/problems/subsets/
+func Subsets(nums []int) [][]int {
+	n := len(nums)
+
+	var result [][]int
+
+	var backtrack func(start, end int, tmp []int)
+	backtrack = func(start, end int, tmp []int) {
+		t := make([]int, len(tmp))
+		copy(t, tmp)
+		result = append(result, t)
+
+		for i := start; i < end; i++ {
+			tmp = append(tmp, nums[i])
+			backtrack(i+1, end, tmp)
+			tmp = tmp[:len(tmp)-1]
+		}
+	}
+
+	backtrack(0, n, []int{})
 
 	return result
 }

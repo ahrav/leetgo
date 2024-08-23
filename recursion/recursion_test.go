@@ -420,3 +420,84 @@ func BenchmarkCombinationSum(b *testing.B) {
 		})
 	}
 }
+
+func TestCombinationSum2(t *testing.T) {
+	tests := []struct {
+		name       string
+		candidates []int
+		target     int
+		expected   [][]int
+	}{
+		{
+			name:       "NoCandidates",
+			candidates: []int{},
+			target:     7,
+			expected:   [][]int{},
+		},
+		{
+			name:       "SingleCandidateEqualToTarget",
+			candidates: []int{7},
+			target:     7,
+			expected:   [][]int{{7}},
+		},
+		{
+			name:       "SingleCandidateLessThanTarget",
+			candidates: []int{2},
+			target:     7,
+			expected:   [][]int{},
+		},
+		{
+			name:       "MultipleCandidatesSumToTarget",
+			candidates: []int{2, 3, 6, 7},
+			target:     7,
+			expected:   [][]int{{7}},
+		},
+		{
+			name:       "MultipleCandidatesNoCombination",
+			candidates: []int{2, 4, 6},
+			target:     5,
+			expected:   [][]int{},
+		},
+		{
+			name:       "MultipleCandidatesWithDuplicates",
+			candidates: []int{2, 3, 2, 6, 7},
+			target:     7,
+			expected:   [][]int{{2, 2, 3}, {7}},
+		},
+		{
+			name:       "LargeTarget",
+			candidates: []int{2, 3, 5},
+			target:     8,
+			expected:   [][]int{{3, 5}},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := CombinationSum2(tt.candidates, tt.target)
+			assert.ElementsMatch(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkCombinationSum2(b *testing.B) {
+	tests := []struct {
+		name       string
+		candidates []int
+		target     int
+	}{
+		{"SmallSet", []int{2, 3, 6, 7}, 7},
+		{"MediumSet", []int{2, 3, 5}, 8},
+		{"LargeSet", []int{2, 3, 5, 7, 11, 13}, 20},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = CombinationSum2(tt.candidates, tt.target)
+			}
+		})
+	}
+}

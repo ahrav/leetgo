@@ -196,3 +196,43 @@ func CombinationSum(candidates []int, target int) [][]int {
 
 	return result
 }
+
+// CombinationSum2 - https://leetcode.com/problems/combination-sum-ii/
+func CombinationSum2(candidates []int, target int) [][]int {
+	n := len(candidates)
+
+	var (
+		result [][]int
+		curr   []int
+	)
+
+	var backtrack func(start, end, sum int)
+	backtrack = func(start, end, sum int) {
+		if sum == target {
+			tmp := make([]int, len(curr))
+			copy(tmp, curr)
+			result = append(result, tmp)
+			return
+		}
+
+		if sum > target {
+			return
+		}
+
+		for i := start; i < end; i++ {
+			if i > start && candidates[i] == candidates[i-1] {
+				continue
+			}
+			sum += candidates[i]
+			curr = append(curr, candidates[i])
+			backtrack(i+1, end, sum)
+			sum -= curr[len(curr)-1]
+			curr = curr[:len(curr)-1]
+		}
+	}
+
+	sort.Ints(candidates)
+	backtrack(0, n, 0)
+
+	return result
+}

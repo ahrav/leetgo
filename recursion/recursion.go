@@ -130,20 +130,20 @@ func Permute(nums []int) [][]int {
 func PermuteUnique(nums []int) [][]int {
 	n := len(nums)
 
-	var result [][]int
-
+	var results [][]int
 	visited := make([]bool, n)
+
 	var backtrack func(tmp []int)
 	backtrack = func(tmp []int) {
 		if len(tmp) == n {
 			t := make([]int, n)
 			copy(t, tmp)
-			result = append(result, t)
+			results = append(results, t)
 			return
 		}
 
 		for i := range n {
-			if visited[i] || (i > 0 && nums[i-1] == nums[i] && !visited[i-1]) {
+			if visited[i] || (i > 0 && nums[i] == nums[i-1] && !visited[i-1]) {
 				continue
 			}
 			visited[i] = true
@@ -156,6 +156,43 @@ func PermuteUnique(nums []int) [][]int {
 
 	sort.Ints(nums)
 	backtrack(make([]int, 0, n))
+
+	return results
+}
+
+// CombinationSum - https://leetcode.com/problems/combination-sum/
+func CombinationSum(candidates []int, target int) [][]int {
+	n := len(candidates)
+
+	var (
+		result [][]int
+		curr   []int
+	)
+
+	var backtrack func(start, end, sum int)
+	backtrack = func(start, end, sum int) {
+		if sum == target {
+			tmp := make([]int, len(curr))
+			copy(tmp, curr)
+			result = append(result, tmp)
+			return
+		}
+
+		if sum > target { // short circuit and return early
+			return
+		}
+
+		for i := start; i < n; i++ {
+			sum += candidates[i]
+			curr = append(curr, candidates[i])
+			backtrack(i, end, sum)
+			sum -= curr[len(curr)-1]
+			curr = curr[:len(curr)-1]
+		}
+	}
+
+	sort.Ints(candidates)
+	backtrack(0, n, 0)
 
 	return result
 }

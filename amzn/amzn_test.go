@@ -5094,3 +5094,100 @@ func BenchmarkNumberOfWaysCounters(b *testing.B) {
 		})
 	}
 }
+
+func TestReorderLogFiles(t *testing.T) {
+	tests := []struct {
+		name     string
+		logs     []string
+		expected []string
+	}{
+		{
+			name: "mixed logs",
+			logs: []string{
+				"dig1 8 1 5 1",
+				"let1 art can",
+				"dig2 3 6",
+				"let2 own kit dig",
+				"let3 art zero",
+			},
+			expected: []string{
+				"let1 art can",
+				"let3 art zero",
+				"let2 own kit dig",
+				"dig1 8 1 5 1",
+				"dig2 3 6",
+			},
+		},
+		{
+			name: "all digit logs",
+			logs: []string{
+				"dig1 8 1 5 1",
+				"dig2 3 6",
+			},
+			expected: []string{
+				"dig1 8 1 5 1",
+				"dig2 3 6",
+			},
+		},
+		{
+			name: "all letter logs",
+			logs: []string{
+				"let1 art can",
+				"let2 own kit dig",
+				"let3 art zero",
+			},
+			expected: []string{
+				"let1 art can",
+				"let3 art zero",
+				"let2 own kit dig",
+			},
+		},
+		{
+			name: "logs with same content",
+			logs: []string{
+				"let1 art can",
+				"let2 art can",
+			},
+			expected: []string{
+				"let1 art can",
+				"let2 art can",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := ReorderLogFiles(tt.logs)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkReorderLogFiles(b *testing.B) {
+	tests := []struct {
+		name string
+		logs []string
+	}{
+		{"SmallSet", []string{"dig1 8 1 5 1", "let1 art can", "dig2 3 6", "let2 own kit dig", "let3 art zero"}},
+		{"MediumSet", []string{
+			"dig1 8 1 5 1", "let1 art can", "dig2 3 6", "let2 own kit dig", "let3 art zero",
+			"let4 art zero", "let5 art zero", "let6 art zero", "let7 art zero", "let8 art zero",
+		}},
+		{"LargeSet", []string{
+			"dig1 8 1 5 1", "let1 art can", "dig2 3 6", "let2 own kit dig", "let3 art zero",
+			"let4 art zero", "let5 art zero", "let6 art zero", "let7 art zero", "let8 art zero",
+			"let9 art zero", "let10 art zero", "let11 art zero", "let12 art zero", "let13 art zero",
+			"let14 art zero", "let15 art zero", "let16 art zero", "let17 art zero", "let18 art zero",
+		}},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = ReorderLogFiles(tt.logs)
+			}
+		})
+	}
+}

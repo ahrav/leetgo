@@ -3303,3 +3303,36 @@ func NumberOfWaysCounters(s string) int64 {
 
 	return result
 }
+
+func ReorderLogFiles(logs []string) []string {
+	var letterLogs, digitLogs []string
+
+	for _, log := range logs {
+		splitIdx := strings.Index(log, " ")
+		content := log[splitIdx+1:]
+
+		if content[0] >= '0' && content[0] <= '9' {
+			digitLogs = append(digitLogs, log)
+		} else {
+			letterLogs = append(letterLogs, log)
+		}
+	}
+
+	sort.SliceStable(letterLogs, func(i, j int) bool {
+		splitIdxI := strings.Index(letterLogs[i], " ")
+		contentI := letterLogs[i][splitIdxI+1:]
+		iID := letterLogs[i][:splitIdxI]
+
+		splitIdxJ := strings.Index(letterLogs[j], " ")
+		contenJ := letterLogs[j][splitIdxJ+1:]
+		jID := letterLogs[j][:splitIdxJ]
+
+		if contentI != contenJ {
+			return contentI < contenJ
+		}
+
+		return iID < jID
+	})
+
+	return append(letterLogs, digitLogs...)
+}

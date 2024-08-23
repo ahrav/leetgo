@@ -1,5 +1,7 @@
 package recursion
 
+import "sort"
+
 func GetRow(index int) []int {
 	if index == 0 {
 		return []int{1}
@@ -122,5 +124,38 @@ func Permute(nums []int) [][]int {
 	}
 
 	backtrack(0, n)
+	return result
+}
+
+func PermuteUnique(nums []int) [][]int {
+	n := len(nums)
+
+	var result [][]int
+
+	visited := make([]bool, n)
+	var backtrack func(tmp []int)
+	backtrack = func(tmp []int) {
+		if len(tmp) == n {
+			t := make([]int, n)
+			copy(t, tmp)
+			result = append(result, t)
+			return
+		}
+
+		for i := range n {
+			if visited[i] || (i > 0 && nums[i-1] == nums[i] && !visited[i-1]) {
+				continue
+			}
+			visited[i] = true
+			tmp = append(tmp, nums[i])
+			backtrack(tmp)
+			tmp = tmp[:len(tmp)-1]
+			visited[i] = false
+		}
+	}
+
+	sort.Ints(nums)
+	backtrack(make([]int, 0, n))
+
 	return result
 }

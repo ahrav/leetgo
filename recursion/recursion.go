@@ -1,4 +1,4 @@
-package recursionI
+package recursion
 
 func GetRow(index int) []int {
 	if index == 0 {
@@ -100,4 +100,27 @@ func GenerateTrees(n int) []*TreeNode {
 	}
 
 	return generateTrees(1, n)
+}
+
+func Permute(nums []int) [][]int {
+	n := len(nums)
+
+	var result [][]int
+	var backtrack func(start, end int)
+	backtrack = func(start, end int) {
+		if start == end {
+			tmp := make([]int, n)
+			copy(tmp, nums)
+			result = append(result, tmp)
+		}
+
+		for i := start; i < end; i++ {
+			nums[i], nums[start] = nums[start], nums[i]
+			backtrack(start+1, end)
+			nums[i], nums[start] = nums[start], nums[i]
+		}
+	}
+
+	backtrack(0, n)
+	return result
 }

@@ -3336,3 +3336,36 @@ func ReorderLogFiles(logs []string) []string {
 
 	return append(letterLogs, digitLogs...)
 }
+
+// CountTheNumOfKFreeSubsets - https://leetcode.com/problems/count-the-number-of-k-free-subsets/?envType=study-plan-v2&envId=amazon-spring-23-high-frequency
+func CountTheNumOfKFreeSubsets(nums []int, k int) int64 {
+	fib := func(v int) int {
+		if v == 1 {
+			return 1
+		}
+		if v == 2 {
+			return 1
+		}
+
+		a, b := 1, 2
+		for i := 3; i <= v; i++ {
+			a, b = b, a+b
+		}
+
+		return b
+	}
+
+	sort.Ints(nums)
+	m := make(map[int]int)
+	for _, num := range nums {
+		m[num] = m[num-k] + 1
+		delete(m, num-k)
+	}
+
+	result := int64(1)
+	for _, v := range m {
+		result *= int64(fib(v + 1))
+	}
+
+	return result
+}

@@ -5191,3 +5191,66 @@ func BenchmarkReorderLogFiles(b *testing.B) {
 		})
 	}
 }
+
+func TestCountTheNumOfKFreeSubsets(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected int64
+	}{
+		{
+			name:     "example case",
+			nums:     []int{1, 2, 3, 4},
+			k:        1,
+			expected: 8,
+		},
+		{
+			name:     "no k-free subsets",
+			nums:     []int{1, 2, 3},
+			k:        10,
+			expected: 1,
+		},
+		{
+			name:     "single element",
+			nums:     []int{5},
+			k:        1,
+			expected: 1,
+		},
+		{
+			name:     "large k value",
+			nums:     []int{1, 2, 3, 4, 5},
+			k:        100,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := CountTheNumOfKFreeSubsets(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkCountTheNumOfKFreeSubsets(b *testing.B) {
+	tests := []struct {
+		name string
+		nums []int
+		k    int
+	}{
+		{"SmallInput", []int{1, 2, 3, 4}, 1},
+		{"MediumInput", []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 2},
+		{"LargeInput", []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}, 3},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = CountTheNumOfKFreeSubsets(tt.nums, tt.k)
+			}
+		})
+	}
+}

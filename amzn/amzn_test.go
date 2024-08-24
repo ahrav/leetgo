@@ -5254,3 +5254,117 @@ func BenchmarkCountTheNumOfKFreeSubsets(b *testing.B) {
 		})
 	}
 }
+
+func TestMissingNumber(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"AllNumbersPresent", []int{0, 1, 2, 3, 4, 5}, 6},
+		{"SingleElementMissing", []int{3, 0, 1}, 2},
+		{"FirstElementMissing", []int{1, 2, 3, 4, 5}, 0},
+		{"LastElementMissing", []int{0, 1, 2, 3, 4}, 5},
+		{"EmptyArray", []int{}, 0},
+		{"LargeArray", func() []int {
+			nums := make([]int, 999999)
+			for i := 0; i < 999999; i++ {
+				nums[i] = i
+			}
+			return nums
+		}(), 999999},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := MissingNumber(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMissingNumber(b *testing.B) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"AllNumbersPresent", []int{0, 1, 2, 3, 4, 5}, 6},
+		{"SingleElementMissing", []int{3, 0, 1}, 2},
+		{"FirstElementMissing", []int{1, 2, 3, 4, 5}, 0},
+		{"LastElementMissing", []int{0, 1, 2, 3, 4}, 5},
+		{"EmptyArray", []int{}, 0},
+		{"LargeArray", func() []int {
+			nums := make([]int, 999999)
+			for i := 0; i < 999999; i++ {
+				nums[i] = i
+			}
+			return nums
+		}(), 999999},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = MissingNumber(tt.nums)
+			}
+		})
+	}
+}
+
+func TestMissingNumberMath(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"AllNumbersPresent", []int{0, 1, 2, 3, 4, 5}, 6},
+		{"SingleElementMissing", []int{3, 0, 1}, 2},
+		{"FirstElementMissing", []int{1, 2, 3, 4, 5}, 0},
+		{"LastElementMissing", []int{0, 1, 2, 3, 4}, 5},
+		{"EmptyArray", []int{}, 0},
+		{"LargeArray", func() []int {
+			nums := make([]int, 999999)
+			for i := 0; i < 999999; i++ {
+				nums[i] = i
+			}
+			return nums
+		}(), 999999},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := MissingNumberMath(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMissingNumberMath(b *testing.B) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"AllNumbersPresent", []int{0, 1, 2, 3, 4, 5}, 6},
+		{"SingleElementMissing", []int{3, 0, 1}, 2},
+		{"FirstElementMissing", []int{1, 2, 3, 4, 5}, 0},
+		{"LastElementMissing", []int{0, 1, 2, 3, 4}, 5},
+		{"EmptyArray", []int{}, 0},
+		{"LargeArray", func() []int {
+			nums := make([]int, 999999)
+			for i := 0; i < 999999; i++ {
+				nums[i] = i
+			}
+			return nums
+		}(), 999999},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = MissingNumberMath(tt.nums)
+			}
+		})
+	}
+}

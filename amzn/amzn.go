@@ -3369,3 +3369,36 @@ func CountTheNumOfKFreeSubsets(nums []int, k int) int64 {
 
 	return result
 }
+
+// MissingNumber - https://leetcode.com/problems/missing-number/
+func MissingNumber(nums []int) int {
+	n := len(nums)
+
+	for i := 0; i < n; {
+		if nums[i] < n && nums[i] != nums[nums[i]] {
+			nums[i], nums[nums[i]] = nums[nums[i]], nums[i]
+		} else {
+			i++
+		}
+	}
+
+	for i := range nums {
+		if nums[i] != i {
+			return i
+		}
+	}
+
+	return n
+}
+
+func MissingNumberMath(nums []int) int {
+	n := len(nums)
+
+	expectedSum := n * (n + 1) / 2
+	sum := 0
+	for _, num := range nums {
+		sum += num
+	}
+
+	return expectedSum - sum
+}

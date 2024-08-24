@@ -1,7 +1,9 @@
 package recursion
 
 import (
+	"bytes"
 	"sort"
+	"strings"
 )
 
 func GetRow(index int) []int {
@@ -327,5 +329,80 @@ func Partition(s string) [][]string {
 
 	backtrack(0, n, []string{})
 
+	return result
+}
+
+// GeneratePalindromes - https://leetcode.com/problems/palindrome-permutation-ii/
+func GeneratePalindromes(s string) []string {
+	if len(s) == 0 {
+		return []string{}
+	}
+
+	freqCount := make(map[byte]int)
+	for i := range s {
+		freqCount[s[i]]++
+	}
+
+	var mid byte
+	oddCount, size := 0, 0
+	for k, v := range freqCount {
+		if v%2 != 0 {
+			oddCount++
+			mid = k
+		}
+		size += v
+
+		if oddCount > 1 {
+			return []string{}
+		}
+	}
+
+	half := make([]byte, 0, size/2)
+	for k, v := range freqCount {
+		half = append(half, bytes.Repeat([]byte{k}, v/2)...)
+	}
+
+	reverse := func(str []byte) []byte {
+		for i, j := 0, len(str)-1; i < j; i, j = i+1, j-1 {
+			str[i], str[j] = str[j], str[i]
+		}
+
+		return str
+	}
+
+	n := len(s) / 2
+
+	var result []string
+	visited := make([]bool, n)
+
+	var backtrack func(tmp []byte)
+	backtrack = func(tmp []byte) {
+		if len(tmp) == n {
+			t := make([]byte, n)
+			copy(t, tmp)
+
+			var sb strings.Builder
+			sb.WriteString(string(t))
+			if oddCount != 0 {
+				sb.WriteByte(mid)
+			}
+			sb.WriteString(string(reverse(t)))
+			result = append(result, sb.String())
+			return
+		}
+
+		for i := range n {
+			if visited[i] || (i > 0 && half[i] == half[i-1] && !visited[i-1]) {
+				continue
+			}
+			visited[i] = true
+			tmp = append(tmp, half[i])
+			backtrack(tmp)
+			tmp = tmp[:len(tmp)-1]
+			visited[i] = false
+		}
+	}
+
+	backtrack([]byte{})
 	return result
 }

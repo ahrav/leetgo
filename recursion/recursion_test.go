@@ -722,3 +722,80 @@ func BenchmarkPartition(b *testing.B) {
 		})
 	}
 }
+
+func TestGeneratePalindromes(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected []string
+	}{
+		{
+			name:     "EmptyString",
+			input:    "",
+			expected: []string{},
+		},
+		{
+			name:     "SingleCharacter",
+			input:    "a",
+			expected: []string{"a"},
+		},
+		{
+			name:     "TwoCharactersPalindrome",
+			input:    "aa",
+			expected: []string{"aa"},
+		},
+		{
+			name:     "TwoCharactersNonPalindrome",
+			input:    "ab",
+			expected: []string{},
+		},
+		{
+			name:     "ThreeCharactersPalindrome",
+			input:    "aab",
+			expected: []string{"aba"},
+		},
+		{
+			name:     "ThreeCharactersNonPalindrome",
+			input:    "abc",
+			expected: []string{},
+		},
+		{
+			name:     "MultiplePalindromes",
+			input:    "aabb",
+			expected: []string{"abba", "baab"},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := GeneratePalindromes(tt.input)
+			assert.ElementsMatch(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkGeneratePalindromes(b *testing.B) {
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{"EmptyString", ""},
+		{"SingleCharacter", "a"},
+		{"TwoCharactersPalindrome", "aa"},
+		{"TwoCharactersNonPalindrome", "ab"},
+		{"ThreeCharactersPalindrome", "aab"},
+		{"ThreeCharactersNonPalindrome", "abc"},
+		{"MultiplePalindromes", "aabb"},
+		{"LongStringWithPalindromes", "aabbcc"},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = GeneratePalindromes(tt.input)
+			}
+		})
+	}
+}

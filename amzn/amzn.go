@@ -3402,3 +3402,47 @@ func MissingNumberMath(nums []int) int {
 
 	return expectedSum - sum
 }
+
+// FindDuplicateFloyd - https://leetcode.com/problems/find-the-duplicate-number/
+func FindDuplicateFloyd(nums []int) int {
+	slow, fast := nums[0], nums[0]
+
+	for {
+		slow = nums[slow]
+		fast = nums[nums[fast]]
+		if slow == fast {
+			break
+		}
+	}
+
+	slow = nums[0]
+	for slow != fast {
+		slow = nums[slow]
+		fast = nums[fast]
+	}
+
+	return slow
+}
+
+func FindDuplicateBinarySearch(nums []int) int {
+	left, right := 1, len(nums)-1
+
+	for left < right {
+		mid := left + (right-left)/2
+
+		count := 0
+		for _, num := range nums {
+			if num <= mid {
+				count++
+			}
+		}
+
+		if count > mid {
+			right = mid
+		} else {
+			left = mid + 1
+		}
+	}
+
+	return left
+}

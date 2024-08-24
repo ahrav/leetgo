@@ -5368,3 +5368,131 @@ func BenchmarkMissingNumberMath(b *testing.B) {
 		})
 	}
 }
+
+func TestFindDuplicateFloyd(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "SingleDuplicate",
+			nums:     []int{1, 3, 4, 2, 2},
+			expected: 2,
+		},
+		{
+			name:     "MultipleDuplicates",
+			nums:     []int{3, 1, 3, 4, 2},
+			expected: 3,
+		},
+		{
+			name: "LargeArray",
+			nums: func() []int {
+				nums := make([]int, 100000)
+				for i := 0; i < 99999; i++ {
+					nums[i] = i + 1
+				}
+				nums[99999] = 99999
+				return nums
+			}(),
+			expected: 99999,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := FindDuplicateFloyd(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkFindDuplicateFloyd(b *testing.B) {
+	tests := []struct {
+		name string
+		nums []int
+	}{
+		{"SingleDuplicate", []int{1, 3, 4, 2, 2}},
+		{"MultipleDuplicates", []int{3, 1, 3, 4, 2}},
+		{"LargeArray", func() []int {
+			nums := make([]int, 100000)
+			for i := 0; i < 99999; i++ {
+				nums[i] = i + 1
+			}
+			nums[99999] = 99999
+			return nums
+		}()},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = FindDuplicateFloyd(tt.nums)
+			}
+		})
+	}
+}
+
+func TestFindDuplicateBinarySearch(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "SingleDuplicate",
+			nums:     []int{1, 3, 4, 2, 2},
+			expected: 2,
+		},
+		{
+			name:     "MultipleDuplicates",
+			nums:     []int{3, 1, 3, 4, 2},
+			expected: 3,
+		},
+		{
+			name: "LargeArray",
+			nums: func() []int {
+				nums := make([]int, 100000)
+				for i := 0; i < 99999; i++ {
+					nums[i] = i + 1
+				}
+				nums[99999] = 99999
+				return nums
+			}(),
+			expected: 99999,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := FindDuplicateBinarySearch(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkFindDuplicateBinarySearch(b *testing.B) {
+	tests := []struct {
+		name string
+		nums []int
+	}{
+		{"SingleDuplicate", []int{1, 3, 4, 2, 2}},
+		{"MultipleDuplicates", []int{3, 1, 3, 4, 2}},
+		{"LargeArray", func() []int {
+			nums := make([]int, 100000)
+			for i := 0; i < 99999; i++ {
+				nums[i] = i + 1
+			}
+			nums[99999] = 99999
+			return nums
+		}()},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = FindDuplicateBinarySearch(tt.nums)
+			}
+		})
+	}
+}

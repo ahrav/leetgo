@@ -3509,3 +3509,21 @@ func MinCost(nums []int, costs []int) int64 {
 
 	return int64(dp[n-1])
 }
+
+// MakePalindrome - https://leetcode.com/problems/valid-palindrome-iv/?envType=study-plan-v2&envId=amazon-spring-23-high-frequency
+func MakePalindrome(s string) bool {
+	n := len(s)
+
+	cnt := 0
+	for i, j := 0, n-1; i < j; i, j = i+1, j-1 {
+		if s[i] != s[j] {
+			cnt++
+		}
+
+		if cnt > 2 {
+			return false
+		}
+	}
+
+	return true
+}

@@ -5625,3 +5625,47 @@ func BenchmarkMinCost(b *testing.B) {
 		})
 	}
 }
+
+func TestMakePalindrome(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected bool
+	}{
+		{"PalindromeWithNoChangesNeeded", "racecar", true},
+		{"PalindromeWithOneChangeNeeded", "raceecar", true},
+		{"PalindromeWithTwoChangesNeeded", "raccecar", true},
+		{"NotPalindromeWithMoreThanTwoChanges", "hiello", false},
+		{"EmptyStringIsPalindrome", "", true},
+		{"SingleCharacterStringIsPalindrome", "a", true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := MakePalindrome(tt.input)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMakePalindrome(b *testing.B) {
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{"PalindromeWithNoChangesNeeded", "racecar"},
+		{"PalindromeWithOneChangeNeeded", "raceecar"},
+		{"PalindromeWithTwoChangesNeeded", "raccecar"},
+		{"NotPalindromeWithMoreThanTwoChanges", "hello"},
+		{"EmptyStringIsPalindrome", ""},
+		{"SingleCharacterStringIsPalindrome", "a"},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = MakePalindrome(tt.input)
+			}
+		})
+	}
+}

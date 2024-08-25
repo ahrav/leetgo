@@ -3585,3 +3585,30 @@ func MinimumSwaps(nums []int) int {
 	}
 	return totalSwaps - 1
 }
+
+// CanCompleteCircuit - https://leetcode.com/problems/gas-station/
+func CanCompleteCircuit(gas []int, cost []int) int {
+	n := len(gas)
+
+	maxGas, maxCost := 0, 0
+	for i := range n {
+		maxGas += gas[i]
+		maxCost += cost[i]
+	}
+
+	if maxCost > maxGas {
+		return -1
+	}
+
+	currGas, startIdx := 0, 0
+	for i := 0; i < n; i++ {
+		currGas += gas[i] - cost[i]
+
+		if currGas < 0 {
+			startIdx = i + 1
+			currGas = 0
+		}
+	}
+
+	return startIdx
+}

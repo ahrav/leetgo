@@ -5755,3 +5755,93 @@ func BenchmarkMinimumSwaps(b *testing.B) {
 		})
 	}
 }
+
+func TestCanCompleteCircuit(t *testing.T) {
+	tests := []struct {
+		name     string
+		gas      []int
+		cost     []int
+		expected int
+	}{
+		{
+			name:     "AllStationsReachable",
+			gas:      []int{1, 2, 3, 4, 5},
+			cost:     []int{3, 4, 5, 1, 2},
+			expected: 3,
+		},
+		{
+			name:     "NotEnoughGas",
+			gas:      []int{2, 3, 4},
+			cost:     []int{3, 4, 3},
+			expected: -1,
+		},
+		{
+			name:     "SingleStation",
+			gas:      []int{5},
+			cost:     []int{4},
+			expected: 0,
+		},
+		{
+			name:     "MultipleStations",
+			gas:      []int{2, 3, 4, 5, 1},
+			cost:     []int{3, 4, 5, 1, 2},
+			expected: 3,
+		},
+		{
+			name:     "ExactGas",
+			gas:      []int{1, 2, 3, 4},
+			cost:     []int{1, 2, 3, 4},
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := CanCompleteCircuit(tt.gas, tt.cost)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkCanCompleteCircuit(b *testing.B) {
+	tests := []struct {
+		name string
+		gas  []int
+		cost []int
+	}{
+		{
+			name: "AllStationsReachable",
+			gas:  []int{1, 2, 3, 4, 5},
+			cost: []int{3, 4, 5, 1, 2},
+		},
+		{
+			name: "NotEnoughGas",
+			gas:  []int{2, 3, 4},
+			cost: []int{3, 4, 3},
+		},
+		{
+			name: "SingleStation",
+			gas:  []int{5},
+			cost: []int{4},
+		},
+		{
+			name: "MultipleStations",
+			gas:  []int{2, 3, 4, 5, 1},
+			cost: []int{3, 4, 5, 1, 2},
+		},
+		{
+			name: "ExactGas",
+			gas:  []int{1, 2, 3, 4},
+			cost: []int{1, 2, 3, 4},
+		},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = CanCompleteCircuit(tt.gas, tt.cost)
+			}
+		})
+	}
+}

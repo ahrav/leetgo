@@ -3552,3 +3552,36 @@ func MinimumOperations(nums []int) int {
 
 	return cnt
 }
+
+// MinimumSwaps - https://leetcode.com/problems/minimum-adjacent-swaps-to-make-a-valid-array/?envType=study-plan-v2&envId=amazon-spring-23-high-frequency
+func MinimumSwaps(nums []int) int {
+	n := len(nums)
+
+	if n == 1 {
+		return 0
+	}
+
+	minIdx := 0
+	for i := 1; i < n; i++ {
+		if nums[i] < nums[minIdx] {
+			minIdx = i
+		}
+	}
+
+	maxIdx := n - 1
+	for i := n - 2; i >= 0; i-- {
+		if nums[i] > nums[maxIdx] {
+			maxIdx = i
+		}
+	}
+
+	minSwaps := minIdx
+	maxSwaps := n - 1 - maxIdx
+
+	totalSwaps := minSwaps + maxSwaps
+
+	if minIdx < maxIdx {
+		return totalSwaps
+	}
+	return totalSwaps - 1
+}

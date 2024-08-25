@@ -5713,3 +5713,45 @@ func BenchmarkMinimumOperations(b *testing.B) {
 		})
 	}
 }
+
+func TestMinimumSwaps(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"SingleElementArray", []int{1}, 0},
+		{"AlreadySortedArray", []int{1, 2, 3, 4, 5}, 0},
+		{"ReverseSortedArray", []int{5, 4, 3, 2, 1}, 7},
+		{"RandomArray", []int{3, 1, 5, 2, 4}, 3},
+		{"ArrayWithDuplicates", []int{2, 3, 2, 1, 4}, 3},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := MinimumSwaps(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinimumSwaps(b *testing.B) {
+	tests := []struct {
+		name string
+		nums []int
+	}{
+		{"SingleElementArray", []int{1}},
+		{"AlreadySortedArray", []int{1, 2, 3, 4, 5}},
+		{"ReverseSortedArray", []int{5, 4, 3, 2, 1}},
+		{"RandomArray", []int{3, 1, 5, 2, 4}},
+		{"ArrayWithDuplicates", []int{2, 3, 2, 1, 4}},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = MinimumSwaps(tt.nums)
+			}
+		})
+	}
+}

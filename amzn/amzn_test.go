@@ -5496,3 +5496,48 @@ func BenchmarkFindDuplicateBinarySearch(b *testing.B) {
 		})
 	}
 }
+
+func TestMinimumKeypresses(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int
+	}{
+		{"EmptyString", "", 0},
+		{"SingleCharacter", "a", 1},
+		{"AllUniqueCharacters", "abcdefghijklmnopqrstuvwxyz", 51},
+		{"AllSameCharacter", "aaaaa", 5},
+		{"MixedCharacters", "aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz", 102},
+		{"HighFrequencyCharacters", "aaaabbbbccccddddeeeeffffgggghhhhiiii", 36},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := MinimumKeypresses(tt.input)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinimumKeypresses(b *testing.B) {
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{"EmptyString", ""},
+		{"SingleCharacter", "a"},
+		{"AllUniqueCharacters", "abcdefghijklmnopqrstuvwxyz"},
+		{"RepeatingCharacters", "aaabbbccc"},
+		{"LongString", "thequickbrownfoxjumpsoverthelazydogthequickbrownfoxjumpsoverthelazydog"},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = MinimumKeypresses(tt.input)
+			}
+		})
+	}
+}

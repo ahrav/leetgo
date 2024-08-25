@@ -3446,3 +3446,35 @@ func FindDuplicateBinarySearch(nums []int) int {
 
 	return left
 }
+
+// MinimumKeypresses - https://leetcode.com/problems/minimum-number-of-keypresses/?envType=study-plan-v2&envId=amazon-spring-23-high-frequency
+func MinimumKeypresses(s string) int {
+	var freqCnt [26]int
+	for i := range s {
+		freqCnt[s[i]-'a']++
+	}
+
+	freqs := make([]int, 0, len(freqCnt))
+	for _, freq := range freqCnt {
+		if freq != 0 {
+			freqs = append(freqs, freq)
+		}
+	}
+
+	sort.Slice(freqs, func(i, j int) bool {
+		return freqs[i] > freqs[j]
+	})
+
+	var result int
+	for i, freq := range freqs {
+		if i < 9 {
+			result += freq * 1
+		} else if i < 18 {
+			result += freq * 2
+		} else {
+			result += freq * 3
+		}
+	}
+
+	return result
+}

@@ -5541,3 +5541,87 @@ func BenchmarkMinimumKeypresses(b *testing.B) {
 		})
 	}
 }
+
+func TestMinCost(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		costs    []int
+		expected int64
+	}{
+		{
+			name:     "SingleElementArray",
+			nums:     []int{5},
+			costs:    []int{10},
+			expected: 0,
+		},
+		{
+			name:     "IncreasingSequence",
+			nums:     []int{1, 2, 3, 4, 5},
+			costs:    []int{1, 2, 3, 4, 5},
+			expected: 14,
+		},
+		{
+			name:     "DecreasingSequence",
+			nums:     []int{5, 4, 3, 2, 1},
+			costs:    []int{5, 4, 3, 2, 1},
+			expected: 10,
+		},
+		{
+			name:     "MixedSequence",
+			nums:     []int{3, 1, 4, 1, 5},
+			costs:    []int{2, 7, 1, 8, 2},
+			expected: 3,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := MinCost(tt.nums, tt.costs)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinCost(b *testing.B) {
+	tests := []struct {
+		name  string
+		nums  []int
+		costs []int
+	}{
+		{
+			name:  "SingleElementArray",
+			nums:  []int{5},
+			costs: []int{10},
+		},
+		{
+			name:  "IncreasingSequence",
+			nums:  []int{1, 2, 3, 4, 5},
+			costs: []int{1, 2, 3, 4, 5},
+		},
+		{
+			name:  "DecreasingSequence",
+			nums:  []int{5, 4, 3, 2, 1},
+			costs: []int{5, 4, 3, 2, 1},
+		},
+		{
+			name:  "MixedSequence",
+			nums:  []int{3, 1, 4, 1, 5},
+			costs: []int{2, 7, 1, 8, 2},
+		},
+		{
+			name:  "EmptyArray",
+			nums:  []int{},
+			costs: []int{},
+		},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = MinCost(tt.nums, tt.costs)
+			}
+		})
+	}
+}

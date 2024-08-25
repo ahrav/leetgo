@@ -3478,3 +3478,34 @@ func MinimumKeypresses(s string) int {
 
 	return result
 }
+
+// MinCost - https://leetcode.com/problems/jump-game-viii/?envType=study-plan-v2&envId=amazon-spring-23-high-frequency
+func MinCost(nums []int, costs []int) int64 {
+	n := len(nums)
+
+	var inc, dec []int
+	dp := make([]int, n)
+	for i := range dp {
+		dp[i] = math.MaxInt
+	}
+	dp[0] = 0
+
+	for i := 0; i < n; i++ {
+		for len(inc) > 0 && nums[i] >= nums[inc[len(inc)-1]] {
+			idx := inc[len(inc)-1]
+			inc = inc[:len(inc)-1]
+			dp[i] = min(dp[i], dp[idx]+costs[i])
+		}
+
+		for len(dec) > 0 && nums[i] < nums[dec[len(dec)-1]] {
+			idx := dec[len(dec)-1]
+			dec = dec[:len(dec)-1]
+			dp[i] = min(dp[i], dp[idx]+costs[i])
+		}
+
+		inc = append(inc, i)
+		dec = append(dec, i)
+	}
+
+	return int64(dp[n-1])
+}

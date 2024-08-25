@@ -3527,3 +3527,28 @@ func MakePalindrome(s string) bool {
 
 	return true
 }
+
+// MinimumOperations - https://leetcode.com/problems/merge-operations-to-turn-array-into-a-palindrome/?envType=study-plan-v2&envId=amazon-spring-23-high-frequency
+func MinimumOperations(nums []int) int {
+	n := len(nums)
+
+	cnt := 0
+	for i, j := 0, n-1; i < j; {
+		if nums[i] == nums[j] {
+			i++
+			j--
+			continue
+		}
+
+		if nums[i] < nums[j] {
+			nums[i+1] += nums[i]
+			i++
+		} else {
+			nums[j-1] += nums[j]
+			j--
+		}
+		cnt++
+	}
+
+	return cnt
+}

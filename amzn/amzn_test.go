@@ -5669,3 +5669,47 @@ func BenchmarkMakePalindrome(b *testing.B) {
 		})
 	}
 }
+
+func TestMinimumOperations(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"MinimumOperationsSingleElement", []int{1}, 0},
+		{"MinimumOperationsAlreadyPalindrome", []int{1, 2, 3, 2, 1}, 0},
+		{"MinimumOperationsTwoElements", []int{1, 2}, 1},
+		{"MinimumOperationsGeneralCase", []int{1, 3, 2, 1, 2}, 4},
+		{"MinimumOperationsAllSameElements", []int{2, 2, 2, 2}, 0},
+		{"MinimumOperationsEmptyArray", []int{}, 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual := MinimumOperations(tt.nums)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMinimumOperations(b *testing.B) {
+	tests := []struct {
+		name string
+		nums []int
+	}{
+		{"MinimumOperationsSingleElement", []int{1}},
+		{"MinimumOperationsAlreadyPalindrome", []int{1, 2, 3, 2, 1}},
+		{"MinimumOperationsTwoElements", []int{1, 2}},
+		{"MinimumOperationsGeneralCase", []int{1, 3, 2, 1, 2}},
+		{"MinimumOperationsAllSameElements", []int{2, 2, 2, 2}},
+		{"MinimumOperationsEmptyArray", []int{}},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = MinimumOperations(tt.nums)
+			}
+		})
+	}
+}

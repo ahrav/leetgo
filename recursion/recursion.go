@@ -443,8 +443,8 @@ func NumTrees(n int) int {
 	for node := 2; node <= n; node++ {
 		for root := 1; root <= node; root++ {
 			leftTrees := dp[root-1]
-			rightTrees := dp[node-root]
-			dp[node] += leftTrees * rightTrees
+			rightTress := dp[node-root]
+			dp[node] += leftTrees * rightTress
 		}
 	}
 

@@ -799,3 +799,127 @@ func BenchmarkGeneratePalindromes(b *testing.B) {
 		})
 	}
 }
+
+func TestMaxAreaOfIsland(t *testing.T) {
+	tests := []struct {
+		name     string
+		grid     [][]int
+		expected int
+	}{
+		{
+			name: "NoIslands",
+			grid: [][]int{
+				{0, 0, 0},
+				{0, 0, 0},
+				{0, 0, 0},
+			},
+			expected: 0,
+		},
+		{
+			name: "SingleCellIsland",
+			grid: [][]int{
+				{0, 0, 0},
+				{0, 1, 0},
+				{0, 0, 0},
+			},
+			expected: 1,
+		},
+		{
+			name: "MultipleIslands",
+			grid: [][]int{
+				{1, 0, 0, 1},
+				{0, 1, 0, 0},
+				{0, 0, 1, 0},
+				{1, 0, 0, 1},
+			},
+			expected: 1,
+		},
+		{
+			name: "LargeIsland",
+			grid: [][]int{
+				{1, 1, 0, 0},
+				{1, 1, 0, 0},
+				{0, 0, 1, 1},
+				{0, 0, 1, 1},
+			},
+			expected: 4,
+		},
+		{
+			name: "IrregularIsland",
+			grid: [][]int{
+				{1, 1, 0, 0, 1},
+				{1, 0, 0, 1, 1},
+				{0, 0, 1, 1, 0},
+				{1, 1, 0, 0, 1},
+			},
+			expected: 5,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := MaxAreaOfIsland(tt.grid)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkMaxAreaOfIsland(b *testing.B) {
+	tests := []struct {
+		name string
+		grid [][]int
+	}{
+		{
+			name: "NoIslands",
+			grid: [][]int{
+				{0, 0, 0},
+				{0, 0, 0},
+				{0, 0, 0},
+			},
+		},
+		{
+			name: "SingleCellIsland",
+			grid: [][]int{
+				{0, 0, 0},
+				{0, 1, 0},
+				{0, 0, 0},
+			},
+		},
+		{
+			name: "MultipleIslands",
+			grid: [][]int{
+				{1, 0, 0, 1},
+				{0, 1, 0, 0},
+				{0, 0, 1, 0},
+				{1, 0, 0, 1},
+			},
+		},
+		{
+			name: "LargeIsland",
+			grid: [][]int{
+				{1, 1, 0, 0},
+				{1, 1, 0, 0},
+				{0, 0, 1, 1},
+				{0, 0, 1, 1},
+			},
+		},
+		{
+			name: "IrregularIsland",
+			grid: [][]int{
+				{1, 1, 0, 0, 1},
+				{1, 0, 0, 1, 1},
+				{0, 0, 1, 1, 0},
+				{1, 1, 0, 0, 1},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = MaxAreaOfIsland(tt.grid)
+			}
+		})
+	}
+}

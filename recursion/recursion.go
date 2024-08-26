@@ -406,3 +406,31 @@ func GeneratePalindromes(s string) []string {
 	backtrack([]byte{})
 	return result
 }
+
+// MaxAreaOfIsland - https://leetcode.com/problems/max-area-of-island/
+func MaxAreaOfIsland(grid [][]int) int {
+	rows, cols := len(grid), len(grid[0])
+
+	var dfs func(x, y int) int
+	dfs = func(x, y int) int {
+		if x < 0 || x >= rows || y < 0 || y >= cols || grid[x][y] == 0 {
+			return 0
+		}
+
+		grid[x][y] = 0
+		return 1 + dfs(x-1, y) + dfs(x+1, y) + dfs(x, y-1) + dfs(x, y+1)
+	}
+
+	var maxArea int
+	for i := range rows {
+		for j := range cols {
+			if grid[i][j] == 1 {
+				if area := dfs(i, j); area > maxArea {
+					maxArea = area
+				}
+			}
+		}
+	}
+
+	return maxArea
+}

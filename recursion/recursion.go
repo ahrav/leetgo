@@ -434,3 +434,19 @@ func MaxAreaOfIsland(grid [][]int) int {
 
 	return maxArea
 }
+
+// NumTrees - https://leetcode.com/problems/unique-binary-search-trees/
+func NumTrees(n int) int {
+	dp := make([]int, n+1)
+	dp[0], dp[1] = 1, 1
+
+	for node := 2; node <= n; node++ {
+		for root := 1; root <= node; root++ {
+			left := dp[root-1]
+			right := dp[node-root]
+			dp[node] += left * right
+		}
+	}
+
+	return dp[n]
+}

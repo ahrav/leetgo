@@ -923,3 +923,85 @@ func BenchmarkMaxAreaOfIsland(b *testing.B) {
 		})
 	}
 }
+
+func TestNumTrees(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected int
+	}{
+		{
+			name:     "OneNode",
+			n:        1,
+			expected: 1,
+		},
+		{
+			name:     "TwoNodes",
+			n:        2,
+			expected: 2,
+		},
+		{
+			name:     "ThreeNodes",
+			n:        3,
+			expected: 5,
+		},
+		{
+			name:     "FourNodes",
+			n:        4,
+			expected: 14,
+		},
+		{
+			name:     "LargeNumberOfNodes",
+			n:        10,
+			expected: 16796,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := NumTrees(tt.n)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkNumTrees(b *testing.B) {
+	tests := []struct {
+		name string
+		n    int
+	}{
+		{
+			name: "ZeroNodes",
+			n:    0,
+		},
+		{
+			name: "OneNode",
+			n:    1,
+		},
+		{
+			name: "TwoNodes",
+			n:    2,
+		},
+		{
+			name: "ThreeNodes",
+			n:    3,
+		},
+		{
+			name: "FourNodes",
+			n:    4,
+		},
+		{
+			name: "LargeNumberOfNodes",
+			n:    10,
+		},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = NumTrees(tt.n)
+			}
+		})
+	}
+}

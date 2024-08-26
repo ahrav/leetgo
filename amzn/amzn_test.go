@@ -5845,3 +5845,100 @@ func BenchmarkCanCompleteCircuit(b *testing.B) {
 		})
 	}
 }
+
+func TestFindWords(t *testing.T) {
+	tests := []struct {
+		name     string
+		board    [][]byte
+		words    []string
+		expected []string
+	}{
+		{
+			name: "FindWordsWithNoMatchingWords",
+			board: [][]byte{
+				{'a', 'b'},
+				{'c', 'd'},
+			},
+			words:    []string{"word"},
+			expected: []string{},
+		},
+		{
+			name: "FindWordsWithSingleWordMatch",
+			board: [][]byte{
+				{'a', 'b'},
+				{'c', 'd'},
+			},
+			words:    []string{"ab"},
+			expected: []string{"ab"},
+		},
+		{
+			name: "FindWordsWithMultipleWordsMatch",
+			board: [][]byte{
+				{'a', 'b'},
+				{'c', 'd'},
+			},
+			words:    []string{"ab", "cd"},
+			expected: []string{"ab", "cd"},
+		},
+		{
+			name: "FindWordsWithOverlappingWords",
+			board: [][]byte{
+				{'a', 'b', 'c'},
+				{'d', 'e', 'f'},
+				{'g', 'h', 'i'},
+			},
+			words:    []string{"abc", "cfi", "beh", "defi"},
+			expected: []string{"abc", "cfi", "beh", "defi"},
+		},
+		{
+			name: "FindWordsWithRepeatedCharacters",
+			board: [][]byte{
+				{'a', 'a'},
+				{'a', 'a'},
+			},
+			words:    []string{"aaa", "aaaa"},
+			expected: []string{"aaa", "aaaa"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := FindWords(tt.board, tt.words)
+			assert.ElementsMatch(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkFindWords(b *testing.B) {
+	tests := []struct {
+		name  string
+		board [][]byte
+		words []string
+	}{
+		{
+			name:  "BenchmarkSmallBoard",
+			board: [][]byte{{'a', 'b'}, {'c', 'd'}},
+			words: []string{"ab", "cd"},
+		},
+		{
+			name: "BenchmarkLargeBoard",
+			board: [][]byte{
+				{'a', 'b', 'c', 'd', 'e'},
+				{'f', 'g', 'h', 'i', 'j'},
+				{'k', 'l', 'm', 'n', 'o'},
+				{'p', 'q', 'r', 's', 't'},
+				{'u', 'v', 'w', 'x', 'y'},
+			},
+			words: []string{"abc", "def", "ghi", "jkl", "mno", "pqr", "stu", "vwx", "yz"},
+		},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = FindWords(tt.board, tt.words)
+			}
+		})
+	}
+}

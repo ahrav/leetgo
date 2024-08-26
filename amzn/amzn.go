@@ -3612,3 +3612,64 @@ func CanCompleteCircuit(gas []int, cost []int) int {
 
 	return startIdx
 }
+
+type TrieNode struct {
+	children map[byte]*TrieNode
+	word     string
+}
+
+func (t *TrieNode) Insert(word string) {
+	curr := t
+	for i := range word {
+		char := word[i]
+		if curr.children[char] == nil {
+			curr.children[char] = &TrieNode{children: make(map[byte]*TrieNode)}
+		}
+		curr = curr.children[char]
+	}
+	curr.word = word
+}
+
+// FindWords - https://leetcode.com/problems/word-search-ii/
+func FindWords(board [][]byte, words []string) []string {
+	trie := &TrieNode{children: make(map[byte]*TrieNode)}
+	for _, word := range words {
+		trie.Insert(word)
+	}
+
+	rows, cols := len(board), len(board[0])
+	var result []string
+
+	var dfs func(x, y int, node *TrieNode)
+	dfs = func(x, y int, node *TrieNode) {
+		if x < 0 || x >= rows || y < 0 || y >= cols || board[x][y] == '#' {
+			return
+		}
+
+		char := board[x][y]
+		child := node.children[char]
+		if child == nil {
+			return
+		}
+
+		if child.word != "" {
+			result = append(result, child.word)
+			child.word = ""
+		}
+
+		board[x][y] = '#'
+		dfs(x-1, y, child)
+		dfs(x+1, y, child)
+		dfs(x, y-1, child)
+		dfs(x, y+1, child)
+		board[x][y] = char
+	}
+
+	for i := range rows {
+		for j := range cols {
+			dfs(i, j, trie)
+		}
+	}
+
+	return result
+}

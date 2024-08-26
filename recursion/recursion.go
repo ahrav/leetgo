@@ -442,9 +442,9 @@ func NumTrees(n int) int {
 
 	for node := 2; node <= n; node++ {
 		for root := 1; root <= node; root++ {
-			left := dp[root-1]
-			right := dp[node-root]
-			dp[node] += left * right
+			leftTrees := dp[root-1]
+			rightTrees := dp[node-root]
+			dp[node] += leftTrees * rightTrees
 		}
 	}
 

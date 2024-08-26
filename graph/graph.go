@@ -36,20 +36,18 @@ func MinCostConnectPoints(points [][]int) int {
 		return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
 	}
 
-	n := len(points)
-	if n <= 1 {
-		return 0
-	}
-
 	h := new(EdgeMinHeap)
 	heap.Init(h)
 
-	visited := make([]bool, n)
-
 	heap.Push(h, Edge{to: 0, weight: 0})
 
-	totalCost := 0
+	n := len(points)
+	if n == 0 {
+		return 0
+	}
+	visited := make([]bool, n)
 
+	totalCost := 0
 	for h.Len() > 0 {
 		edge := heap.Pop(h).(Edge)
 
@@ -107,13 +105,12 @@ func (uf *UnionFind) Union(x, y int) bool {
 		}
 		return true
 	}
-
 	return false
 }
 
 // MinimumCost - https://leetcode.com/problems/connecting-cities-with-minimum-cost/
 func MinimumCost(n int, connections [][]int) int {
-	if len(connections) < n-1 { // Not enough cities to connect
+	if len(connections) < n-1 {
 		return -1
 	}
 
@@ -122,14 +119,13 @@ func MinimumCost(n int, connections [][]int) int {
 	})
 
 	uf := NewUnionFind(n)
-
-	totalCost, edgesUsed := 0, 0
+	totalCost, edgesAccessed := 0, 0
 	for _, conn := range connections {
 		x, y, cost := conn[0]-1, conn[1]-1, conn[2]
 		if uf.Union(x, y) {
 			totalCost += cost
-			edgesUsed++
-			if edgesUsed == n-1 {
+			edgesAccessed++
+			if edgesAccessed == n-1 {
 				return totalCost
 			}
 		}

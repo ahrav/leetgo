@@ -5942,3 +5942,32 @@ func BenchmarkFindWords(b *testing.B) {
 		})
 	}
 }
+
+func TestSnakesAndLadders(t *testing.T) {
+	board := [][]int{
+		{-1, -1, -1, -1, -1, -1},
+		{-1, -1, -1, -1, -1, -1},
+		{-1, -1, -1, -1, -1, -1},
+		{-1, 35, -1, -1, 13, -1},
+		{-1, -1, -1, -1, -1, -1},
+		{-1, 15, -1, -1, -1, -1},
+	}
+	expected := 4
+	result := SnakesAndLadders(board)
+	assert.Equal(t, expected, result)
+}
+
+func BenchmarkSnakesAndLadders(b *testing.B) {
+	board := [][]int{
+		{-1, -1, -1, -1, -1, -1},
+		{-1, -1, -1, -1, -1, -1},
+		{-1, -1, -1, -1, -1, -1},
+		{-1, 35, -1, -1, 13, -1},
+		{-1, -1, -1, -1, -1, -1},
+		{-1, 15, -1, -1, -1, -1},
+	}
+
+	for i := 0; i < b.N; i++ {
+		_ = SnakesAndLadders(board)
+	}
+}

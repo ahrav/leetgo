@@ -2,6 +2,7 @@ package amzn
 
 import (
 	"container/heap"
+	"container/list"
 	"fmt"
 	"math"
 	"math/rand"
@@ -3672,4 +3673,51 @@ func FindWords(board [][]byte, words []string) []string {
 	}
 
 	return result
+}
+
+// SnakesAndLadders - https://leetcode.com/problems/snakes-and-ladders/
+func SnakesAndLadders(board [][]int) int {
+	n := len(board)
+
+	getCoord := func(pos int) (int, int) {
+		row := (pos - 1) / n
+		col := (pos - 1) % n
+
+		if row%2 == 1 {
+			col = n - 1 - col
+		}
+
+		return n - 1 - row, col
+	}
+
+	queue := list.New()
+	queue.PushBack([2]int{1, 0})
+	boardSize := n * n
+	visited := make([]bool, boardSize+1)
+	visited[1] = true
+
+	for queue.Len() > 0 {
+		front := queue.Remove(queue.Front()).([2]int)
+
+		curr, moves := front[0], front[1]
+		for nextPos := curr + 1; nextPos <= min(curr+6, boardSize); nextPos++ {
+			row, col := getCoord(nextPos)
+
+			next := nextPos
+			if board[row][col] != -1 {
+				next = board[row][col]
+			}
+
+			if next == boardSize {
+				return moves + 1
+			}
+
+			if !visited[next] {
+				visited[next] = true
+				queue.PushBack([2]int{next, moves + 1})
+			}
+		}
+	}
+
+	return -1
 }

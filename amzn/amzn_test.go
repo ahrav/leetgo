@@ -6188,3 +6188,35 @@ func BenchmarkUpdateBoard(b *testing.B) {
 		_ = UpdateBoard(board, click)
 	}
 }
+
+func TestLongestValidParentheses(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int
+	}{
+		{"LongestValidParenthesesEmptyString", "", 0},
+		{"LongestValidParenthesesNoValidPairs", "(((((", 0},
+		{"LongestValidParenthesesSinglePair", "()", 2},
+		{"LongestValidParenthesesNestedPairs", "((()))", 6},
+		{"LongestValidParenthesesMixedPairs", "(()())", 6},
+		{"LongestValidParenthesesUnbalancedLeft", "(()", 2},
+		{"LongestValidParenthesesUnbalancedRight", "())", 2},
+		{"LongestValidParenthesesComplex", "(()))())(", 4},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LongestValidParentheses(tt.input)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLongestValidParentheses(b *testing.B) {
+	input := "(()))())("
+	for i := 0; i < b.N; i++ {
+		_ = LongestValidParentheses(input)
+	}
+}

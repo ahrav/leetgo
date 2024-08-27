@@ -3826,3 +3826,29 @@ func UpdateBoard(board [][]byte, click []int) [][]byte {
 
 	return board
 }
+
+// LongestValidParentheses - https://leetcode.com/problems/longest-valid-parentheses/
+func LongestValidParentheses(s string) int {
+	n := len(s)
+	if n < 2 {
+		return 0
+	}
+
+	stack := []int{-1}
+	maxLen := 0
+	for i := 0; i < n; i++ {
+		if s[i] == '(' {
+			stack = append(stack, i)
+			continue
+		}
+
+		stack = stack[:len(stack)-1]
+		if len(stack) == 0 {
+			stack = append(stack, i)
+		} else {
+			maxLen = max(maxLen, i-stack[len(stack)-1])
+		}
+	}
+
+	return maxLen
+}

@@ -5971,3 +5971,81 @@ func BenchmarkSnakesAndLadders(b *testing.B) {
 		_ = SnakesAndLadders(board)
 	}
 }
+
+func TestExist(t *testing.T) {
+	tests := []struct {
+		board    [][]byte
+		word     string
+		expected bool
+	}{
+		{
+			board: [][]byte{
+				{'A', 'B', 'C', 'E'},
+				{'S', 'F', 'C', 'S'},
+				{'A', 'D', 'E', 'E'},
+			},
+			word:     "ABCCED",
+			expected: true,
+		},
+		{
+			board: [][]byte{
+				{'A', 'B', 'C', 'E'},
+				{'S', 'F', 'C', 'S'},
+				{'A', 'D', 'E', 'E'},
+			},
+			word:     "SEE",
+			expected: true,
+		},
+		{
+			board: [][]byte{
+				{'A', 'B', 'C', 'E'},
+				{'S', 'F', 'C', 'S'},
+				{'A', 'D', 'E', 'E'},
+			},
+			word:     "ABCB",
+			expected: false,
+		},
+		{
+			board: [][]byte{
+				{'A'},
+			},
+			word:     "A",
+			expected: true,
+		},
+		{
+			board: [][]byte{
+				{'A'},
+			},
+			word:     "B",
+			expected: false,
+		},
+		{
+			board: [][]byte{
+				{'A', 'B'},
+				{'C', 'D'},
+			},
+			word:     "ABCD",
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("board: %v, word: %s", tt.board, tt.word), func(t *testing.T) {
+			result := Exist(tt.board, tt.word)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkExist(b *testing.B) {
+	board := [][]byte{
+		{'A', 'B', 'C', 'E'},
+		{'S', 'F', 'C', 'S'},
+		{'A', 'D', 'E', 'E'},
+	}
+	word := "ABCCED"
+
+	for i := 0; i < b.N; i++ {
+		_ = Exist(board, word)
+	}
+}

@@ -3721,3 +3721,36 @@ func SnakesAndLadders(board [][]int) int {
 
 	return -1
 }
+
+// Exist - https://leetcode.com/problems/word-search/?envType=problem-list-v2&envId=954v5ops
+func Exist(board [][]byte, word string) bool {
+	rows, cols := len(board), len(board[0])
+
+	var dfs func(x, y, idx int) bool
+	dfs = func(x, y, idx int) bool {
+		if idx == len(word) {
+			return true
+		}
+
+		if x < 0 || x >= rows || y < 0 || y >= cols || board[x][y] != word[idx] {
+			return false
+		}
+
+		char := board[x][y]
+		board[x][y] = '#'
+		found := dfs(x-1, y, idx+1) || dfs(x+1, y, idx+1) || dfs(x, y-1, idx+1) || dfs(x, y+1, idx+1)
+		board[x][y] = char
+
+		return found
+	}
+
+	for i := range rows {
+		for j := range cols {
+			if board[i][j] == word[0] && dfs(i, j, 0) {
+				return true
+			}
+		}
+	}
+
+	return false
+}

@@ -6049,3 +6049,30 @@ func BenchmarkExist(b *testing.B) {
 		_ = Exist(board, word)
 	}
 }
+
+func TestGenerateParenthesis(t *testing.T) {
+	tests := []struct {
+		n        int
+		expected []string
+	}{
+		{n: 1, expected: []string{"()"}},
+		{n: 2, expected: []string{"(())", "()()"}},
+		{n: 3, expected: []string{"((()))", "(()())", "(())()", "()(())", "()()()"}},
+		{n: 0, expected: []string{""}},
+	}
+
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("n=%d", tt.n), func(t *testing.T) {
+			t.Parallel()
+			result := GenerateParenthesis(tt.n)
+			assert.ElementsMatch(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkGenerateParenthesis(b *testing.B) {
+	n := 3
+	for i := 0; i < b.N; i++ {
+		_ = GenerateParenthesis(n)
+	}
+}

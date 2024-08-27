@@ -3754,3 +3754,28 @@ func Exist(board [][]byte, word string) bool {
 
 	return false
 }
+
+// GenerateParenthesis - https://leetcode.com/problems/generate-parentheses/description/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func GenerateParenthesis(n int) []string {
+	validSize := n * 2
+
+	var result []string
+	var backtrack func(curr string, open, close int)
+	backtrack = func(curr string, open, close int) {
+		if len(curr) == validSize {
+			result = append(result, curr)
+			return
+		}
+
+		if open < n {
+			backtrack(curr+"(", open+1, close)
+		}
+
+		if close < open {
+			backtrack(curr+")", open, close+1)
+		}
+	}
+
+	backtrack("", 0, 0)
+	return result
+}

@@ -3779,3 +3779,50 @@ func GenerateParenthesis(n int) []string {
 	backtrack("", 0, 0)
 	return result
 }
+
+// UpdateBoard - https://leetcode.com/problems/minesweeper/description/?envType=problem-list-v2&envId=954v5ops
+func UpdateBoard(board [][]byte, click []int) [][]byte {
+	rowClick, colClick := click[0], click[1]
+
+	if board[rowClick][colClick] == 'M' {
+		board[rowClick][colClick] = 'X'
+		return board
+	}
+
+	rows, cols := len(board), len(board[0])
+	directions := [][]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}
+
+	mineCount := func(x, y int) int {
+		cnt := 0
+		for _, dir := range directions {
+			newRow, newCol := x+dir[0], y+dir[1]
+			if newRow < 0 || newRow >= rows || newCol < 0 || newCol >= cols || board[newRow][newCol] != 'M' {
+				continue
+			}
+			cnt++
+		}
+		return cnt
+	}
+
+	var dfs func(x, y int)
+	dfs = func(x, y int) {
+		if x < 0 || x >= rows || y < 0 || y >= cols || board[x][y] != 'E' {
+			return
+		}
+
+		if cnt := mineCount(x, y); cnt > 0 {
+			board[x][y] = byte('0' + cnt)
+		} else {
+			board[x][y] = 'B'
+
+			for _, dir := range directions {
+				newRow, newCol := x+dir[0], y+dir[1]
+				dfs(newRow, newCol)
+			}
+		}
+	}
+
+	dfs(rowClick, colClick)
+
+	return board
+}

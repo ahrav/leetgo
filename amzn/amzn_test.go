@@ -6076,3 +6076,115 @@ func BenchmarkGenerateParenthesis(b *testing.B) {
 		_ = GenerateParenthesis(n)
 	}
 }
+
+func TestUpdateBoard(t *testing.T) {
+	tests := []struct {
+		name     string
+		board    [][]byte
+		click    []int
+		expected [][]byte
+	}{
+		{
+			name: "MineClicked",
+			board: [][]byte{
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'M', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+			},
+			click: []int{1, 2},
+			expected: [][]byte{
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'X', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+			},
+		},
+		{
+			name: "EmptyCellWithNoAdjacentMines",
+			board: [][]byte{
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+			},
+			click: []int{0, 0},
+			expected: [][]byte{
+				{'B', 'B', 'B', 'B', 'B'},
+				{'B', 'B', 'B', 'B', 'B'},
+				{'B', 'B', 'B', 'B', 'B'},
+				{'B', 'B', 'B', 'B', 'B'},
+			},
+		},
+		{
+			name: "EmptyCellWithAdjacentMines",
+			board: [][]byte{
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'M', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+			},
+			click: []int{1, 1},
+			expected: [][]byte{
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', '1', 'M', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+			},
+		},
+		{
+			name: "ClickOnBoundary",
+			board: [][]byte{
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+			},
+			click: []int{0, 4},
+			expected: [][]byte{
+				{'B', 'B', 'B', 'B', 'B'},
+				{'B', 'B', 'B', 'B', 'B'},
+				{'B', 'B', 'B', 'B', 'B'},
+				{'B', 'B', 'B', 'B', 'B'},
+			},
+		},
+		{
+			name: "ClickOnAlreadyRevealedCell",
+			board: [][]byte{
+				{'B', '1', 'E', 'E', 'E'},
+				{'E', 'E', 'M', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+			},
+			click: []int{0, 0},
+			expected: [][]byte{
+				{'B', '1', 'E', 'E', 'E'},
+				{'E', 'E', 'M', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+				{'E', 'E', 'E', 'E', 'E'},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := UpdateBoard(tt.board, tt.click)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkUpdateBoard(b *testing.B) {
+	board := [][]byte{
+		{'E', 'E', 'E', 'E', 'E'},
+		{'E', 'E', 'M', 'E', 'E'},
+		{'E', 'E', 'E', 'E', 'E'},
+		{'E', 'E', 'E', 'E', 'E'},
+	}
+	click := []int{1, 2}
+
+	for i := 0; i < b.N; i++ {
+		_ = UpdateBoard(board, click)
+	}
+}

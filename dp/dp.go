@@ -28,13 +28,12 @@ func LengthOfLIS(nums []int) int {
 // LengthOfLISBinarySearch - https://leetcode.com/problems/longest-increasing-subsequence/
 func LengthOfLISBinarySearch(nums []int) int {
 	var tails []int
-
 	for _, num := range nums {
 		idx := sort.Search(len(tails), func(i int) bool {
 			return tails[i] >= num
 		})
 
-		if idx == len(tails) {
+		if len(tails) == idx {
 			tails = append(tails, num)
 		} else {
 			tails[idx] = num

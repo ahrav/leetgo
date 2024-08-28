@@ -4197,3 +4197,37 @@ func Candy(ratings []int) int {
 
 	return total
 }
+
+// Trap - https://leetcode.com/problems/trapping-rain-water/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func Trap(height []int) int {
+	n := len(height)
+	if n < 3 {
+		return 0
+	}
+
+	left, right := 0, n-1
+	maxLeft, maxRight := height[left], height[right]
+
+	water := 0
+	for left < right {
+		if maxLeft < maxRight {
+			left++
+
+			if height[left] < maxLeft {
+				water += maxLeft - height[left]
+			} else {
+				maxLeft = height[left]
+			}
+		} else {
+			right--
+
+			if height[right] < maxRight {
+				water += maxRight - height[right]
+			} else {
+				maxRight = height[right]
+			}
+		}
+	}
+
+	return water
+}

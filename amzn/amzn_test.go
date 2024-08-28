@@ -6413,3 +6413,35 @@ func BenchmarkCandy(b *testing.B) {
 		_ = Candy(ratings)
 	}
 }
+
+func TestTrap(t *testing.T) {
+	tests := []struct {
+		name     string
+		height   []int
+		expected int
+	}{
+		{"NoElevation", []int{}, 0},
+		{"SingleElevation", []int{1}, 0},
+		{"TwoElevations", []int{1, 2}, 0},
+		{"SimpleCase", []int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}, 6},
+		{"FlatSurface", []int{3, 3, 3, 3}, 0},
+		{"DescendingSurface", []int{4, 3, 2, 1}, 0},
+		{"AscendingSurface", []int{1, 2, 3, 4}, 0},
+		{"ComplexCase", []int{4, 2, 0, 3, 2, 5}, 9},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := Trap(tt.height)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkTrap(b *testing.B) {
+	height := []int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}
+	for i := 0; i < b.N; i++ {
+		_ = Trap(height)
+	}
+}

@@ -3946,3 +3946,20 @@ func GameOfLife(board [][]int) {
 
 	return
 }
+
+// IsSameTree - https://leetcode.com/problems/same-tree/description/?envType=problem-list-v2&envId=954v5ops
+func IsSameTree(p *TreeNode, q *TreeNode) bool {
+	if p == nil && q == nil {
+		return true
+	}
+
+	if p == nil || q == nil {
+		return false
+	}
+
+	if p.Val != q.Val {
+		return false
+	}
+
+	return IsSameTree(p.Left, p.Right) && IsSameTree(q.Left, q.Right)
+}

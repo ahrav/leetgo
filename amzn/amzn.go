@@ -3984,3 +3984,35 @@ func MinPathSum(grid [][]int) int {
 
 	return grid[rows-1][cols-1]
 }
+
+// RotateRight - https://leetcode.com/problems/rotate-list/description/?envType=problem-list-v2&envId=954v5ops
+func RotateRight(head *ListNode, k int) *ListNode {
+	if head == nil || head.Next == nil || k == 0 {
+		return head
+	}
+
+	size := 1
+	tail := head
+	for tail.Next != nil {
+		tail = tail.Next
+		size++
+	}
+
+	tail.Next = head
+
+	k = k % size
+	if k == 0 {
+		tail.Next = nil
+		return head
+	}
+
+	newTail := head
+	for range size - k - 1 {
+		newTail = newTail.Next
+	}
+
+	newHead := newTail.Next
+	newTail.Next = nil
+
+	return newHead
+}

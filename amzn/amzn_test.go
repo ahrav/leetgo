@@ -6383,3 +6383,33 @@ func BenchmarkMinPathSum(b *testing.B) {
 		_ = MinPathSum(grid)
 	}
 }
+
+func TestCandy(t *testing.T) {
+	tests := []struct {
+		name     string
+		ratings  []int
+		expected int
+	}{
+		{"SingleChild", []int{5}, 1},
+		{"TwoChildrenIncreasing", []int{1, 2}, 3},
+		{"TwoChildrenDecreasing", []int{2, 1}, 3},
+		{"MultipleChildren", []int{1, 0, 2}, 5},
+		{"AllSameRatings", []int{1, 1, 1}, 3},
+		{"ComplexRatings", []int{1, 2, 2}, 4},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := Candy(tt.ratings)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkCandy(b *testing.B) {
+	ratings := []int{1, 0, 2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	for i := 0; i < b.N; i++ {
+		_ = Candy(ratings)
+	}
+}

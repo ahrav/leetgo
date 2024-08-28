@@ -4134,3 +4134,66 @@ func IsSymmetric(root *TreeNode) bool {
 
 	return isMirror(root.Left, root.Right)
 }
+
+// IsValidBST - https://leetcode.com/problems/validate-binary-search-tree/?envType=problem-list-v2&envId=954v5ops
+func IsValidBST(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+
+	var dfs func(node *TreeNode, lower, upper int) bool
+	dfs = func(node *TreeNode, lower, upper int) bool {
+		if node == nil {
+			return true
+		}
+
+		if node.Val <= lower || node.Val >= upper {
+			return false
+		}
+
+		if !dfs(node.Left, lower, node.Val) {
+			return false
+		}
+
+		if !dfs(node.Right, node.Val, upper) {
+			return false
+		}
+
+		return true
+	}
+
+	return dfs(root, math.MinInt, math.MaxInt)
+}
+
+// Candy - https://leetcode.com/problems/candy/?envType=problem-list-v2&envId=954v5ops
+func Candy(ratings []int) int {
+	n := len(ratings)
+
+	if n < 2 {
+		return n
+	}
+
+	candies := make([]int, n)
+	for i := range candies {
+		candies[i] = 1
+	}
+
+	for i := 1; i < n; i++ {
+		if ratings[i] > ratings[i-1] {
+			candies[i] = candies[i-1] + 1
+		}
+	}
+
+	for i := n - 2; i >= 0; i-- {
+		if ratings[i] > ratings[i+1] {
+			candies[i] = max(candies[i], candies[i+1]+1)
+		}
+	}
+
+	var total int
+	for _, cnt := range candies {
+		total += cnt
+	}
+
+	return total
+}

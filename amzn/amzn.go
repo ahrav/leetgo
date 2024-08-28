@@ -4047,3 +4047,34 @@ func PathSum(root *TreeNode, targetSum int) [][]int {
 	dfs(root, 0, []int{})
 	return result
 }
+
+// LevelOrder - https://leetcode.com/problems/binary-tree-level-order-traversal/?envType=problem-list-v2&envId=954v5ops
+func LevelOrder(root *TreeNode) [][]int {
+	if root == nil {
+		return [][]int{}
+	}
+
+	var result [][]int
+	queue := []*TreeNode{root}
+
+	for len(queue) > 0 {
+		levelSize := len(queue)
+
+		var levelResults []int
+		for i := 0; i < levelSize; i++ {
+			node := queue[0]
+			queue = queue[1:]
+
+			levelResults = append(levelResults, node.Val)
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+			}
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+			}
+		}
+		result = append(result, levelResults)
+	}
+
+	return result
+}

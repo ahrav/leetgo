@@ -3963,3 +3963,24 @@ func IsSameTree(p *TreeNode, q *TreeNode) bool {
 
 	return IsSameTree(p.Left, p.Right) && IsSameTree(q.Left, q.Right)
 }
+
+// MinPathSum - https://leetcode.com/problems/minimum-path-sum/?envType=problem-list-v2&envId=954v5ops
+func MinPathSum(grid [][]int) int {
+	rows, cols := len(grid), len(grid[0])
+
+	for i := 1; i < cols; i++ {
+		grid[0][i] += grid[0][i-1]
+	}
+
+	for j := 1; j < rows; j++ {
+		grid[j][0] += grid[j-1][0]
+	}
+
+	for i := 1; i < rows; i++ {
+		for j := 1; j < cols; j++ {
+			grid[i][j] += min(grid[i][j-1], grid[i-1][j])
+		}
+	}
+
+	return grid[rows-1][cols-1]
+}

@@ -6331,3 +6331,55 @@ func BenchmarkGameOfLife(b *testing.B) {
 		GameOfLife(board)
 	}
 }
+
+func TestMinPathSum(t *testing.T) {
+	tests := []struct {
+		name     string
+		grid     [][]int
+		expected int
+	}{
+		{
+			name:     "SingleElement",
+			grid:     [][]int{{5}},
+			expected: 5,
+		},
+		{
+			name:     "SingleRow",
+			grid:     [][]int{{1, 2, 3}},
+			expected: 6,
+		},
+		{
+			name:     "SingleColumn",
+			grid:     [][]int{{1}, {2}, {3}},
+			expected: 6,
+		},
+		{
+			name: "MultipleRowsAndColumns",
+			grid: [][]int{
+				{1, 3, 1},
+				{1, 5, 1},
+				{4, 2, 1},
+			},
+			expected: 7,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := MinPathSum(tt.grid)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMinPathSum(b *testing.B) {
+	grid := [][]int{
+		{1, 3, 1},
+		{1, 5, 1},
+		{4, 2, 1},
+	}
+	for i := 0; i < b.N; i++ {
+		_ = MinPathSum(grid)
+	}
+}

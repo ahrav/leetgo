@@ -4013,6 +4013,37 @@ func RotateRight(head *ListNode, k int) *ListNode {
 
 	newHead := newTail.Next
 	newTail.Next = nil
-
 	return newHead
+}
+
+// PathSum - https://leetcode.com/problems/path-sum-ii/?envType=problem-list-v2&envId=954v5ops
+func PathSum(root *TreeNode, targetSum int) [][]int {
+	if root == nil {
+		return [][]int{}
+	}
+
+	var result [][]int
+
+	var dfs func(node *TreeNode, sum int, arr []int)
+	dfs = func(node *TreeNode, sum int, arr []int) {
+		if node == nil {
+			return
+		}
+
+		sum += node.Val
+		arr = append(arr, node.Val)
+
+		if node.Left == nil && node.Right == nil && sum == targetSum {
+			tmp := make([]int, len(arr))
+			copy(tmp, arr)
+			result = append(result, tmp)
+			return
+		}
+
+		dfs(node.Left, sum, arr)
+		dfs(node.Right, sum, arr)
+	}
+
+	dfs(root, 0, []int{})
+	return result
 }

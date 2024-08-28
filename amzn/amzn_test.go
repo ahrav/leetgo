@@ -6220,3 +6220,35 @@ func BenchmarkLongestValidParentheses(b *testing.B) {
 		_ = LongestValidParentheses(input)
 	}
 }
+
+func TestLongestValidParenthesesTwoPass(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int
+	}{
+		{"LongestValidParenthesesEmptyString", "", 0},
+		{"LongestValidParenthesesNoValidPairs", "(((((", 0},
+		{"LongestValidParenthesesSinglePair", "()", 2},
+		{"LongestValidParenthesesNestedPairs", "((()))", 6},
+		{"LongestValidParenthesesMixedPairs", "(()())", 6},
+		{"LongestValidParenthesesUnbalancedLeft", "(()", 2},
+		{"LongestValidParenthesesUnbalancedRight", "())", 2},
+		{"LongestValidParenthesesComplex", "(()))())(", 4},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LongestValidParenthesesTwoPass(tt.input)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLongestValidParenthesesTwoPass(b *testing.B) {
+	input := "(()))())("
+	for i := 0; i < b.N; i++ {
+		_ = LongestValidParenthesesTwoPass(input)
+	}
+}

@@ -3830,6 +3830,7 @@ func UpdateBoard(board [][]byte, click []int) [][]byte {
 // LongestValidParentheses - https://leetcode.com/problems/longest-valid-parentheses/
 func LongestValidParentheses(s string) int {
 	n := len(s)
+
 	if n < 2 {
 		return 0
 	}
@@ -3847,6 +3848,49 @@ func LongestValidParentheses(s string) int {
 			stack = append(stack, i)
 		} else {
 			maxLen = max(maxLen, i-stack[len(stack)-1])
+		}
+	}
+
+	return maxLen
+}
+
+// LongestValidParentheses - https://leetcode.com/problems/longest-valid-parentheses/
+func LongestValidParenthesesTwoPass(s string) int {
+	n := len(s)
+
+	if n < 2 {
+		return 0
+	}
+
+	left, right := 0, 0
+	maxLen := 0
+
+	for i := 0; i < n; i++ {
+		if s[i] == '(' {
+			left++
+		} else {
+			right++
+		}
+
+		if left == right {
+			maxLen = max(maxLen, 2*right)
+		} else if right > left {
+			right, left = 0, 0
+		}
+	}
+
+	left, right = 0, 0
+	for i := n - 1; i >= 0; i-- {
+		if s[i] == '(' {
+			left++
+		} else {
+			right++
+		}
+
+		if left == right {
+			maxLen = max(maxLen, 2*left)
+		} else if left > right {
+			left, right = 0, 0
 		}
 	}
 

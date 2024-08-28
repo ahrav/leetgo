@@ -4119,8 +4119,8 @@ func IsSymmetric(root *TreeNode) bool {
 		return true
 	}
 
-	var isMirror func(left *TreeNode, right *TreeNode) bool
-	isMirror = func(left *TreeNode, right *TreeNode) bool {
+	var isMirror func(left, right *TreeNode) bool
+	isMirror = func(left, right *TreeNode) bool {
 		if left == nil && right == nil {
 			return true
 		}
@@ -4129,9 +4129,7 @@ func IsSymmetric(root *TreeNode) bool {
 			return false
 		}
 
-		l := isMirror(left.Left, right.Right)
-		r := isMirror(left.Right, right.Left)
-		return (left.Val == right.Val) && l && r
+		return (left.Val == right.Val) && isMirror(left.Left, right.Right) && isMirror(left.Right, right.Left)
 	}
 
 	return isMirror(root.Left, root.Right)

@@ -4112,3 +4112,27 @@ func SortedListToBST(head *ListNode) *TreeNode {
 
 	return root
 }
+
+// IsSymmetric - https://leetcode.com/problems/symmetric-tree/?envType=problem-list-v2&envId=954v5ops
+func IsSymmetric(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+
+	var isMirror func(left *TreeNode, right *TreeNode) bool
+	isMirror = func(left *TreeNode, right *TreeNode) bool {
+		if left == nil && right == nil {
+			return true
+		}
+
+		if left == nil || right == nil {
+			return false
+		}
+
+		l := isMirror(left.Left, right.Right)
+		r := isMirror(left.Right, right.Left)
+		return (left.Val == right.Val) && l && r
+	}
+
+	return isMirror(root.Left, root.Right)
+}

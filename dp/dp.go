@@ -54,12 +54,12 @@ func LargestDivisibleSubset(nums []int) []int {
 	sort.Ints(nums)
 
 	dp, parents := make([]int, n), make([]int, n)
-	maxIdx := 0
-
 	for i := range dp {
 		dp[i] = 1
 		parents[i] = -1
 	}
+
+	maxIdx := 0
 
 	for i := 1; i < n; i++ {
 		for j := 0; j < i; j++ {
@@ -74,15 +74,15 @@ func LargestDivisibleSubset(nums []int) []int {
 		}
 	}
 
-	var result []int
+	var results []int
 	for maxIdx != -1 {
-		result = append(result, nums[maxIdx])
+		results = append(results, nums[maxIdx])
 		maxIdx = parents[maxIdx]
 	}
 
-	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {
-		result[i], result[j] = result[j], result[i]
+	for i, j := 0, len(results)-1; i < j; i, j = i+1, j-1 {
+		results[i], results[j] = results[j], results[i]
 	}
 
-	return result
+	return results
 }

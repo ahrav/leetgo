@@ -4078,3 +4078,37 @@ func LevelOrder(root *TreeNode) [][]int {
 
 	return result
 }
+
+// SortedListToBST - https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/?envType=problem-list-v2&envId=954v5ops
+func SortedListToBST(head *ListNode) *TreeNode {
+	if head == nil {
+		return nil
+	}
+
+	if head.Next == nil {
+		return &TreeNode{Val: head.Val}
+	}
+
+	findMiddle := func(head *ListNode) *ListNode {
+		var prev *ListNode
+		slow, fast := head, head
+		for fast != nil && fast.Next != nil {
+			prev = slow
+			slow = slow.Next
+			fast = fast.Next.Next
+		}
+
+		if prev != nil {
+			prev.Next = nil
+		}
+		return slow
+	}
+
+	mid := findMiddle(head)
+	root := &TreeNode{Val: mid.Val}
+
+	root.Left = SortedListToBST(head)
+	root.Right = SortedListToBST(mid.Next)
+
+	return root
+}

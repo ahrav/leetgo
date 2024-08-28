@@ -169,3 +169,52 @@ func BenchmarkLengthOfLISBinarySearch(b *testing.B) {
 		})
 	}
 }
+
+func TestLargestDivisibleSubset(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected []int
+	}{
+		{
+			name:     "LargestDivisibleSubsetSingleElement",
+			nums:     []int{1},
+			expected: []int{1},
+		},
+		{
+			name:     "LargestDivisibleSubsetAllDivisible",
+			nums:     []int{1, 2, 4, 8},
+			expected: []int{1, 2, 4, 8},
+		},
+		{
+			name:     "LargestDivisibleSubsetMixedElements",
+			nums:     []int{1, 2, 3, 4, 6, 8, 12},
+			expected: []int{1, 2, 4, 8},
+		},
+		{
+			name:     "LargestDivisibleSubsetNoDivisiblePairs",
+			nums:     []int{2, 3, 5, 7, 11},
+			expected: []int{2},
+		},
+		{
+			name:     "LargestDivisibleSubsetEmptyArray",
+			nums:     []int{},
+			expected: []int{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LargestDivisibleSubset(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLargestDivisibleSubset(b *testing.B) {
+	nums := []int{1, 2, 3, 4, 6, 8, 12}
+	for i := 0; i < b.N; i++ {
+		_ = LargestDivisibleSubset(nums)
+	}
+}

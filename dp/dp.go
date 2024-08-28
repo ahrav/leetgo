@@ -42,3 +42,47 @@ func LengthOfLISBinarySearch(nums []int) int {
 
 	return len(tails)
 }
+
+// LargestDivisibleSubset - https://leetcode.com/problems/largest-divisible-subset/
+func LargestDivisibleSubset(nums []int) []int {
+	n := len(nums)
+
+	if n < 2 {
+		return nums
+	}
+
+	sort.Ints(nums)
+
+	dp, parents := make([]int, n), make([]int, n)
+	maxIdx := 0
+
+	for i := range dp {
+		dp[i] = 1
+		parents[i] = -1
+	}
+
+	for i := 1; i < n; i++ {
+		for j := 0; j < i; j++ {
+			if nums[i]%nums[j] == 0 && dp[i] < dp[j]+1 {
+				dp[i] = dp[j] + 1
+				parents[i] = j
+			}
+
+			if dp[i] > dp[maxIdx] {
+				maxIdx = i
+			}
+		}
+	}
+
+	var result []int
+	for maxIdx != -1 {
+		result = append(result, nums[maxIdx])
+		maxIdx = parents[maxIdx]
+	}
+
+	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {
+		result[i], result[j] = result[j], result[i]
+	}
+
+	return result
+}

@@ -3896,3 +3896,53 @@ func LongestValidParenthesesTwoPass(s string) int {
 
 	return maxLen
 }
+
+// GameOfLife - https://leetcode.com/problems/game-of-life/?envType=problem-list-v2&envId=954v5ops
+func GameOfLife(board [][]int) {
+	rows, cols := len(board), len(board[0])
+
+	directions := [][]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}
+	countAliveNeighbors := func(x, y int) int {
+		aliveCnt := 0
+		for _, dir := range directions {
+			newRow, newCol := x+dir[0], y+dir[1]
+			if newRow < 0 || newRow >= rows || newCol < 0 || newCol >= cols {
+				continue
+			}
+
+			if board[newRow][newCol] == 1 || board[newRow][newCol] == 2 {
+				aliveCnt++
+			}
+		}
+		return aliveCnt
+	}
+
+	for i := range rows {
+		for j := range cols {
+			aliveCnt := countAliveNeighbors(i, j)
+
+			if board[i][j] == 1 {
+				if aliveCnt < 2 || aliveCnt > 3 {
+					board[i][j] = 2
+				}
+			} else {
+				if aliveCnt == 3 {
+					board[i][j] = -1
+				}
+			}
+		}
+	}
+
+	for i := range rows {
+		for j := range cols {
+			if board[i][j] == 2 {
+				board[i][j] = 0
+			}
+			if board[i][j] == -1 {
+				board[i][j] = 1
+			}
+		}
+	}
+
+	return
+}

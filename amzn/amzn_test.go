@@ -6252,3 +6252,82 @@ func BenchmarkLongestValidParenthesesTwoPass(b *testing.B) {
 		_ = LongestValidParenthesesTwoPass(input)
 	}
 }
+
+func TestGameOfLife(t *testing.T) {
+	tests := []struct {
+		name     string
+		board    [][]int
+		expected [][]int
+	}{
+		{
+			name: "GameOfLifeAllDead",
+			board: [][]int{
+				{0, 0, 0},
+				{0, 0, 0},
+				{0, 0, 0},
+			},
+			expected: [][]int{
+				{0, 0, 0},
+				{0, 0, 0},
+				{0, 0, 0},
+			},
+		},
+		{
+			name: "GameOfLifeAllAlive",
+			board: [][]int{
+				{1, 1, 1},
+				{1, 1, 1},
+				{1, 1, 1},
+			},
+			expected: [][]int{
+				{1, 0, 1},
+				{0, 0, 0},
+				{1, 0, 1},
+			},
+		},
+		{
+			name: "GameOfLifeMixed",
+			board: [][]int{
+				{0, 1, 0},
+				{1, 1, 1},
+				{0, 1, 0},
+			},
+			expected: [][]int{
+				{1, 1, 1},
+				{1, 0, 1},
+				{1, 1, 1},
+			},
+		},
+		{
+			name: "GameOfLifeEdgeCase",
+			board: [][]int{
+				{1, 1},
+				{1, 0},
+			},
+			expected: [][]int{
+				{1, 1},
+				{1, 1},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			GameOfLife(tt.board)
+			assert.Equal(t, tt.expected, tt.board)
+		})
+	}
+}
+
+func BenchmarkGameOfLife(b *testing.B) {
+	board := [][]int{
+		{0, 1, 0},
+		{1, 1, 1},
+		{0, 1, 0},
+	}
+
+	for i := 0; i < b.N; i++ {
+		GameOfLife(board)
+	}
+}

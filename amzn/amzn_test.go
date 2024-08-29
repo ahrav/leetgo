@@ -6519,3 +6519,34 @@ func BenchmarkPacificAtlantic(b *testing.B) {
 		_ = PacificAtlantic(heights)
 	}
 }
+
+func TestSortColors(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected []int
+	}{
+		{"AllZeros", []int{0, 0, 0, 0}, []int{0, 0, 0, 0}},
+		{"AllOnes", []int{1, 1, 1, 1}, []int{1, 1, 1, 1}},
+		{"AllTwos", []int{2, 2, 2, 2}, []int{2, 2, 2, 2}},
+		{"Mixed", []int{2, 0, 2, 1, 1, 0}, []int{0, 0, 1, 1, 2, 2}},
+		{"Empty", []int{}, []int{}},
+		{"SingleElement", []int{1}, []int{1}},
+		{"AlreadySorted", []int{0, 0, 1, 1, 2, 2}, []int{0, 0, 1, 1, 2, 2}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			SortColors(tt.nums)
+			assert.Equal(t, tt.expected, tt.nums)
+		})
+	}
+}
+
+func BenchmarkSortColors(b *testing.B) {
+	nums := []int{2, 0, 2, 1, 1, 0}
+	for i := 0; i < b.N; i++ {
+		SortColors(nums)
+	}
+}

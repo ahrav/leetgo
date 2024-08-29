@@ -4290,3 +4290,22 @@ func PacificAtlantic(heights [][]int) [][]int {
 
 	return result
 }
+
+// SortColors - https://leetcode.com/problems/sort-colors/?envType=problem-list-v2&envId=954v5ops (Dutch Flag Problem)
+func SortColors(nums []int) {
+	n := len(nums)
+	l, m, h := 0, 0, n-1
+	for m <= h {
+		switch nums[m] {
+		case 0:
+			nums[l], nums[m] = nums[m], nums[l]
+			l++
+			m++
+		case 1:
+			m++
+		case 2:
+			nums[m], nums[h] = nums[h], nums[m]
+			h--
+		}
+	}
+}

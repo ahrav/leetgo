@@ -4363,3 +4363,55 @@ func RestoreIpAddresses(s string) []string {
 	backtrack(0, []string{})
 	return result
 }
+
+type ListNodeMinHeap []*ListNode
+
+func (h ListNodeMinHeap) Len() int           { return len(h) }
+func (h ListNodeMinHeap) Less(i, j int) bool { return h[i].Val < h[j].Val }
+func (h ListNodeMinHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *ListNodeMinHeap) Push(x any) { *h = append(*h, x.(*ListNode)) }
+func (h *ListNodeMinHeap) Pop() any {
+	old := *h
+	n := len(old) - 1
+	x := old[n]
+	*h = old[:n-1]
+	return x
+}
+
+// MergeKLists - https://leetcode.com/problems/merge-k-sorted-lists/description/?envType=problem-list-v2&envId=954v5ops
+func MergeKLists(lists []*ListNode) *ListNode {
+	if len(lists) == 0 {
+		return nil
+	}
+
+	if len(lists) == 1 {
+		return lists[0]
+	}
+
+	h := new(ListNodeMinHeap)
+	heap.Init(h)
+
+	for _, lst := range lists {
+		if lst != nil {
+			heap.Push(h, lst)
+		}
+	}
+
+	tmp := &ListNode{}
+	curr := tmp
+
+	for h.Len() > 0 {
+		node := heap.Pop(h).(*ListNode)
+
+		if node.Next != nil {
+			heap.Push(h, node.Next)
+			node.Next = nil
+		}
+
+		curr.Next = node
+		curr = node
+	}
+
+	return tmp.Next
+}

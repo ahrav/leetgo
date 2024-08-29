@@ -4257,7 +4257,12 @@ func PacificAtlantic(heights [][]int) [][]int {
 
 		for _, dir := range directions {
 			newRow, newCol := x+dir[0], y+dir[1]
-			if newRow < 0 || newRow >= rows || newCol < 0 || newCol >= cols || ocean[newRow][newCol] || heights[newRow][newCol] < heights[x][y] {
+			if newRow < 0 ||
+				newRow >= rows ||
+				newCol < 0 ||
+				newCol >= cols ||
+				ocean[newRow][newCol] ||
+				heights[newRow][newCol] < heights[x][y] {
 				continue
 			}
 			dfs(newRow, newCol, ocean)

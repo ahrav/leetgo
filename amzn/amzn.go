@@ -4309,3 +4309,57 @@ func SortColors(nums []int) {
 		}
 	}
 }
+
+// RestoreIpAddresses - https://leetcode.com/problems/restore-ip-addresses/description/?envType=problem-list-v2&envId=954v5ops
+func RestoreIpAddresses(s string) []string {
+	n := len(s)
+
+	if n < 4 || n > 12 {
+		return []string{}
+	}
+
+	isValid := func(segment string) bool {
+		n := len(segment)
+		if n == 0 || n > 3 {
+			return false
+		}
+
+		if segment[0] == '0' && n > 1 {
+			return false
+		}
+
+		num, err := strconv.Atoi(segment)
+		if err != nil {
+			return false
+		}
+
+		return num >= 0 && num <= 255
+	}
+
+	var result []string
+	var backtrack func(start int, path []string)
+	backtrack = func(start int, path []string) {
+		if len(path) == 4 && start == n {
+			result = append(result, fmt.Sprintf("%s.%s.%s.%s", path[0], path[1], path[2], path[3]))
+			return
+		}
+
+		if len(path) == 4 {
+			return
+		}
+
+		for i := 1; i <= 3; i++ {
+			if start+i > n {
+				break
+			}
+
+			segment := s[start : start+i]
+			if isValid(segment) {
+				backtrack(start+i, append(path, segment))
+			}
+		}
+	}
+
+	backtrack(0, []string{})
+	return result
+}

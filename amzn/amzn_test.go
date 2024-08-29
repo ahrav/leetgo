@@ -6550,3 +6550,33 @@ func BenchmarkSortColors(b *testing.B) {
 		SortColors(nums)
 	}
 }
+
+func TestRestoreIpAddresses(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected []string
+	}{
+		{"ValidInput", "25525511135", []string{"255.255.11.135", "255.255.111.35"}},
+		{"SingleSegment", "0000", []string{"0.0.0.0"}},
+		{"InvalidLength", "123", []string{}},
+		{"LeadingZero", "010010", []string{"0.10.0.10", "0.100.1.0"}},
+		{"MaxLength", "111111111111", []string{"111.111.111.111"}},
+		{"EmptyInput", "", []string{}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := RestoreIpAddresses(tt.input)
+			assert.ElementsMatch(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkRestoreIpAddresses(b *testing.B) {
+	input := "25525511135"
+	for i := 0; i < b.N; i++ {
+		RestoreIpAddresses(input)
+	}
+}

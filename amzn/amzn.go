@@ -4494,3 +4494,56 @@ func (mf *MedianFinder) FindMedian() float64 {
 
 	return (float64((*mf.maxH)[0]) + float64((*mf.minH)[0])) / float64(2)
 }
+
+type WordDictionary struct {
+	trie *TrieNodeW
+}
+
+type TrieNodeW struct {
+	children map[rune]*TrieNodeW
+	isWord   bool
+}
+
+func WordDictionaryConstructor() WordDictionary {
+	return WordDictionary{trie: &TrieNodeW{children: make(map[rune]*TrieNodeW)}}
+}
+
+func (wd *WordDictionary) AddWord(word string) {
+	curr := wd.trie
+	for _, char := range word {
+		if curr.children[char] == nil {
+			curr.children[char] = &TrieNodeW{children: make(map[rune]*TrieNodeW)}
+		}
+		curr = curr.children[char]
+	}
+	curr.isWord = true
+
+}
+
+func (wd *WordDictionary) Search(word string) bool {
+	n := len(word)
+
+	var search func(idx int, node *TrieNodeW) bool
+	search = func(idx int, node *TrieNodeW) bool {
+		if idx == n {
+			return node.isWord
+		}
+
+		char := rune(word[idx])
+		if char != '.' {
+			if wd.trie.children[char] == nil {
+				return false
+			}
+			return search(idx+1, wd.trie.children[char])
+		}
+
+		for _, child := range wd.trie.children {
+			if search(idx+1, child) {
+				return true
+			}
+		}
+		return false
+	}
+
+	return search(0, wd.trie)
+}

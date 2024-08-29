@@ -6445,3 +6445,77 @@ func BenchmarkTrap(b *testing.B) {
 		_ = Trap(height)
 	}
 }
+
+func TestPacificAtlantic(t *testing.T) {
+	tests := []struct {
+		name     string
+		heights  [][]int
+		expected [][]int
+	}{
+		{
+			name:     "SingleCell",
+			heights:  [][]int{{1}},
+			expected: [][]int{{0, 0}},
+		},
+		{
+			name: "FlatGrid",
+			heights: [][]int{
+				{1, 1, 1},
+				{1, 1, 1},
+				{1, 1, 1},
+			},
+			expected: [][]int{
+				{0, 0}, {0, 1}, {0, 2},
+				{1, 0}, {1, 1}, {1, 2},
+				{2, 0}, {2, 1}, {2, 2},
+			},
+		},
+		{
+			name: "ComplexGrid",
+			heights: [][]int{
+				{1, 2, 2, 3, 5},
+				{3, 2, 3, 4, 4},
+				{2, 4, 5, 3, 1},
+				{6, 7, 1, 4, 5},
+				{5, 1, 1, 2, 4},
+			},
+			expected: [][]int{
+				{0, 4}, {1, 3}, {1, 4}, {2, 2}, {3, 0}, {3, 1}, {4, 0},
+			},
+		},
+		{
+			name: "NoFlow",
+			heights: [][]int{
+				{10, 10, 10},
+				{10, 1, 10},
+				{10, 10, 10},
+			},
+			expected: [][]int{
+				{0, 0}, {0, 1}, {0, 2},
+				{1, 0}, {1, 2},
+				{2, 0}, {2, 1}, {2, 2},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := PacificAtlantic(tt.heights)
+			assert.ElementsMatch(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkPacificAtlantic(b *testing.B) {
+	heights := [][]int{
+		{1, 2, 2, 3, 5},
+		{3, 2, 3, 4, 4},
+		{2, 4, 5, 3, 1},
+		{6, 7, 1, 4, 5},
+		{5, 1, 1, 2, 4},
+	}
+	for i := 0; i < b.N; i++ {
+		_ = PacificAtlantic(heights)
+	}
+}

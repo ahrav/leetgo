@@ -4231,3 +4231,57 @@ func Trap(height []int) int {
 
 	return water
 }
+
+// PacificAtlantic - https://leetcode.com/problems/pacific-atlantic-water-flow/?envType=problem-list-v2&envId=954v5ops
+func PacificAtlantic(heights [][]int) [][]int {
+	rows, cols := len(heights), len(heights[0])
+
+	if rows == 0 || cols == 0 {
+		return [][]int{}
+	}
+
+	// Invert the problem statement and work from the oceans inward.
+	// This simplifies the number of directions we need to compare. (Move toward higher heights)
+
+	pacific, atlantic := make([][]bool, rows), make([][]bool, rows)
+	for i := range pacific {
+		pacific[i] = make([]bool, cols)
+		atlantic[i] = make([]bool, cols)
+	}
+
+	directions := [][]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
+
+	var dfs func(x, y int, ocean [][]bool)
+	dfs = func(x, y int, ocean [][]bool) {
+		ocean[x][y] = true
+
+		for _, dir := range directions {
+			newRow, newCol := x+dir[0], y+dir[1]
+			if newRow < 0 || newRow >= rows || newCol < 0 || newCol >= cols || ocean[newRow][newCol] || heights[newRow][newCol] < heights[x][y] {
+				continue
+			}
+			dfs(newRow, newCol, ocean)
+		}
+	}
+
+	for i := range rows {
+		dfs(i, 0, pacific)
+		dfs(i, cols-1, atlantic)
+	}
+
+	for j := range cols {
+		dfs(0, j, pacific)
+		dfs(rows-1, j, atlantic)
+	}
+
+	var result [][]int
+	for i := range rows {
+		for j := range cols {
+			if pacific[i][j] && atlantic[i][j] {
+				result = append(result, []int{i, j})
+			}
+		}
+	}
+
+	return result
+}

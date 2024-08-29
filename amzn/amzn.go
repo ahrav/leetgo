@@ -4415,3 +4415,82 @@ func MergeKLists(lists []*ListNode) *ListNode {
 
 	return tmp.Next
 }
+
+type MinHeap2 []int
+type MaxHeap2 []int
+
+func (h MinHeap2) Len() int { return len(h) }
+func (h MaxHeap2) Len() int { return len(h) }
+
+func (h MinHeap2) Less(i, j int) bool { return h[i] < h[j] }
+func (h MaxHeap2) Less(i, j int) bool { return h[i] > h[j] }
+
+func (h MinHeap2) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+func (h MaxHeap2) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+
+func (h *MinHeap2) Push(x any) { *h = append(*h, x.(int)) }
+func (h *MaxHeap2) Push(x any) { *h = append(*h, x.(int)) }
+
+func (h *MinHeap2) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[:n-1]
+	return x
+}
+
+func (h *MaxHeap2) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[:n-1]
+	return x
+}
+
+type MedianFinder struct {
+	minH    *MinHeap2
+	minSize int
+
+	maxH    *MaxHeap2
+	maxSize int
+}
+
+func MedianFinderConstructor() MedianFinder {
+	minH, maxH := new(MinHeap2), new(MaxHeap2)
+	heap.Init(minH)
+	heap.Init(maxH)
+
+	return MedianFinder{
+		minH: minH,
+		maxH: maxH,
+	}
+}
+
+func (mf *MedianFinder) AddNum(num int) {
+	if mf.maxH.Len() == 0 || num <= (*mf.maxH)[0] {
+		heap.Push(mf.maxH, num)
+		mf.maxSize++
+	} else {
+		heap.Push(mf.minH, num)
+		mf.minSize--
+	}
+
+	if mf.maxSize > mf.minSize+1 {
+		heap.Push(mf.minH, heap.Pop(mf.maxH).(int))
+		mf.maxSize--
+		mf.minSize++
+	} else if mf.minSize > mf.maxSize {
+		heap.Push(mf.maxH, heap.Pop(mf.minH).(int))
+		mf.maxSize++
+		mf.minSize--
+	}
+
+}
+
+func (mf *MedianFinder) FindMedian() float64 {
+	if mf.maxSize > mf.minSize {
+		return float64((*mf.maxH)[0])
+	}
+
+	return (float64((*mf.maxH)[0]) + float64((*mf.minH)[0])) / float64(2)
+}

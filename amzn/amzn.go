@@ -2564,6 +2564,44 @@ func FindOrder(numCourses int, prerequisites [][]int) []int {
 	return stack
 }
 
+func FindOrderBFS(numCourses int, prerequisites [][]int) []int {
+	graph := make([][]int, numCourses)
+	inDegrees := make([]int, numCourses)
+
+	for _, pair := range prerequisites {
+		course, req := pair[0], pair[1]
+		graph[req] = append(graph[req], course)
+		inDegrees[course]++
+	}
+
+	var queue []int
+	for i := range numCourses {
+		if inDegrees[i] == 0 {
+			queue = append(queue, i)
+		}
+	}
+
+	var order []int
+	for len(queue) > 0 {
+		course := queue[0]
+		queue = queue[1:]
+
+		order = append(order, course)
+		for _, dep := range graph[course] {
+			inDegrees[dep]--
+			if inDegrees[dep] == 0 {
+				queue = append(queue, dep)
+			}
+		}
+	}
+
+	if len(order) != numCourses {
+		return []int{}
+	}
+
+	return order
+}
+
 func FirstUniqChar(s string) int {
 	var charCount [26]int
 

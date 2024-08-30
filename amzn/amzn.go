@@ -4572,3 +4572,26 @@ func ConnectDFS(root *NextTreeNode) *NextTreeNode {
 
 	return root
 }
+
+// ConnectIterative - https://leetcode.com/problems/populating-next-right-pointers-in-each-node/description/?envType=problem-list-v2&envId=954v5ops
+func ConnectIterative(root *NextTreeNode) *NextTreeNode {
+	if root == nil || root.Left == nil {
+		return root
+	}
+
+	leftmost := root
+	for leftmost.Left != nil {
+		head := leftmost
+		for head != nil {
+			head.Left.Next = head.Right
+
+			if head.Next != nil {
+				head.Right.Next = head.Next.Left
+			}
+			head = head.Next
+		}
+		leftmost = leftmost.Left
+	}
+
+	return root
+}

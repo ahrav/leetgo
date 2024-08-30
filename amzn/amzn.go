@@ -4547,3 +4547,28 @@ func (wd *WordDictionary) Search(word string) bool {
 
 	return search(0, wd.trie)
 }
+
+type NextTreeNode struct {
+	Val   int
+	Left  *NextTreeNode
+	Right *NextTreeNode
+	Next  *NextTreeNode
+}
+
+// ConnectDFS - https://leetcode.com/problems/populating-next-right-pointers-in-each-node/description/?envType=problem-list-v2&envId=954v5ops
+func ConnectDFS(root *NextTreeNode) *NextTreeNode {
+	if root == nil || root.Left == nil {
+		return root
+	}
+
+	root.Left.Next = root.Right
+
+	if root.Next != nil {
+		root.Right.Next = root.Next.Left
+	}
+
+	ConnectDFS(root.Left)
+	ConnectDFS(root.Right)
+
+	return root
+}

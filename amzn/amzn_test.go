@@ -6705,3 +6705,32 @@ func BenchmarkReverse(b *testing.B) {
 		Reverse(input)
 	}
 }
+
+func TestLongestConsecutive(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"LongestConsecutiveSequence", []int{100, 4, 200, 1, 3, 2}, 4},
+		{"SingleElementSequence", []int{1}, 1},
+		{"EmptyArraySequence", []int{}, 0},
+		{"NoConsecutiveSequence", []int{10, 5, 100}, 1},
+		{"NegativeNumbersSequence", []int{-1, -2, -3, -4, 0, 1}, 6},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LongestConsecutive(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLongestConsecutive(b *testing.B) {
+	nums := []int{100, 4, 200, 1, 3, 2}
+	for i := 0; i < b.N; i++ {
+		LongestConsecutive(nums)
+	}
+}

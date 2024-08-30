@@ -4680,3 +4680,31 @@ func Reverse(x int) int {
 
 	return result
 }
+
+// LongestConsecutive - https://leetcode.com/problems/longest-consecutive-sequence/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func LongestConsecutive(nums []int) int {
+	n := len(nums)
+	numSet := make(map[int]bool, n)
+	for _, num := range nums {
+		numSet[num] = true
+	}
+
+	longest := 0
+	for _, num := range nums {
+		if !numSet[num-1] {
+			currNum := num
+			currStreak := 1
+
+			for numSet[currNum+1] {
+				currStreak++
+				currNum++
+			}
+
+			if currStreak > longest {
+				longest = currStreak
+			}
+		}
+	}
+
+	return longest
+}

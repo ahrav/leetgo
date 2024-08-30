@@ -218,3 +218,33 @@ func BenchmarkLargestDivisibleSubset(b *testing.B) {
 		_ = LargestDivisibleSubset(nums)
 	}
 }
+
+func TestNumDecodings(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int
+	}{
+		{"ValidDecoding", "12", 2},
+		{"SingleDigitDecoding", "2", 1},
+		{"LeadingZeroDecoding", "012", 0},
+		{"MultipleZerosDecoding", "100", 0},
+		{"LargeNumberDecoding", "226", 3},
+		{"EmptyStringDecoding", "", 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := NumDecodings(tt.input)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkNumDecodings(b *testing.B) {
+	input := "226"
+	for i := 0; i < b.N; i++ {
+		NumDecodings(input)
+	}
+}

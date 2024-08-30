@@ -4662,3 +4662,21 @@ func MaxSlidingWindow(nums []int, k int) []int {
 
 	return result
 }
+
+// Reverse - https://leetcode.com/problems/reverse-integer/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func Reverse(x int) int {
+	result := 0
+	for x != 0 {
+		digit := x % 10
+		result = result*10 + digit
+		x /= 10
+	}
+
+	if result < math.MinInt32 {
+		return 0
+	} else if result > math.MaxInt32 {
+		return 0
+	}
+
+	return result
+}

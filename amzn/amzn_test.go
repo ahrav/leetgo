@@ -6674,3 +6674,34 @@ func BenchmarkMaxSlidingWindow(b *testing.B) {
 		MaxSlidingWindow(nums, k)
 	}
 }
+
+func TestReverse(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    int
+		expected int
+	}{
+		{"PositiveNumber", 123, 321},
+		{"NegativeNumber", -123, -321},
+		{"NumberWithTrailingZeros", 120, 21},
+		{"SingleDigitNumber", 5, 5},
+		{"Zero", 0, 0},
+		{"OverflowPositive", 1534236469, 0},
+		{"OverflowNegative", -1534236469, 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := Reverse(tt.input)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkReverse(b *testing.B) {
+	input := 123
+	for i := 0; i < b.N; i++ {
+		Reverse(input)
+	}
+}

@@ -1,6 +1,9 @@
 package dp
 
-import "sort"
+import (
+	"sort"
+	"strconv"
+)
 
 // LengthOfLIS - https://leetcode.com/problems/longest-increasing-subsequence/
 func LengthOfLIS(nums []int) int {
@@ -85,4 +88,29 @@ func LargestDivisibleSubset(nums []int) []int {
 	}
 
 	return results
+}
+
+// NumDecodings - https://leetcode.com/problems/decode-ways/
+func NumDecodings(s string) int {
+	n := len(s)
+	if n == 0 || s[0] == '0' {
+		return 0
+	}
+
+	dp := make([]int, n+1)
+	dp[0], dp[1] = 1, 1
+
+	for i := 2; i <= n; i++ {
+		digit, _ := strconv.Atoi(string(s[i-1]))
+		if digit != 0 {
+			dp[i] += dp[i-1]
+		}
+
+		digit, _ = strconv.Atoi(string(s[i-2 : i]))
+		if digit >= 10 && digit <= 26 {
+			dp[i] += dp[i-2]
+		}
+	}
+
+	return dp[n]
 }

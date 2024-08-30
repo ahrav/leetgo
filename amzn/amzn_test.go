@@ -6734,3 +6734,32 @@ func BenchmarkLongestConsecutive(b *testing.B) {
 		LongestConsecutive(nums)
 	}
 }
+
+func TestNumSquares(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected int
+	}{
+		{"SinglePerfectSquare", 16, 1},
+		{"SumOfTwoPerfectSquares", 13, 2},
+		{"SumOfThreePerfectSquares", 12, 3},
+		{"Zero", 0, 0},
+		{"NonPerfectSquare", 15, 4},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := NumSquares(tt.n)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkNumSquares(b *testing.B) {
+	n := 16
+	for i := 0; i < b.N; i++ {
+		NumSquares(n)
+	}
+}

@@ -4708,3 +4708,21 @@ func LongestConsecutive(nums []int) int {
 
 	return longest
 }
+
+// NumSquares - https://leetcode.com/problems/perfect-squares/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func NumSquares(n int) int {
+	dp := make([]int, n+1)
+	for i := range dp {
+		dp[i] = math.MaxInt
+	}
+
+	dp[0] = 0
+	for i := 1; i <= n; i++ {
+		for j := 1; j*j <= i; j++ {
+			square := j * j
+			dp[i] = min(dp[i], dp[i-square]+1)
+		}
+	}
+
+	return dp[n]
+}

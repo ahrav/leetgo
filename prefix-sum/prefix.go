@@ -27,3 +27,21 @@ func VowelStrings(words []string, queries [][]int) []int {
 
 	return result
 }
+
+// SubarraySum - https://leetcode.com/problems/subarray-sum-equals-k/
+func SubarraySum(nums []int, k int) int {
+	sum, count := 0, 0
+	prefixFreq := make(map[int]int)
+	prefixFreq[0] = 1
+
+	for _, num := range nums {
+		sum += num
+		if freqs, ok := prefixFreq[sum-k]; ok {
+			count += freqs
+		}
+
+		prefixFreq[sum]++
+	}
+
+	return count
+}

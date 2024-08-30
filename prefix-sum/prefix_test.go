@@ -35,3 +35,34 @@ func BenchmarkVowelStrings(b *testing.B) {
 		VowelStrings(words, queries)
 	}
 }
+
+func TestSubarraySum(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected int
+	}{
+		{"ValidInput", []int{1, 1, 1}, 2, 2},
+		{"SingleElement", []int{1}, 1, 1},
+		{"NoSubarray", []int{1, 2, 3}, 7, 0},
+		{"NegativeNumbers", []int{1, -1, 1, -1, 1}, 0, 6},
+		{"EmptyInput", []int{}, 0, 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := SubarraySum(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkSubarraySum(b *testing.B) {
+	nums := []int{1, 1, 1}
+	k := 2
+	for i := 0; i < b.N; i++ {
+		SubarraySum(nums, k)
+	}
+}

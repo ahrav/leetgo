@@ -6763,3 +6763,34 @@ func BenchmarkNumSquares(b *testing.B) {
 		NumSquares(n)
 	}
 }
+
+func TestLeastInterval(t *testing.T) {
+	tests := []struct {
+		name     string
+		tasks    []byte
+		n        int
+		expected int
+	}{
+		{"SingleTask", []byte{'A'}, 2, 1},
+		{"MultipleTasksNoCooldown", []byte{'A', 'A', 'A', 'B', 'B', 'B'}, 0, 6},
+		{"MultipleTasksWithCooldown", []byte{'A', 'A', 'A', 'B', 'B', 'B'}, 2, 8},
+		{"AllUniqueTasks", []byte{'A', 'B', 'C', 'D', 'E', 'F'}, 2, 6},
+		{"EmptyTasks", []byte{}, 2, 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LeastInterval(tt.tasks, tt.n)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLeastInterval(b *testing.B) {
+	tasks := []byte{'A', 'A', 'A', 'B', 'B', 'B'}
+	n := 2
+	for i := 0; i < b.N; i++ {
+		LeastInterval(tasks, n)
+	}
+}

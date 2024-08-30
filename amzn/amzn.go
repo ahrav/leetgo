@@ -4726,3 +4726,60 @@ func NumSquares(n int) int {
 
 	return dp[n]
 }
+
+type MxHeap []int
+
+func (h MxHeap) Len() int           { return len(h) }
+func (h MxHeap) Less(i, j int) bool { return h[i] > h[j] }
+func (h MxHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *MxHeap) Push(x any) { *h = append(*h, x.(int)) }
+func (h *MxHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[:n-1]
+	return x
+}
+
+// LeastInterval - https://leetcode.com/problems/task-scheduler/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func LeastInterval(tasks []byte, n int) int {
+	freqs := make(map[byte]int)
+	for _, t := range tasks {
+		freqs[t]++
+	}
+
+	h := new(MxHeap)
+	heap.Init(h)
+
+	for _, v := range freqs {
+		heap.Push(h, v)
+	}
+
+	interval := 0
+	for h.Len() > 0 {
+		var tmp []int
+
+		i := 0
+
+		for i <= n {
+			if h.Len() > 0 {
+				if f := heap.Pop(h).(int); f > 1 {
+					tmp = append(tmp, f-1)
+				}
+			}
+
+			interval++
+			if h.Len() == 0 && len(tmp) == 0 {
+				break
+			}
+			i++
+		}
+
+		for _, v := range tmp {
+			heap.Push(h, v)
+		}
+	}
+
+	return interval
+}

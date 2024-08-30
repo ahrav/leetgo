@@ -6580,3 +6580,34 @@ func BenchmarkRestoreIpAddresses(b *testing.B) {
 		RestoreIpAddresses(input)
 	}
 }
+
+func TestMaxSlidingWindow(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected []int
+	}{
+		{"ValidInput", []int{1, 3, -1, -3, 5, 3, 6, 7}, 3, []int{3, 3, 5, 5, 6, 7}},
+		{"SingleElement", []int{1}, 1, []int{1}},
+		{"EmptyInput", []int{}, 3, []int{}},
+		{"KGreaterThanLength", []int{1, 2, 3}, 4, []int{}},
+		{"KIsZero", []int{1, 2, 3}, 0, []int{}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := MaxSlidingWindow(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMaxSlidingWindow(b *testing.B) {
+	nums := []int{1, 3, -1, -3, 5, 3, 6, 7}
+	k := 3
+	for i := 0; i < b.N; i++ {
+		MaxSlidingWindow(nums, k)
+	}
+}

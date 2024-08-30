@@ -4595,3 +4595,32 @@ func ConnectIterative(root *NextTreeNode) *NextTreeNode {
 
 	return root
 }
+
+// MaxSlidingWindow - https://leetcode.com/problems/sliding-window-maximum/?envType=problem-list-v2&envId=954v5ops
+func MaxSlidingWindow(nums []int, k int) []int {
+	n := len(nums)
+	if n == 0 || k == 0 {
+		return []int{}
+	}
+
+	deque := []int{}
+	result := make([]int, 0, n-k+1)
+
+	for i := 0; i < n; i++ {
+		if len(deque) > 0 && deque[0] < i-k+1 {
+			deque = deque[1:]
+		}
+
+		for len(deque) > 0 && nums[deque[len(deque)-1]] < nums[i] {
+			deque = deque[:len(deque)-1]
+		}
+
+		deque = append(deque, i)
+
+		if i >= k-1 {
+			result = append(result, nums[deque[0]])
+		}
+	}
+
+	return result
+}

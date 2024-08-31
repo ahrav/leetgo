@@ -6794,3 +6794,34 @@ func BenchmarkLeastInterval(b *testing.B) {
 		LeastInterval(tasks, n)
 	}
 }
+
+func TestKClosest(t *testing.T) {
+	tests := []struct {
+		name     string
+		points   [][]int
+		k        int
+		expected [][]int
+	}{
+		{"SinglePoint", [][]int{{1, 2}}, 1, [][]int{{1, 2}}},
+		{"MultiplePoints", [][]int{{1, 3}, {-2, 2}}, 1, [][]int{{-2, 2}}},
+		{"KGreaterThanPoints", [][]int{{3, 3}, {5, -1}, {-2, 4}}, 5, [][]int{{3, 3}, {5, -1}, {-2, 4}}},
+		{"KEqualToPoints", [][]int{{1, 3}, {-2, 2}, {2, -2}}, 3, [][]int{{1, 3}, {-2, 2}, {2, -2}}},
+		{"EmptyPoints", [][]int{}, 1, [][]int{}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := KClosest(tt.points, tt.k)
+			assert.ElementsMatch(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkKClosest(b *testing.B) {
+	points := [][]int{{1, 3}, {-2, 2}, {2, -2}}
+	k := 2
+	for i := 0; i < b.N; i++ {
+		KClosest(points, k)
+	}
+}

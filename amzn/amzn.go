@@ -4845,3 +4845,49 @@ func CheckContradictions(equations [][]string, values []float64) bool {
 
 	return false
 }
+
+type CoordDist struct {
+	point    []int
+	distance float64
+}
+
+type MaxCoordHeap []CoordDist
+
+func (h MaxCoordHeap) Len() int           { return len(h) }
+func (h MaxCoordHeap) Less(i, j int) bool { return h[i].distance > h[j].distance }
+func (h MaxCoordHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *MaxCoordHeap) Push(x any) { *h = append(*h, x.(CoordDist)) }
+func (h *MaxCoordHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[:n-1]
+	return x
+}
+
+// KClosest - https://leetcode.com/problems/k-closest-points-to-origin/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func KClosest(points [][]int, k int) [][]int {
+	h := new(MaxCoordHeap)
+	heap.Init(h)
+
+	distance := func(x, y int) float64 {
+		return math.Sqrt(float64((x * x) + (y * y)))
+	}
+
+	for _, point := range points {
+		d := distance(point[0], point[1])
+		heap.Push(h, CoordDist{point: point, distance: d})
+
+		if h.Len() > k {
+			heap.Pop(h)
+		}
+	}
+
+	result := make([][]int, 0, k)
+	for h.Len() > 0 {
+		result = append(result, heap.Pop(h).(CoordDist).point)
+	}
+
+	return result
+}

@@ -248,3 +248,36 @@ func BenchmarkNumDecodings(b *testing.B) {
 		NumDecodings(input)
 	}
 }
+
+func TestJobScheduling(t *testing.T) {
+	tests := []struct {
+		name      string
+		startTime []int
+		endTime   []int
+		profit    []int
+		expected  int
+	}{
+		{"SingleJob", []int{1}, []int{2}, []int{50}, 50},
+		{"NonOverlappingJobs", []int{1, 3, 6}, []int{2, 5, 9}, []int{50, 10, 40}, 100},
+		{"OverlappingJobs", []int{1, 2, 3, 4}, []int{3, 5, 10, 6}, []int{20, 20, 100, 70}, 120},
+		{"MixedJobs", []int{1, 2, 3, 3}, []int{3, 4, 5, 6}, []int{50, 10, 40, 70}, 120},
+		{"EmptyJobs", []int{}, []int{}, []int{}, 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := JobScheduling(tt.startTime, tt.endTime, tt.profit)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkJobScheduling(b *testing.B) {
+	startTime := []int{1, 2, 3, 3}
+	endTime := []int{3, 4, 5, 6}
+	profit := []int{50, 10, 40, 70}
+	for i := 0; i < b.N; i++ {
+		JobScheduling(startTime, endTime, profit)
+	}
+}

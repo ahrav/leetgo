@@ -114,3 +114,35 @@ func NumDecodings(s string) int {
 
 	return dp[n]
 }
+
+// JobScheduling - https://leetcode.com/problems/maximum-profit-in-job-scheduling/
+func JobScheduling(startTime []int, endTime []int, profit []int) int {
+	type Job struct {
+		start  int
+		end    int
+		profit int
+	}
+
+	n := len(profit)
+	jobs := make([]Job, n)
+	for i := range profit {
+		jobs[i] = Job{start: startTime[i], end: endTime[i], profit: profit[i]}
+	}
+
+	sort.Slice(jobs, func(i, j int) bool {
+		return jobs[i].end < jobs[j].end
+	})
+
+	dp := make([]int, n+1)
+	for i := 1; i <= n; i++ {
+		job := jobs[i-1]
+
+		numJobs := sort.Search(n, func(i int) bool {
+			return jobs[i].end > job.start
+		})
+
+		dp[i] = max(dp[i-1], job.profit+dp[numJobs])
+	}
+
+	return dp[n]
+}

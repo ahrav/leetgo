@@ -4783,3 +4783,65 @@ func LeastInterval(tasks []byte, n int) int {
 
 	return interval
 }
+
+type WeightedUnionFind struct {
+	parents map[string]string
+	ratios  map[string]float64
+}
+
+func NewWeightedUnionfind() *WeightedUnionFind {
+	return &WeightedUnionFind{
+		parents: make(map[string]string),
+		ratios:  make(map[string]float64),
+	}
+}
+
+func (uf *WeightedUnionFind) Find(x string) (string, float64) {
+	if uf.parents[x] == x {
+		return x, 1.0
+	}
+
+	origParent, origRatio := uf.parents[x], uf.ratios[x]
+	root, rootRatio := uf.Find(origParent)
+	uf.parents[x] = root
+	uf.ratios[x] = origRatio * rootRatio
+	return root, uf.ratios[x]
+}
+
+func (uf *WeightedUnionFind) Union(x, y string, value float64) bool {
+	rootX, ratioX := uf.Find(x)
+	rootY, ratioY := uf.Find(y)
+
+	if rootX == rootY {
+		return math.Abs(ratioX/ratioY-value) < 1e-5
+	}
+
+	uf.parents[rootX] = rootY
+	uf.ratios[rootX] = value * (ratioY / ratioX)
+	return true
+}
+
+// CheckContradictions - https://leetcode.com/problems/check-for-contradictions-in-equations/?envType=study-plan-v2&envId=amazon-spring-23-high-frequency
+func CheckContradictions(equations [][]string, values []float64) bool {
+	uf := NewWeightedUnionfind()
+
+	for i, eq := range equations {
+		a, b := eq[0], eq[1]
+		value := values[i]
+
+		if _, ok := uf.parents[a]; !ok {
+			uf.parents[a] = a
+			uf.ratios[a] = 1.0
+		}
+		if _, ok := uf.parents[b]; !ok {
+			uf.parents[b] = b
+			uf.ratios[b] = 1.0
+		}
+
+		if !uf.Union(a, b, value) {
+			return true
+		}
+	}
+
+	return false
+}

@@ -4891,3 +4891,60 @@ func KClosest(points [][]int, k int) [][]int {
 
 	return result
 }
+
+// SolveSudoku - https://leetcode.com/problems/sudoku-solver/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func SolveSudoku(board [][]byte) {
+	const side = 9
+
+	nextAvailableCell := func() (int, int) {
+		for i := range side {
+			for j := range side {
+				if board[i][j] == '.' {
+					return i, j
+				}
+			}
+		}
+		return -1, -1
+	}
+
+	isValid := func(row, col int, val byte) bool {
+		for i := range side {
+			if board[row][i] == val || board[i][col] == val {
+				return false
+			}
+		}
+
+		startRow := row - row%3
+		startCol := col - col%3
+		for i := startRow; i < startRow+3; i++ {
+			for j := startCol; j < startCol+3; j++ {
+				if board[i][j] == val {
+					return false
+				}
+			}
+		}
+		return true
+	}
+
+	var backtrack func() bool
+	backtrack = func() bool {
+		r, c := nextAvailableCell()
+		if r == -1 || c == -1 {
+			return true
+		}
+
+		for i := 1; i <= side; i++ {
+			if isValid(r, c, byte(i)+'0') {
+				board[r][c] = byte(i) + '0'
+				if backtrack() {
+					return true
+				}
+				board[r][c] = '.'
+			}
+		}
+
+		return false
+	}
+
+	_ = backtrack()
+}

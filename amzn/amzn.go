@@ -5062,3 +5062,50 @@ func SmallestDistancePair(nums []int, k int) int {
 
 	return left
 }
+
+// MinimumCost - https://leetcode.com/problems/minimum-cost-to-convert-string-i/
+func MinimumCost(source string, target string, original []byte, changed []byte, cost []int) int64 {
+	inf := math.MaxInt
+	const charCount = 26
+
+	minCost := make([][]int, charCount)
+	for i := range minCost {
+		minCost[i] = make([]int, charCount)
+		for j := range minCost[i] {
+			if i == j {
+				minCost[i][j] = 0
+			} else {
+				minCost[i][j] = inf
+			}
+		}
+	}
+
+	n := len(original)
+	for i := range n {
+		x := original[i] - 'a'
+		y := changed[i] - 'a'
+		minCost[x][y] = min(minCost[x][y], cost[i])
+	}
+
+	for k := range charCount {
+		for i := range charCount {
+			for j := range charCount {
+				if minCost[i][k] != inf && minCost[k][j] != inf {
+					minCost[i][j] = min(minCost[i][j], minCost[i][k]+minCost[k][j])
+				}
+			}
+		}
+	}
+
+	totalCost := 0
+	for i := range source {
+		x := source[i] - 'a'
+		y := target[i] - 'a'
+		if minCost[x][y] == inf {
+			return -1
+		}
+		totalCost += minCost[x][y]
+	}
+
+	return int64(totalCost)
+}

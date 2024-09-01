@@ -6947,3 +6947,81 @@ func BenchmarkSmallestDistancePair(b *testing.B) {
 		SmallestDistancePair(nums, k)
 	}
 }
+
+func TestMinimumCost(t *testing.T) {
+	tests := []struct {
+		name     string
+		source   string
+		target   string
+		original []byte
+		changed  []byte
+		cost     []int
+		expected int64
+	}{
+		{
+			name:     "ValidTransformation",
+			source:   "abc",
+			target:   "def",
+			original: []byte{'a', 'b', 'c'},
+			changed:  []byte{'d', 'e', 'f'},
+			cost:     []int{1, 2, 3},
+			expected: 6,
+		},
+		{
+			name:     "InvalidTransformation",
+			source:   "abc",
+			target:   "xyz",
+			original: []byte{'a', 'b', 'c'},
+			changed:  []byte{'d', 'e', 'f'},
+			cost:     []int{1, 2, 3},
+			expected: -1,
+		},
+		{
+			name:     "SameSourceAndTarget",
+			source:   "abc",
+			target:   "abc",
+			original: []byte{'a', 'b', 'c'},
+			changed:  []byte{'d', 'e', 'f'},
+			cost:     []int{1, 2, 3},
+			expected: 0,
+		},
+		{
+			name:     "EmptySourceAndTarget",
+			source:   "",
+			target:   "",
+			original: []byte{},
+			changed:  []byte{},
+			cost:     []int{},
+			expected: 0,
+		},
+		{
+			name:     "PartialTransformation",
+			source:   "abc",
+			target:   "abf",
+			original: []byte{'c'},
+			changed:  []byte{'f'},
+			cost:     []int{3},
+			expected: 3,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := MinimumCost(tt.source, tt.target, tt.original, tt.changed, tt.cost)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMinimumCost(b *testing.B) {
+	source := "abc"
+	target := "def"
+	original := []byte{'a', 'b', 'c'}
+	changed := []byte{'d', 'e', 'f'}
+	cost := []int{1, 2, 3}
+
+	for i := 0; i < b.N; i++ {
+		MinimumCost(source, target, original, changed, cost)
+	}
+}

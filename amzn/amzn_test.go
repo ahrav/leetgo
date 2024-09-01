@@ -6887,3 +6887,32 @@ func BenchmarkLongestSubstring(b *testing.B) {
 		LongestSubstring(s, k)
 	}
 }
+
+func TestWordBreakII(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		wordDict []string
+		expected []string
+	}{
+		{"WordBreakIIWithSingleWord", "leetcode", []string{"leet", "code"}, []string{"leet code"}},
+		{"WordBreakIIWithMultipleWords", "catsanddog", []string{"cat", "cats", "and", "sand", "dog"}, []string{"cats and dog", "cat sand dog"}},
+		{"WordBreakIIWithNoSolution", "catsandog", []string{"cats", "dog", "sand", "and", "cat"}, []string{}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := WordBreakII(tt.s, tt.wordDict)
+			assert.ElementsMatch(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkWordBreakII(b *testing.B) {
+	s := "catsanddog"
+	wordDict := []string{"cat", "cats", "and", "sand", "dog"}
+	for i := 0; i < b.N; i++ {
+		WordBreakII(s, wordDict)
+	}
+}

@@ -4994,3 +4994,41 @@ func LongestSubstring(s string, k int) int {
 
 	return substring(s, k)
 }
+
+// WordBreakII - https://leetcode.com/problems/word-break-ii/
+func WordBreakII(s string, wordDict []string) []string {
+	wordSet := make(map[string]struct{}, len(wordDict))
+	for _, word := range wordDict {
+		wordSet[word] = struct{}{}
+	}
+
+	memo := make(map[string][]string)
+
+	var backtrack func(subStr string) []string
+	backtrack = func(subStr string) []string {
+		if res, exists := memo[subStr]; exists {
+			return res
+		}
+
+		var result []string
+		if _, exists := wordSet[subStr]; exists {
+			result = append(result, subStr)
+		}
+
+		for i := 1; i < len(subStr); i++ {
+			prefix := subStr[:i]
+			if _, exists := wordSet[prefix]; exists {
+				suffix := subStr[i:]
+				sentences := backtrack(suffix)
+				for _, sent := range sentences {
+					result = append(result, prefix+" "+sent)
+				}
+			}
+		}
+
+		memo[subStr] = result
+		return result
+	}
+
+	return backtrack(s)
+}

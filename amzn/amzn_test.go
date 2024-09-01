@@ -6854,3 +6854,36 @@ func BenchmarkPeakIndexInMountainArray(b *testing.B) {
 		PeakIndexInMountainArray(arr)
 	}
 }
+
+func TestLongestSubstring(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		k        int
+		expected int
+	}{
+		{"LongestSubstringWithSingleCharacter", "aaaaa", 1, 5},
+		{"LongestSubstringWithNoRepeatingCharacters", "abcdef", 2, 0},
+		{"LongestSubstringWithMixedCharacters", "aaabb", 3, 3},
+		{"LongestSubstringWithMultipleValidSubstrings", "ababbc", 2, 5},
+		{"LongestSubstringWithEmptyString", "", 3, 0},
+		{"LongestSubstringWithSingleCharacterString", "a", 1, 1},
+		{"LongestSubstringWithAllCharactersBelowK", "aabbcc", 3, 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LongestSubstring(tt.s, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLongestSubstring(b *testing.B) {
+	s := "ababbc"
+	k := 2
+	for i := 0; i < b.N; i++ {
+		LongestSubstring(s, k)
+	}
+}

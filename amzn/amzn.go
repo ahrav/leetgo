@@ -4963,3 +4963,34 @@ func PeakIndexInMountainArray(arr []int) int {
 
 	return left
 }
+
+// LongestSubstring - https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func LongestSubstring(s string, k int) int {
+	if k == 1 {
+		return len(s)
+	}
+
+	var substring func(s string, k int) int
+	substring = func(s string, k int) int {
+		if len(s) == 0 {
+			return 0
+		}
+
+		var charCount [26]int
+		for i := range s {
+			charCount[s[i]-'a']++
+		}
+
+		for i := range s {
+			if charCount[s[i]-'a'] < k {
+				left := substring(s[:i], k)
+				right := substring(s[i+1:], k)
+				return max(left, right)
+			}
+		}
+
+		return len(s)
+	}
+
+	return substring(s, k)
+}

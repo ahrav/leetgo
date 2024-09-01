@@ -6825,3 +6825,32 @@ func BenchmarkKClosest(b *testing.B) {
 		KClosest(points, k)
 	}
 }
+
+func TestPeakIndexInMountainArray(t *testing.T) {
+	tests := []struct {
+		name     string
+		arr      []int
+		expected int
+	}{
+		{"PeakIndexInMiddleOfMountainArray", []int{0, 2, 3, 4, 5, 3, 1}, 4},
+		{"PeakIndexAtStartOfMountainArray", []int{5, 4, 3, 2, 1}, 0},
+		{"PeakIndexAtEndOfMountainArray", []int{1, 2, 3, 4, 5}, 4},
+		{"PeakIndexInSingleElementArray", []int{1}, 0},
+		{"PeakIndexInTwoElementArray", []int{1, 2}, 1},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := PeakIndexInMountainArray(tt.arr)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkPeakIndexInMountainArray(b *testing.B) {
+	arr := []int{0, 2, 3, 4, 5, 3, 1}
+	for i := 0; i < b.N; i++ {
+		PeakIndexInMountainArray(arr)
+	}
+}

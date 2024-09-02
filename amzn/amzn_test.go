@@ -7025,3 +7025,66 @@ func BenchmarkMinimumCost(b *testing.B) {
 		MinimumCost(source, target, original, changed, cost)
 	}
 }
+
+func TestLongestValidSubstring(t *testing.T) {
+	tests := []struct {
+		name      string
+		word      string
+		forbidden []string
+		expected  int
+	}{
+		{
+			name:      "NoForbiddenWords",
+			word:      "abcde",
+			forbidden: []string{},
+			expected:  5,
+		},
+		{
+			name:      "WithForbiddenWords",
+			word:      "abcde",
+			forbidden: []string{"bc"},
+			expected:  3,
+		},
+		{
+			name:      "AllForbidden",
+			word:      "abcde",
+			forbidden: []string{"a", "b", "c", "d", "e"},
+			expected:  0,
+		},
+		{
+			name:      "PartialForbidden",
+			word:      "abcde",
+			forbidden: []string{"ab", "de"},
+			expected:  3,
+		},
+		{
+			name:      "EmptyWord",
+			word:      "",
+			forbidden: []string{"a", "b"},
+			expected:  0,
+		},
+		{
+			name:      "LongForbidden",
+			word:      "abcdefghij",
+			forbidden: []string{"abcdefghij"},
+			expected:  9,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LongestValidSubstring(tt.word, tt.forbidden)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLongestValidSubstring(b *testing.B) {
+	word := "abcdefghij"
+	forbidden := []string{"abcdefghij"}
+
+	for i := 0; i < b.N; i++ {
+		LongestValidSubstring(word, forbidden)
+	}
+}

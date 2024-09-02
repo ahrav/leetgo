@@ -5109,3 +5109,27 @@ func MinimumCost(source string, target string, original []byte, changed []byte, 
 
 	return int64(totalCost)
 }
+
+// LongestValidSubstring - https://leetcode.com/problems/length-of-the-longest-valid-substring/
+func LongestValidSubstring(word string, forbidden []string) int {
+	m := make(map[string]struct{}, len(forbidden))
+	for _, str := range forbidden {
+		m[str] = struct{}{}
+	}
+
+	n := len(word)
+	left, maxLen := 0, 0
+	for right := 0; right < n; right++ {
+		for j := right; j >= max(left, right-9); j-- {
+			str := word[j : right+1]
+
+			if _, exists := m[str]; exists {
+				left = j + 1
+				break
+			}
+		}
+		maxLen = max(maxLen, right-left+1)
+	}
+
+	return maxLen
+}

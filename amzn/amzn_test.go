@@ -7088,3 +7088,53 @@ func BenchmarkLongestValidSubstring(b *testing.B) {
 		LongestValidSubstring(word, forbidden)
 	}
 }
+
+func TestFindMinMoves(t *testing.T) {
+	tests := []struct {
+		name     string
+		machines []int
+		expected int
+	}{
+		{
+			name:     "EqualDistribution",
+			machines: []int{1, 0, 5},
+			expected: 3,
+		},
+		{
+			name:     "Distribution",
+			machines: []int{0, 3, 0},
+			expected: 2,
+		},
+		{
+			name:     "AlreadyBalanced",
+			machines: []int{1, 1, 1},
+			expected: 0,
+		},
+		{
+			name:     "SingleMachine",
+			machines: []int{4},
+			expected: 0,
+		},
+		{
+			name:     "LargeDifference",
+			machines: []int{0, 0, 11, 5},
+			expected: 8,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := FindMinMoves(tt.machines)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkFindMinMoves(b *testing.B) {
+	machines := []int{0, 0, 11, 5}
+
+	for i := 0; i < b.N; i++ {
+		FindMinMoves(machines)
+	}
+}

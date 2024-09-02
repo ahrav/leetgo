@@ -5133,3 +5133,35 @@ func LongestValidSubstring(word string, forbidden []string) int {
 
 	return maxLen
 }
+
+// FindMinMoves - https://leetcode.com/problems/super-washing-machines/
+func FindMinMoves(machines []int) int {
+	totalDresses := 0
+	for _, cnt := range machines {
+		totalDresses += cnt
+	}
+
+	n := len(machines)
+	if totalDresses%n != 0 {
+		return -1
+	}
+
+	target := totalDresses / n
+
+	abs := func(x int) int {
+		if x < 0 {
+			return -x
+		}
+		return x
+	}
+
+	minMoves, currBalance := 0, 0
+	for _, cnt := range machines {
+		diff := cnt - target
+		currBalance += diff
+
+		minMoves = max(minMoves, max(abs(currBalance), diff))
+	}
+
+	return minMoves
+}

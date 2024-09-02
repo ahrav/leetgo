@@ -5229,3 +5229,64 @@ func FindAllConcatenatedWordsInADict(words []string) []string {
 
 	return result
 }
+
+type TNode struct {
+	children [26]*TNode
+	isWord   bool
+}
+
+func (t *TNode) Insert(word string) {
+	curr := t
+	for i := range word {
+		if curr.children[word[i]-'a'] == nil {
+			curr.children[word[i]-'a'] = new(TNode)
+		}
+		curr = curr.children[word[i]-'a']
+	}
+	curr.isWord = true
+}
+
+// FindAllConcatenatedWordsInADictTrie - https://leetcode.com/problems/concatenated-words/
+func FindAllConcatenatedWordsInADictTrie(words []string) []string {
+	trie := new(TNode)
+	for _, word := range words {
+		if word != "" {
+			trie.Insert(word)
+		}
+	}
+
+	var canConcat func(word string, idx, count int) bool
+	canConcat = func(word string, idx, count int) bool {
+		curr := trie
+		n := len(word)
+
+		for i := idx; i < n; i++ {
+			child := curr.children[word[i]-'a']
+			if child == nil {
+				return false
+			}
+
+			curr = child
+
+			if child.isWord {
+				if i == n-1 {
+					return count >= 1
+				}
+
+				if canConcat(word, i+1, count+1) {
+					return true
+				}
+			}
+		}
+		return false
+	}
+
+	var result []string
+	for _, word := range words {
+		if canConcat(word, 0, 0) {
+			result = append(result, word)
+		}
+	}
+
+	return result
+}

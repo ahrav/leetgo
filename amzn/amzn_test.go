@@ -7138,3 +7138,53 @@ func BenchmarkFindMinMoves(b *testing.B) {
 		FindMinMoves(machines)
 	}
 }
+
+func TestUniqueLetterString(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		expected int
+	}{
+		{
+			name:     "SingleCharacter",
+			s:        "A",
+			expected: 1,
+		},
+		{
+			name:     "AllUnique",
+			s:        "ABC",
+			expected: 10,
+		},
+		{
+			name:     "RepeatingCharacters",
+			s:        "AAB",
+			expected: 6,
+		},
+		{
+			name:     "EmptyString",
+			s:        "",
+			expected: 0,
+		},
+		{
+			name:     "LongString",
+			s:        "ABABABAB",
+			expected: 28,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := UniqueLetterString(tt.s)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkUniqueLetterString(b *testing.B) {
+	s := "ABABABAB"
+
+	for i := 0; i < b.N; i++ {
+		UniqueLetterString(s)
+	}
+}

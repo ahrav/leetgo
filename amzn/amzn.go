@@ -5165,3 +5165,31 @@ func FindMinMoves(machines []int) int {
 
 	return minMoves
 }
+
+// UniqueLetterString - https://leetcode.com/problems/count-unique-characters-of-all-substrings-of-a-given-string/
+func UniqueLetterString(s string) int {
+	n := len(s)
+	const charCount = 26
+
+	last := make([]int, charCount)
+	secondLast := make([]int, charCount)
+	for i := range last {
+		last[i] = -1
+		secondLast[i] = -1
+	}
+
+	sum := 0
+	for i := 0; i < n; i++ {
+		idx := s[i] - 'A'
+
+		sum += (i - last[idx]) * (last[idx] - secondLast[idx])
+		secondLast[idx] = last[idx]
+		last[idx] = i
+	}
+
+	for i := range charCount {
+		sum += (n - last[i]) * (last[i] - secondLast[i])
+	}
+
+	return sum
+}

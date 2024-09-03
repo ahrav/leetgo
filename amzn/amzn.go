@@ -5456,3 +5456,34 @@ func mergeSort(nums, tmp []int, left, right int) int {
 
 	return count + merge(nums, tmp, left, mid, right)
 }
+
+// GetMaxLen - https://leetcode.com/problems/maximum-length-of-subarray-with-positive-product/
+func GetMaxLen(nums []int) int {
+	maxLen := 0
+	currMax, currMin := 0, 0
+
+	for _, num := range nums {
+		if num > 0 {
+			currMax++
+			if currMin > 0 {
+				currMin++
+			}
+		} else if num < 0 {
+			tmp := currMax
+			if currMin > 0 {
+				currMax = currMin + 1
+			} else {
+				currMax = 0
+			}
+			currMin = tmp + 1
+		} else {
+			currMax, currMin = 0, 0
+		}
+
+		if currMax > maxLen {
+			maxLen = currMax
+		}
+	}
+
+	return maxLen
+}

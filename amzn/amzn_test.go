@@ -7443,3 +7443,58 @@ func BenchmarkReversePairs(b *testing.B) {
 		ReversePairs(nums)
 	}
 }
+
+func TestGetMaxLen(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "PositiveNumbers",
+			nums:     []int{1, 2, 3, 4, 5},
+			expected: 5,
+		},
+		{
+			name:     "NegativeNumbers",
+			nums:     []int{-1, -2, -3, -4, -5},
+			expected: 4,
+		},
+		{
+			name:     "MixedNumbers",
+			nums:     []int{1, -2, -3, 4, -5, 6},
+			expected: 4,
+		},
+		{
+			name:     "SingleZero",
+			nums:     []int{0},
+			expected: 0,
+		},
+		{
+			name:     "MultipleZeros",
+			nums:     []int{0, 0, 0},
+			expected: 0,
+		},
+		{
+			name:     "AlternatingSigns",
+			nums:     []int{1, -1, 1, -1, 1},
+			expected: 5,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := GetMaxLen(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkGetMaxLen(b *testing.B) {
+	nums := []int{1, -2, -3, 4, -5, 6}
+
+	for i := 0; i < b.N; i++ {
+		GetMaxLen(nums)
+	}
+}

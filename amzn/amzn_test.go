@@ -7338,3 +7338,58 @@ func BenchmarkLargestRectangleArea(b *testing.B) {
 		LargestRectangleArea(heights)
 	}
 }
+
+func TestTotalFruit(t *testing.T) {
+	tests := []struct {
+		name     string
+		fruits   []int
+		expected int
+	}{
+		{
+			name:     "SingleType",
+			fruits:   []int{1, 1, 1, 1},
+			expected: 4,
+		},
+		{
+			name:     "TwoTypes",
+			fruits:   []int{1, 2, 1, 2, 1, 2},
+			expected: 6,
+		},
+		{
+			name:     "ThreeTypes",
+			fruits:   []int{1, 2, 3, 2, 2},
+			expected: 4,
+		},
+		{
+			name:     "Empty",
+			fruits:   []int{},
+			expected: 0,
+		},
+		{
+			name:     "SingleElement",
+			fruits:   []int{1},
+			expected: 1,
+		},
+		{
+			name:     "AlternatingTypes",
+			fruits:   []int{1, 2, 1, 2, 1, 2, 1, 2},
+			expected: 8,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := TotalFruit(tt.fruits)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkTotalFruit(b *testing.B) {
+	fruits := []int{1, 2, 1, 2, 1, 2, 1, 2}
+
+	for i := 0; i < b.N; i++ {
+		TotalFruit(fruits)
+	}
+}

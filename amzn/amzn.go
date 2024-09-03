@@ -5334,3 +5334,32 @@ func LargestRectangleArea(heights []int) int {
 
 	return maxArea
 }
+
+// TotalFruit - https://leetcode.com/problems/fruit-into-baskets/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func TotalFruit(fruits []int) int {
+	n := len(fruits)
+	if n < 3 {
+		return n
+	}
+
+	const basketCapacity = 2
+	basket := make(map[int]int, basketCapacity)
+	left, maxFruit := 0, 0
+	for right := 0; right < n; right++ {
+		basket[fruits[right]]++
+
+		for len(basket) > basketCapacity {
+			basket[fruits[left]]--
+			if basket[fruits[left]] == 0 {
+				delete(basket, fruits[left])
+			}
+			left++
+		}
+
+		if window := right - left + 1; window > maxFruit {
+			maxFruit = window
+		}
+	}
+
+	return maxFruit
+}

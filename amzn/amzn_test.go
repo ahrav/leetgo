@@ -7288,3 +7288,53 @@ func BenchmarkFindAllConcatenatedWordsInADicTriet(b *testing.B) {
 		FindAllConcatenatedWordsInADict(words)
 	}
 }
+
+func TestLargestRectangleArea(t *testing.T) {
+	tests := []struct {
+		name     string
+		heights  []int
+		expected int
+	}{
+		{
+			name:     "SingleElement",
+			heights:  []int{5},
+			expected: 5,
+		},
+		{
+			name:     "MultipleElements",
+			heights:  []int{2, 1, 5, 6, 2, 3},
+			expected: 10,
+		},
+		{
+			name:     "AllSameHeight",
+			heights:  []int{3, 3, 3, 3},
+			expected: 12,
+		},
+		{
+			name:     "DecreasingHeights",
+			heights:  []int{6, 5, 4, 3, 2, 1},
+			expected: 12,
+		},
+		{
+			name:     "SinglePeak",
+			heights:  []int{2, 1, 4, 5, 1, 3, 3},
+			expected: 8,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LargestRectangleArea(tt.heights)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLargestRectangleArea(b *testing.B) {
+	heights := []int{2, 1, 5, 6, 2, 3}
+
+	for i := 0; i < b.N; i++ {
+		LargestRectangleArea(heights)
+	}
+}

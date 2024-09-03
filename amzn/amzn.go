@@ -5290,3 +5290,47 @@ func FindAllConcatenatedWordsInADictTrie(words []string) []string {
 
 	return result
 }
+
+// LargestRectangeArea - https://leetcode.com/problems/largest-rectangle-in-histogram/
+func LargestRectangleArea(heights []int) int {
+	n := len(heights)
+	if n == 1 {
+		return heights[0]
+	}
+
+	var stack []int
+	maxArea := 0
+
+	for i, h := range heights {
+		for len(stack) > 0 && heights[stack[len(stack)-1]] > h {
+			height := heights[stack[len(stack)-1]]
+			stack = stack[:len(stack)-1]
+
+			var width int
+			if len(stack) == 0 {
+				width = i
+			} else {
+				width = i - stack[len(stack)-1] - 1
+			}
+
+			maxArea = max(maxArea, height*width)
+		}
+		stack = append(stack, i)
+	}
+
+	for len(stack) > 0 {
+		height := heights[stack[len(stack)-1]]
+		stack = stack[:len(stack)-1]
+
+		var width int
+		if len(stack) == 0 {
+			width = n
+		} else {
+			width = n - stack[len(stack)-1] - 1
+		}
+
+		maxArea = max(maxArea, height*width)
+	}
+
+	return maxArea
+}

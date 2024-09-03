@@ -7393,3 +7393,53 @@ func BenchmarkTotalFruit(b *testing.B) {
 		TotalFruit(fruits)
 	}
 }
+
+func TestReversePairs(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "SingleElement",
+			nums:     []int{1},
+			expected: 0,
+		},
+		{
+			name:     "NoPairs",
+			nums:     []int{1, 2, 3, 4, 5},
+			expected: 0,
+		},
+		{
+			name:     "WithPairs",
+			nums:     []int{5, 4, 3, 2, 1},
+			expected: 4,
+		},
+		{
+			name:     "Mixed",
+			nums:     []int{1, 3, 2, 3, 1},
+			expected: 2,
+		},
+		{
+			name:     "Duplicates",
+			nums:     []int{2, 2, 2, 2, 2},
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := ReversePairs(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkReversePairs(b *testing.B) {
+	nums := []int{1, 3, 2, 3, 1}
+
+	for i := 0; i < b.N; i++ {
+		ReversePairs(nums)
+	}
+}

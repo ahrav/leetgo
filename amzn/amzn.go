@@ -5363,3 +5363,96 @@ func TotalFruit(fruits []int) int {
 
 	return maxFruit
 }
+
+func MergeSort(arr []int) []int {
+	n := len(arr)
+	if n <= 1 {
+		return arr
+	}
+
+	merge := func(left, right []int) []int {
+		res := make([]int, len(left)+len(right))
+		i, j := 0, 0
+		for i < len(left) && j < len(right) {
+			if left[i] < right[j] {
+				res = append(res, left[i])
+				i++
+			} else {
+				res = append(res, right[j])
+				j++
+			}
+		}
+
+		res = append(res, left[i:]...)
+		res = append(res, right[j:]...)
+		return res
+	}
+
+	mid := n / 2
+	left := MergeSort(arr[:mid])
+	right := MergeSort(arr[mid:])
+
+	return merge(left, right)
+}
+
+// ReversePairs - https://leetcode.com/problems/reverse-pairs/
+func ReversePairs(nums []int) int {
+	n := len(nums)
+	tmp := make([]int, n)
+	return mergeSort(nums, tmp, 0, n-1)
+}
+
+func mergeSort(nums, tmp []int, left, right int) int {
+	if left >= right {
+		return 0
+	}
+
+	merge := func(nums, tmp []int, left, mid, right int) int {
+		i, j, k := left, mid+1, left
+		count := 0
+		for i <= mid && j <= right {
+			if nums[i] > 2*nums[j] {
+				count += mid - i + 1
+				j++
+			} else {
+				i++
+			}
+		}
+
+		i, j, k = left, mid+1, left
+		for i <= mid && j <= right {
+			if nums[i] < nums[j] {
+				tmp[k] = nums[i]
+				i++
+			} else {
+				tmp[k] = nums[j]
+				j++
+			}
+			k++
+		}
+
+		for i <= mid {
+			tmp[k] = nums[i]
+			i++
+			k++
+		}
+
+		for j <= right {
+			tmp[k] = nums[j]
+			j++
+			k++
+		}
+
+		for i := left; i <= right; i++ {
+			nums[i] = tmp[i]
+		}
+
+		return count
+	}
+
+	mid := (left + right) / 2
+	count := mergeSort(nums, tmp, left, mid)
+	count += mergeSort(nums, tmp, mid+1, right)
+
+	return count + merge(nums, tmp, left, mid, right)
+}

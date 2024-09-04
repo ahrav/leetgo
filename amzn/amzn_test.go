@@ -7498,3 +7498,53 @@ func BenchmarkGetMaxLen(b *testing.B) {
 		GetMaxLen(nums)
 	}
 }
+
+func TestMaximumBooks(t *testing.T) {
+	tests := []struct {
+		name     string
+		books    []int
+		expected int64
+	}{
+		{
+			name:     "SingleBook",
+			books:    []int{5},
+			expected: 5,
+		},
+		{
+			name:     "IncreasingOrder",
+			books:    []int{1, 2, 3, 4, 5},
+			expected: 15,
+		},
+		{
+			name:     "DecreasingOrder",
+			books:    []int{5, 4, 3, 2, 1},
+			expected: 25,
+		},
+		{
+			name:     "MixedOrder",
+			books:    []int{3, 1, 4, 1, 5},
+			expected: 26,
+		},
+		{
+			name:     "AllSame",
+			books:    []int{2, 2, 2, 2, 2},
+			expected: 4,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := MaximumBooks(tt.books)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMaximumBooks(b *testing.B) {
+	books := []int{3, 1, 4, 1, 5}
+
+	for i := 0; i < b.N; i++ {
+		MaximumBooks(books)
+	}
+}

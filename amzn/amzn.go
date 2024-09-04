@@ -5487,3 +5487,45 @@ func GetMaxLen(nums []int) int {
 
 	return maxLen
 }
+
+// MaximumBooks - https://leetcode.com/problems/maximum-number-of-books-you-can-take/
+func MaximumBooks(books []int) int64 {
+	n := len(books)
+	if n == 1 {
+		return int64(books[0])
+	}
+
+	var stack []int
+	dp := make([]int, n+1)
+	maxBooks := 0
+
+	asum := func(x int) int {
+		return x * (x + 1) / 2
+	}
+
+	for i, book := range books {
+		for len(stack) > 0 && books[stack[len(stack)-1]] >= book-i+stack[len(stack)-1] {
+			stack = stack[:len(stack)-1]
+		}
+
+		curr := asum(book)
+
+		j := -1
+		if len(stack) > 0 {
+			j = stack[len(stack)-1]
+		}
+
+		if prevBooks := book - i + j; prevBooks > 0 {
+			curr += dp[j+1] + asum(prevBooks)
+		}
+
+		dp[i+1] = curr
+		if curr > maxBooks {
+			maxBooks = curr
+		}
+
+		stack = append(stack, i)
+	}
+
+	return int64(maxBooks)
+}

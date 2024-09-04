@@ -7548,3 +7548,48 @@ func BenchmarkMaximumBooks(b *testing.B) {
 		MaximumBooks(books)
 	}
 }
+
+func TestReachNumber(t *testing.T) {
+	tests := []struct {
+		name     string
+		target   int
+		expected int
+	}{
+		{
+			name:     "PositiveTarget",
+			target:   5,
+			expected: 5,
+		},
+		{
+			name:     "NegativeTarget",
+			target:   -5,
+			expected: 5,
+		},
+		{
+			name:     "ZeroTarget",
+			target:   0,
+			expected: 0,
+		},
+		{
+			name:     "LargeTarget",
+			target:   1000,
+			expected: 47,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := ReachNumber(tt.target)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkReachNumber(b *testing.B) {
+	target := 1000
+
+	for i := 0; i < b.N; i++ {
+		ReachNumber(target)
+	}
+}

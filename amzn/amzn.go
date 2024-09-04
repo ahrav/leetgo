@@ -5527,3 +5527,18 @@ func MaximumBooks(books []int) int64 {
 
 	return int64(maxBooks)
 }
+
+// ReachNumber - https://leetcode.com/problems/reach-a-number/
+func ReachNumber(target int) int {
+	if target < 0 {
+		target = -target
+	}
+
+	sum, moves := 0, 0
+	for sum < target || (sum-target)%2 != 0 {
+		moves++
+		sum += moves
+	}
+
+	return moves
+}

@@ -7804,3 +7804,45 @@ func BenchmarkMostExpensiveItem(b *testing.B) {
 		mostExpensiveItem(101, 103)
 	}
 }
+
+func TestMostExpensiveItemDP(t *testing.T) {
+	tests := []struct {
+		name     string
+		primeOne int
+		primeTwo int
+		expected int
+	}{
+		{
+			name:     "Basic",
+			primeOne: 3,
+			primeTwo: 5,
+			expected: 7,
+		},
+		{
+			name:     "LargePrimes",
+			primeOne: 101,
+			primeTwo: 103,
+			expected: 10199,
+		},
+		{
+			name:     "EdgeCaseOne",
+			primeOne: 2,
+			primeTwo: 3,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := mostExpensiveItemDP(tt.primeOne, tt.primeTwo)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMostExpensiveItemDP(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mostExpensiveItem(101, 103)
+	}
+}

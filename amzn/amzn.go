@@ -5657,6 +5657,31 @@ func ShortestBridge(grid [][]int) int {
 }
 
 // MostExpensiveItem - https://leetcode.com/problems/most-expensive-item-that-can-not-be-bought/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
-func mostExpensiveItem(primeOne int, primeTwo int) int {
+func mostExpensiveItem(primeOne, primeTwo int) int {
 	return primeOne*primeTwo - primeOne - primeTwo
+}
+
+// MostExpensiveItemDP - https://leetcode.com/problems/most-expensive-item-that-can-not-be-bought/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func mostExpensiveItemDP(primeOne, primeTwo int) int {
+	maxSum := primeOne * primeTwo
+
+	dp := make([]bool, maxSum+1)
+	dp[0] = true
+
+	for i := 1; i <= maxSum; i++ {
+		if i >= primeOne && dp[i-primeOne] {
+			dp[i] = true
+		}
+		if i >= primeTwo && dp[i-primeTwo] {
+			dp[i] = true
+		}
+	}
+
+	for i := maxSum; i >= 0; i-- {
+		if !dp[i] {
+			return i
+		}
+	}
+
+	return 0
 }

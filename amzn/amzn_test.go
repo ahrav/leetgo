@@ -7877,3 +7877,34 @@ func BenchmarkSubArrayRanges(b *testing.B) {
 		SubArrayRanges(nums)
 	}
 }
+
+func TestMinSwapsBinaryString(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int
+	}{
+		{"EqualZeroAndOne", "010101", 0},
+		{"UnequalZeroAndOne", "000111", 1},
+		{"UnequalZeroAndOneReturnsNegativeOne", "000011", -1},
+		{"AllZeros", "0000", -1},
+		{"AllOnes", "1111", -1},
+		{"SingleZero", "0", 0},
+		{"SingleOne", "1", 0},
+		{"EmptyString", "", 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := MinSwapsBinaryString(tt.input)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMinSwapsBinaryString(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		MinSwapsBinaryString("010101")
+	}
+}

@@ -5728,3 +5728,54 @@ func SubArrayRanges(nums []int) int64 {
 
 	return int64(sum)
 }
+
+// MinSwapsBinaryString - https://leetcode.com/problems/minimum-number-of-swaps-to-make-the-binary-string-alternating/
+func MinSwapsBinaryString(s string) int {
+	zeroCnt, oneCnt := 0, 0
+	for _, c := range s {
+		if c == '1' {
+			oneCnt++
+		} else {
+			zeroCnt++
+		}
+	}
+
+	abs := func(x int) int {
+		if x < 0 {
+			return -x
+		}
+		return x
+	}
+
+	if abs(zeroCnt-oneCnt) > 1 {
+		return -1
+	}
+
+	evenMiss, oddMiss := 0, 0
+	for i, c := range s {
+		if i%2 == 0 {
+			if c != '0' {
+				evenMiss++
+			}
+			if c != '1' {
+				oddMiss++
+			}
+		} else {
+			if c != '1' {
+				evenMiss++
+			}
+			if c != 0 {
+				oddMiss++
+			}
+		}
+	}
+
+	if zeroCnt == oneCnt {
+		return min(evenMiss, oddMiss) / 2
+	}
+
+	if zeroCnt > oneCnt {
+		return evenMiss / 2
+	}
+	return oddMiss / 2
+}

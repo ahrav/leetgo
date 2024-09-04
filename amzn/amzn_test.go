@@ -7593,3 +7593,81 @@ func BenchmarkReachNumber(b *testing.B) {
 		ReachNumber(target)
 	}
 }
+
+func TestClosedIsland(t *testing.T) {
+	tests := []struct {
+		name     string
+		grid     [][]int
+		expected int
+	}{
+		{
+			name: "SingleIsland",
+			grid: [][]int{
+				{1, 1, 1, 1, 1},
+				{1, 0, 0, 0, 1},
+				{1, 0, 1, 0, 1},
+				{1, 0, 0, 0, 1},
+				{1, 1, 1, 1, 1},
+			},
+			expected: 1,
+		},
+		{
+			name: "MultipleIslands",
+			grid: [][]int{
+				{1, 1, 1, 1, 1, 1, 1},
+				{1, 0, 0, 0, 1, 0, 1},
+				{1, 0, 1, 0, 1, 0, 1},
+				{1, 0, 0, 0, 1, 0, 1},
+				{1, 1, 1, 1, 1, 1, 1},
+			},
+			expected: 2,
+		},
+		{
+			name: "NoIslands",
+			grid: [][]int{
+				{1, 1, 1, 1},
+				{1, 1, 1, 1},
+				{1, 1, 1, 1},
+				{1, 1, 1, 1},
+			},
+			expected: 0,
+		},
+		{
+			name: "EdgeCaseSmallGrid",
+			grid: [][]int{
+				{0, 0},
+				{0, 0},
+			},
+			expected: 0,
+		},
+		{
+			name: "EdgeCaseSingleCell",
+			grid: [][]int{
+				{0},
+			},
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := ClosedIsland(tt.grid)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkClosedIsland(b *testing.B) {
+	grid := [][]int{
+		{1, 1, 1, 1, 1, 1, 1},
+		{1, 0, 0, 0, 1, 0, 1},
+		{1, 0, 1, 0, 1, 0, 1},
+		{1, 0, 0, 0, 1, 0, 1},
+		{1, 1, 1, 1, 1, 1, 1},
+	}
+
+	for i := 0; i < b.N; i++ {
+		ClosedIsland(grid)
+	}
+}

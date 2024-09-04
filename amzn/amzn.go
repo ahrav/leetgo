@@ -5655,3 +5655,8 @@ func ShortestBridge(grid [][]int) int {
 
 	return -1
 }
+
+// MostExpensiveItem - https://leetcode.com/problems/most-expensive-item-that-can-not-be-bought/?envType=company&envId=amazon&favoriteSlug=amazon-thirty-days
+func mostExpensiveItem(primeOne int, primeTwo int) int {
+	return primeOne*primeTwo - primeOne - primeTwo
+}

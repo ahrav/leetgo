@@ -7750,3 +7750,57 @@ func BenchmarkShortestBridge(b *testing.B) {
 		ShortestBridge(grid)
 	}
 }
+
+func TestMostExpensiveItem(t *testing.T) {
+	tests := []struct {
+		name     string
+		primeOne int
+		primeTwo int
+		expected int
+	}{
+		{
+			name:     "Basic",
+			primeOne: 3,
+			primeTwo: 5,
+			expected: 7,
+		},
+		{
+			name:     "SamePrimes",
+			primeOne: 7,
+			primeTwo: 7,
+			expected: 35,
+		},
+		{
+			name:     "LargePrimes",
+			primeOne: 101,
+			primeTwo: 103,
+			expected: 10199,
+		},
+		{
+			name:     "EdgeCaseOne",
+			primeOne: 2,
+			primeTwo: 3,
+			expected: 1,
+		},
+		{
+			name:     "EdgeCaseTwo",
+			primeOne: 2,
+			primeTwo: 2,
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := mostExpensiveItem(tt.primeOne, tt.primeTwo)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMostExpensiveItem(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mostExpensiveItem(101, 103)
+	}
+}

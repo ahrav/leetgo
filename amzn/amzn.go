@@ -5509,7 +5509,6 @@ func MaximumBooks(books []int) int64 {
 		}
 
 		curr := asum(book)
-
 		j := -1
 		if len(stack) > 0 {
 			j = stack[len(stack)-1]
@@ -5523,7 +5522,6 @@ func MaximumBooks(books []int) int64 {
 		if curr > maxBooks {
 			maxBooks = curr
 		}
-
 		stack = append(stack, i)
 	}
 

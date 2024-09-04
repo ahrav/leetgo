@@ -5779,3 +5779,19 @@ func MinSwapsBinaryString(s string) int {
 	}
 	return oddMiss / 2
 }
+
+// - MinimumOperationsArrayZero - https://leetcode.com/problems/make-array-zero-by-subtracting-equal-amounts/
+func MinimumOperationsArrayZero(nums []int) int {
+	var set [101]bool
+	set[0] = true
+
+	counter := 0
+	for _, num := range nums {
+		if !set[num] {
+			set[num] = true
+			counter++
+		}
+	}
+
+	return counter
+}

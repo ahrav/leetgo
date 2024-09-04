@@ -7908,3 +7908,33 @@ func BenchmarkMinSwapsBinaryString(b *testing.B) {
 		MinSwapsBinaryString("010101")
 	}
 }
+
+func TestMinimumOperationsArrayZero(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    []int
+		expected int
+	}{
+		{"AllUniqueElements", []int{1, 2, 3, 4, 5}, 5},
+		{"AllSameElements", []int{1, 1, 1, 1, 1}, 1},
+		{"MixedElements", []int{1, 2, 2, 3, 3, 3, 4, 4, 4, 4}, 4},
+		{"EmptyArray", []int{}, 0},
+		{"SingleElement", []int{1}, 1},
+		{"ZeroIncluded", []int{0, 1, 2, 3}, 3},
+		{"LargeNumbers", []int{100, 99, 98, 97}, 4},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := MinimumOperationsArrayZero(tt.input)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMinimumOperationsArrayZero(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		MinimumOperationsArrayZero([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+	}
+}

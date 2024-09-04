@@ -5586,3 +5586,72 @@ func ClosedIsland(grid [][]int) int {
 
 	return numIslands
 }
+
+// ShortestBridge - https://leetcode.com/problems/shortest-bridge/
+func ShortestBridge(grid [][]int) int {
+	n := len(grid)
+
+	directions := [4][2]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
+
+	isValid := func(x, y int) bool {
+		return x >= 0 && x < n && y >= 0 && y < n
+	}
+
+	var islands [][2]int
+	visited := make([][]bool, n)
+	for i := range visited {
+		visited[i] = make([]bool, n)
+	}
+
+	var dfs func(x, y int)
+	dfs = func(x, y int) {
+		if !isValid(x, y) || visited[x][y] || grid[x][y] == 0 {
+			return
+		}
+
+		visited[x][y] = true
+		islands = append(islands, [2]int{x, y})
+
+		for _, dir := range directions {
+			newRow, newCol := x+dir[0], y+dir[1]
+			dfs(newRow, newCol)
+		}
+	}
+
+	found := false
+	for i := 0; i < n && !found; i++ {
+		for j := 0; j < n && !found; j++ {
+			if grid[i][j] == 1 {
+				dfs(i, j)
+				found = true
+			}
+		}
+	}
+
+	numChanges := 0
+	queue := islands
+
+	for len(queue) > 0 {
+		levelSize := len(queue)
+		for range levelSize {
+			cell := queue[0]
+			queue = queue[1:]
+
+			for _, dir := range directions {
+				newRow, newCol := cell[0]+dir[0], cell[1]+dir[1]
+				if isValid(newRow, newCol) {
+					if !visited[newRow][newCol] && grid[newRow][newCol] == 1 {
+						return numChanges
+					}
+					if !visited[newRow][newCol] && grid[newRow][newCol] == 0 {
+						visited[newRow][newCol] = true
+						queue = append(queue, [2]int{newRow, newCol})
+					}
+				}
+			}
+		}
+		numChanges++
+	}
+
+	return -1
+}

@@ -7671,3 +7671,82 @@ func BenchmarkClosedIsland(b *testing.B) {
 		ClosedIsland(grid)
 	}
 }
+
+func TestShortestBridge(t *testing.T) {
+	tests := []struct {
+		name     string
+		grid     [][]int
+		expected int
+	}{
+		{
+			name: "SingleBridge",
+			grid: [][]int{
+				{0, 1, 0, 0, 0},
+				{0, 1, 0, 1, 1},
+				{0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0},
+			},
+			expected: 1,
+		},
+		{
+			name: "MultipleBridges",
+			grid: [][]int{
+				{1, 1, 0, 0, 0},
+				{1, 0, 0, 1, 1},
+				{0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0},
+			},
+			expected: 2,
+		},
+		{
+			name: "NoBridgeNeeded",
+			grid: [][]int{
+				{1, 1, 0, 0, 0},
+				{1, 1, 0, 0, 0},
+				{0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0},
+				{0, 0, 0, 0, 0},
+			},
+			expected: -1,
+		},
+		{
+			name: "EdgeCaseSingleCell",
+			grid: [][]int{
+				{0},
+			},
+			expected: -1,
+		},
+		{
+			name: "EdgeCaseSmallGrid",
+			grid: [][]int{
+				{0, 1},
+				{1, 0},
+			},
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := ShortestBridge(tt.grid)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkShortestBridge(b *testing.B) {
+	grid := [][]int{
+		{0, 1, 0, 0, 0},
+		{0, 1, 0, 1, 1},
+		{0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0},
+	}
+
+	for i := 0; i < b.N; i++ {
+		ShortestBridge(grid)
+	}
+}

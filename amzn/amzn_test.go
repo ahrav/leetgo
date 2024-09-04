@@ -7793,7 +7793,7 @@ func TestMostExpensiveItem(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			result := mostExpensiveItem(tt.primeOne, tt.primeTwo)
+			result := MostExpensiveItem(tt.primeOne, tt.primeTwo)
 			assert.Equal(t, tt.expected, result)
 		})
 	}
@@ -7801,7 +7801,7 @@ func TestMostExpensiveItem(t *testing.T) {
 
 func BenchmarkMostExpensiveItem(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		mostExpensiveItem(101, 103)
+		MostExpensiveItem(101, 103)
 	}
 }
 
@@ -7835,7 +7835,7 @@ func TestMostExpensiveItemDP(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			result := mostExpensiveItemDP(tt.primeOne, tt.primeTwo)
+			result := MostExpensiveItemDP(tt.primeOne, tt.primeTwo)
 			assert.Equal(t, tt.expected, result)
 		})
 	}
@@ -7843,6 +7843,6 @@ func TestMostExpensiveItemDP(t *testing.T) {
 
 func BenchmarkMostExpensiveItemDP(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		mostExpensiveItem(101, 103)
+		MostExpensiveItem(101, 103)
 	}
 }

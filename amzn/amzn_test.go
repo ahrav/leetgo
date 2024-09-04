@@ -7846,3 +7846,34 @@ func BenchmarkMostExpensiveItemDP(b *testing.B) {
 		MostExpensiveItem(101, 103)
 	}
 }
+
+func TestSubArrayRanges(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int64
+	}{
+		{"SingleElement", []int{1}, 0},
+		{"TwoElements", []int{1, 2}, 1},
+		{"ThreeElements", []int{1, 2, 3}, 4},
+		{"AllSameElements", []int{2, 2, 2}, 0},
+		{"MixedElements", []int{1, 3, 2, 4}, 12},
+		{"DescendingOrder", []int{4, 3, 2, 1}, 10},
+		{"EmptyArray", []int{}, 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := SubArrayRanges(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkSubArrayRanges(b *testing.B) {
+	nums := []int{1, 3, 2, 4, 5, 6, 7, 8, 9, 10}
+	for i := 0; i < b.N; i++ {
+		SubArrayRanges(nums)
+	}
+}

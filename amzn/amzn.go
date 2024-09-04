@@ -5685,3 +5685,46 @@ func MostExpensiveItemDP(primeOne, primeTwo int) int {
 
 	return 0
 }
+
+// SubArrayRanges - https://leetcode.com/problems/sum-of-subarray-ranges/
+func SubArrayRanges(nums []int) int64 {
+	n := len(nums)
+	stack := make([]int, 0, n)
+	sum := 0
+
+	for right := 0; right <= n; right++ {
+		for len(stack) > 0 && (right == n || nums[stack[len(stack)-1]] > nums[right]) {
+			mid := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+
+			left := -1
+			if len(stack) > 0 {
+				left = stack[len(stack)-1]
+			}
+
+			sum -= nums[mid] * (mid - left) * (right - mid)
+		}
+
+		stack = append(stack, right)
+	}
+
+	stack = stack[:0]
+
+	for right := 0; right <= n; right++ {
+		for len(stack) > 0 && (right == n || nums[stack[len(stack)-1]] < nums[right]) {
+			mid := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+
+			left := -1
+			if len(stack) > 0 {
+				left = stack[len(stack)-1]
+			}
+
+			sum += nums[mid] * (mid - left) * (right - mid)
+		}
+
+		stack = append(stack, right)
+	}
+
+	return int64(sum)
+}

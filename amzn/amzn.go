@@ -5797,7 +5797,7 @@ func MinimumOperationsArrayZero(nums []int) int {
 }
 
 // SequentialDigits - https://leetcode.com/problems/sequential-digits/
-func SequentialDigits(low int, high int) []int {
+func SequentialDigits(low, high int) []int {
 	var result []int
 
 	baseDigits := "123456789"

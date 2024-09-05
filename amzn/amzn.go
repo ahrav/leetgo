@@ -5953,3 +5953,26 @@ func Racecar(target int) int {
 
 	return -1
 }
+
+// AppealSum - https://leetcode.com/problems/total-appeal-of-a-string/
+func AppealSum(s string) int64 {
+	var seen [26]int
+	for i := range seen {
+		seen[i] = -1
+	}
+
+	total, curr := 0, 0
+	for i := range s {
+		if idx := seen[s[i]-'a']; idx != -1 {
+			// Remove the previous contribution
+			curr -= idx + 1
+		}
+
+		curr += i + 1
+		total += curr
+
+		seen[s[i]-'a'] = i
+	}
+
+	return int64(total)
+}

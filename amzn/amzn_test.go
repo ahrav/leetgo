@@ -8083,3 +8083,32 @@ func BenchmarkRacecar(b *testing.B) {
 		Racecar(target)
 	}
 }
+
+func TestAppealSum(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		expected int64
+	}{
+		{"SingleCharacter", "a", 1},
+		{"AllUniqueCharacters", "abc", 10},
+		{"RepeatingCharacters", "abbca", 28},
+		{"EmptyString", "", 0},
+		{"LongString", "abcdefghijklmnopqrstuvwxyz", 3276},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := AppealSum(tt.s)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkAppealSum(b *testing.B) {
+	s := "abcdefghijklmnopqrstuvwxyz"
+	for i := 0; i < b.N; i++ {
+		AppealSum(s)
+	}
+}

@@ -7968,3 +7968,32 @@ func BenchmarkSequentialDigits(b *testing.B) {
 		SequentialDigits(10, 10000)
 	}
 }
+
+func TestTriangularSum(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{"SingleElement", []int{5}, 5},
+		{"MultipleElements", []int{1, 2, 3, 4, 5}, 8},
+		{"AllZeros", []int{0, 0, 0, 0}, 0},
+		{"LargeNumbers", []int{9, 9, 9, 9}, 2},
+		{"MixedNumbers", []int{3, 6, 1, 8, 2}, 7},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := TriangularSum(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkTriangularSum(b *testing.B) {
+	nums := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	for i := 0; i < b.N; i++ {
+		TriangularSum(nums)
+	}
+}

@@ -5819,3 +5819,18 @@ func SequentialDigits(low, high int) []int {
 
 	return result
 }
+
+// TriangularSum - https://leetcode.com/problems/find-triangular-sum-of-an-array/
+func TriangularSum(nums []int) int {
+	n := len(nums)
+	if n == 1 {
+		return nums[0]
+	}
+
+	newNums := make([]int, n-1)
+	for i := 1; i < n; i++ {
+		newNums[i-1] = (nums[i] + nums[i-1]) % 10
+	}
+
+	return TriangularSum(newNums)
+}

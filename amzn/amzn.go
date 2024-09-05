@@ -5834,3 +5834,39 @@ func TriangularSum(nums []int) int {
 
 	return TriangularSum(newNums)
 }
+
+// GoodDaysToRobBank - https://leetcode.com/problems/find-good-days-to-rob-the-bank/
+func GoodDaysToRobBank(security []int, time int) []int {
+	n := len(security)
+	if time == 0 {
+		result := make([]int, n)
+		for i := range n {
+			result[i] = i
+		}
+		return result
+	}
+
+	dec := make([]int, n)
+	inc := make([]int, n)
+
+	for i := 1; i < n; i++ {
+		if security[i-1] >= security[i] {
+			dec[i] = dec[i-1] + 1
+		}
+	}
+
+	for i := n - 2; i >= 0; i-- {
+		if security[i+1] >= security[i] {
+			inc[i] = inc[i+1] + 1
+		}
+	}
+
+	var result []int
+	for i := time; i < n-time; i++ {
+		if inc[i] >= time && dec[i] >= time {
+			result = append(result, i)
+		}
+	}
+
+	return result
+}

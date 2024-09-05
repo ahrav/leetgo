@@ -7997,3 +7997,32 @@ func BenchmarkTriangularSum(b *testing.B) {
 		TriangularSum(nums)
 	}
 }
+
+func TestGoodDaysToRobBank(t *testing.T) {
+	tests := []struct {
+		name     string
+		security []int
+		time     int
+		expected []int
+	}{
+		{"AllDays", []int{1, 2, 3, 4, 5}, 0, []int{0, 1, 2, 3, 4}},
+		{"SingleDay", []int{5, 3, 3, 3, 5, 6, 2}, 2, []int{2, 3}},
+		{"EdgeCase", []int{1}, 0, []int{0}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := GoodDaysToRobBank(tt.security, tt.time)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkGoodDaysToRobBank(b *testing.B) {
+	security := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	time := 2
+	for i := 0; i < b.N; i++ {
+		GoodDaysToRobBank(security, time)
+	}
+}

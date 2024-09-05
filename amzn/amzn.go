@@ -5909,3 +5909,47 @@ func MinMovesToMakePalindrome(s string) int {
 
 	return moves
 }
+
+// Racecar - https://leetcode.com/problems/race-car/
+func Racecar(target int) int {
+	type State struct{ speed, pos int }
+
+	queue := list.New()
+	queue.PushBack(State{speed: 1, pos: 0})
+
+	visited := make(map[State]bool)
+	visited[State{speed: 1, pos: 0}] = true
+
+	upperLimit := 2 * target
+	steps := 0
+
+	for queue.Len() > 0 {
+		for range queue.Len() {
+			curr := queue.Remove(queue.Front()).(State)
+
+			if curr.pos == target {
+				return steps
+			}
+
+			newSpeed, newPos := curr.speed*2, curr.pos+curr.speed
+			newState := State{speed: newSpeed, pos: newPos}
+			if newPos > 0 && newPos < upperLimit && !visited[newState] {
+				visited[newState] = true
+				queue.PushBack(newState)
+			}
+
+			revSpeed := -1
+			if curr.speed < 0 {
+				revSpeed = 1
+			}
+			newState = State{speed: revSpeed, pos: curr.pos}
+			if !visited[newState] {
+				visited[newState] = true
+				queue.PushBack(newState)
+			}
+		}
+		steps++
+	}
+
+	return -1
+}

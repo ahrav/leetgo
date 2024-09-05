@@ -8055,3 +8055,31 @@ func BenchmarkMinMovesToMakePalindrome(b *testing.B) {
 		MinMovesToMakePalindrome(input)
 	}
 }
+
+func TestRacecar(t *testing.T) {
+	tests := []struct {
+		name     string
+		target   int
+		expected int
+	}{
+		{"RacecarReachesTarget", 3, 2},
+		{"RacecarReachesTargetWithHigherValue", 6, 5},
+		{"RacecarReachesTargetWithZero", 0, 0},
+		{"RacecarReachesTargetWithNegativeValue", -1, -1},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := Racecar(tt.target)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkRacecar(b *testing.B) {
+	target := 10000
+	for i := 0; i < b.N; i++ {
+		Racecar(target)
+	}
+}

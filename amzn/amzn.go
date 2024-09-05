@@ -5870,3 +5870,42 @@ func GoodDaysToRobBank(security []int, time int) []int {
 
 	return result
 }
+
+// MinMovesToMakePalindrome - https://leetcode.com/problems/minimum-number-of-moves-to-make-palindrome/
+func MinMovesToMakePalindrome(s string) int {
+	n := len(s)
+
+	arr := []rune(s)
+	lp, rp := 0, n-1
+	moves := 0
+
+	for lp < rp {
+		if arr[lp] == arr[rp] {
+			lp++
+			rp--
+			continue
+		}
+
+		left := rp
+		for arr[left] != arr[lp] {
+			left--
+		}
+
+		if left == lp {
+			// Middle character.
+			arr[left], arr[left+1] = arr[left+1], arr[left]
+			moves++
+		} else {
+			for left < rp {
+				arr[left], arr[left+1] = arr[left+1], arr[left]
+				left++
+				moves++
+			}
+
+			lp++
+			rp--
+		}
+	}
+
+	return moves
+}

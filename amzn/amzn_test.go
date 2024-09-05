@@ -8026,3 +8026,32 @@ func BenchmarkGoodDaysToRobBank(b *testing.B) {
 		GoodDaysToRobBank(security, time)
 	}
 }
+
+func TestMinMovesToMakePalindrome(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected int
+	}{
+		{"PalindromeAlready", "racecar", 0},
+		{"SingleCharacter", "a", 0},
+		{"MultipleMoves", "aabb", 2},
+		{"ComplexPalindrome", "abcba", 0},
+		{"EmptyString", "", 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := MinMovesToMakePalindrome(tt.input)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMinMovesToMakePalindrome(b *testing.B) {
+	input := "aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz"
+	for i := 0; i < b.N; i++ {
+		MinMovesToMakePalindrome(input)
+	}
+}

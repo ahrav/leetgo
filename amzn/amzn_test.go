@@ -7938,3 +7938,33 @@ func BenchmarkMinimumOperationsArrayZero(b *testing.B) {
 		MinimumOperationsArrayZero([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	}
 }
+
+func TestSequentialDigits(t *testing.T) {
+	tests := []struct {
+		name     string
+		low      int
+		high     int
+		expected []int
+	}{
+		{"RangeWithinSingleDigit", 10, 12, []int{12}},
+		{"RangeWithinDoubleDigits", 10, 100, []int{12, 23, 34, 45, 56, 67, 78, 89}},
+		{"RangeCrossingDoubleDigits", 10, 123, []int{12, 23, 34, 45, 56, 67, 78, 89, 123}},
+		{"RangeWithinTripleDigits", 100, 300, []int{123, 234}},
+		{"RangeWithSingleSequentialDigit", 123, 123, []int{123}},
+		{"RangeWithLargeNumbers", 1000, 13000, []int{1234, 2345, 3456, 4567, 5678, 6789, 12345}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := SequentialDigits(tt.low, tt.high)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkSequentialDigits(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		SequentialDigits(10, 10000)
+	}
+}

@@ -5795,3 +5795,27 @@ func MinimumOperationsArrayZero(nums []int) int {
 
 	return counter
 }
+
+// SequentialDigits - https://leetcode.com/problems/sequential-digits/
+func SequentialDigits(low int, high int) []int {
+	var result []int
+
+	baseDigits := "123456789"
+
+	for length := 2; length <= 9; length++ {
+		for start := 0; start+length <= 9; start++ {
+			num := baseDigits[start : start+length]
+
+			seqDigits := 0
+			for _, d := range num {
+				seqDigits = seqDigits*10 + int(d-'0')
+			}
+
+			if seqDigits >= low && seqDigits <= high {
+				result = append(result, seqDigits)
+			}
+		}
+	}
+
+	return result
+}

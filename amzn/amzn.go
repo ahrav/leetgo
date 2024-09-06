@@ -5976,3 +5976,54 @@ func AppealSum(s string) int64 {
 
 	return int64(total)
 }
+
+// TicTacToe - https://leetcode.com/problems/design-tic-tac-toe/
+type TicTacToe struct {
+	board      [][]byte
+	directions [8][2]int
+	players    [3]byte
+	size       int
+}
+
+func TicTacToeConstructor(n int) TicTacToe {
+	board := make([][]byte, n)
+	for i := range board {
+		board[i] = make([]byte, n)
+	}
+
+	players := [3]byte{'.', 'x', 'o'}
+	directions := [8][2]int{
+		{-1, 0}, {1, 0}, // vertical (up, down)
+		{0, -1}, {0, 1}, // horizontal (left, right)
+		{-1, -1}, {1, 1}, // diagonal (top-left to bottom-right)
+		{-1, 1}, {1, -1}, // anti-diagonal (top-right to bottom-left)
+	}
+
+	return TicTacToe{board: board, size: n, players: players, directions: directions}
+}
+
+func (t *TicTacToe) Move(row int, col int, player int) int {
+	t.board[row][col] = t.players[player]
+
+	checkDirection := func(dir [2]int) int {
+		depth := 0
+		r, c := row+dir[0], col+dir[1]
+		for r >= 0 && r < t.size && c >= 0 && c < t.size && t.board[r][c] == t.players[player] {
+			depth++
+			r += dir[0]
+			c += dir[1]
+		}
+		return depth
+	}
+
+	for i := 0; i < len(t.directions); i += 2 {
+		fwdDir, bckDir := t.directions[i], t.directions[i+1]
+
+		fwdDepth, bckDepth := checkDirection(fwdDir), checkDirection(bckDir)
+		if fwdDepth+bckDepth+1 >= t.size {
+			return player
+		}
+	}
+
+	return 0
+}

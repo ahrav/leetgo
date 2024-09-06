@@ -8112,3 +8112,33 @@ func BenchmarkAppealSum(b *testing.B) {
 		AppealSum(s)
 	}
 }
+
+func TestMinimumHealth(t *testing.T) {
+	tests := []struct {
+		name     string
+		damage   []int
+		armor    int
+		expected int64
+	}{
+		{"SingleDamage", []int{10}, 5, 6},
+		{"MultipleDamage", []int{5, 10, 15}, 10, 21},
+		{"ArmorGreaterThanMaxDamage", []int{5, 10, 15}, 20, 16},
+		{"ArmorZero", []int{5, 10, 15}, 0, 31},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := MinimumHealth(tt.damage, tt.armor)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMinimumHealth(b *testing.B) {
+	damage := []int{5, 10, 15, 20, 25, 30, 35, 40, 45, 50}
+	armor := 25
+	for i := 0; i < b.N; i++ {
+		MinimumHealth(damage, armor)
+	}
+}

@@ -6027,3 +6027,18 @@ func (t *TicTacToe) Move(row int, col int, player int) int {
 
 	return 0
 }
+
+// MinimumHealth - https://leetcode.com/problems/minimum-health-to-beat-game/
+func MinimumHealth(damage []int, armor int) int64 {
+	n := len(damage)
+	maxV, total := damage[0], damage[0]+1
+
+	for i := 1; i < n; i++ {
+		total += damage[i]
+		if d := damage[i]; d > maxV {
+			maxV = d
+		}
+	}
+
+	return int64(total - min(armor, maxV))
+}

@@ -8142,3 +8142,35 @@ func BenchmarkMinimumHealth(b *testing.B) {
 		MinimumHealth(damage, armor)
 	}
 }
+
+func TestEvalRPN(t *testing.T) {
+	tests := []struct {
+		name     string
+		tokens   []string
+		expected int
+	}{
+		{"EvaluateSingleNumber", []string{"3"}, 3},
+		{"EvaluateSimpleAddition", []string{"2", "3", "+"}, 5},
+		{"EvaluateSimpleSubtraction", []string{"5", "3", "-"}, 2},
+		{"EvaluateSimpleMultiplication", []string{"2", "3", "*"}, 6},
+		{"EvaluateSimpleDivision", []string{"6", "3", "/"}, 2},
+		{"EvaluateComplexExpression", []string{"2", "1", "+", "3", "*"}, 9},
+		{"EvaluateExpressionWithNegativeResult", []string{"4", "13", "5", "/", "+"}, 6},
+		{"EvaluateExpressionWithMultipleOperators", []string{"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"}, 22},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := EvalRPN(tt.tokens)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkEvalRPN(b *testing.B) {
+	tokens := []string{"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"}
+	for i := 0; i < b.N; i++ {
+		EvalRPN(tokens)
+	}
+}

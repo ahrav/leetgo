@@ -6042,3 +6042,60 @@ func MinimumHealth(damage []int, armor int) int64 {
 
 	return int64(total - min(armor, maxV))
 }
+
+// EvalRPN - https://leetcode.com/problems/evaluate-reverse-polish-notation/
+func EvalRPN(tokens []string) int {
+	type expressionType int
+	const (
+		add expressionType = iota
+		sub
+		mult
+		div
+	)
+
+	expressions := map[string]expressionType{
+		"+": add,
+		"-": sub,
+		"*": mult,
+		"/": div,
+	}
+
+	var stack []int
+	for _, tok := range tokens {
+		expr, ok := expressions[tok]
+		if !ok {
+			val, _ := strconv.Atoi(tok)
+			stack = append(stack, val)
+			continue
+		}
+
+		switch expr {
+		case add:
+			op1 := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			op2 := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			stack = append(stack, op2+op1)
+		case sub:
+			op1 := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			op2 := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			stack = append(stack, op2-op1)
+		case mult:
+			op1 := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			op2 := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			stack = append(stack, op2*op1)
+		case div:
+			op1 := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			op2 := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			stack = append(stack, op2/op1)
+		}
+	}
+
+	return stack[0]
+}

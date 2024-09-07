@@ -1,6 +1,7 @@
 package top50
 
 import (
+	"container/heap"
 	"sort"
 	"strings"
 )
@@ -160,6 +161,7 @@ func MinimumSwaps(nums []int) int {
 	return totalSwaps - 1
 }
 
+// MinMeetingRooms - https://leetcode.com/problems/meeting-rooms-ii/
 func MinMeetingRooms(intervals [][]int) int {
 	n := len(intervals)
 	if n == 1 {
@@ -193,4 +195,67 @@ func MinMeetingRooms(intervals [][]int) int {
 	}
 
 	return maxRooms
+}
+
+type CharFreq struct {
+	freq int
+	char byte
+}
+
+type MaxCharFreqHeap []CharFreq
+
+func (h MaxCharFreqHeap) Len() int           { return len(h) }
+func (h MaxCharFreqHeap) Less(i, j int) bool { return h[i].freq > h[j].freq }
+func (h MaxCharFreqHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *MaxCharFreqHeap) Push(x any) { *h = append(*h, x.(CharFreq)) }
+func (h *MaxCharFreqHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[:n-1]
+	return x
+}
+
+// ReorganizeString - https://leetcode.com/problems/reorganize-string/
+func ReorganizeString(s string) string {
+	n := len(s)
+	if n == 1 {
+		return s
+	}
+
+	half := (n + 1) / 2
+	var charFreq [26]int
+	for _, char := range s {
+		charFreq[char-'a']++
+		if charFreq[char-'a'] > half {
+			return ""
+		}
+	}
+
+	h := new(MaxCharFreqHeap)
+	heap.Init(h)
+
+	for idx, freq := range charFreq {
+		if freq > 0 {
+			heap.Push(h, CharFreq{char: byte(idx) + 'a', freq: freq})
+		}
+	}
+
+	var builder strings.Builder
+	var prev CharFreq
+
+	for h.Len() > 0 {
+		cf := heap.Pop(h).(CharFreq)
+		builder.WriteByte(cf.char)
+
+		if prev.freq > 0 {
+			heap.Push(h, prev)
+		}
+
+		cf.freq--
+		prev = cf
+	}
+
+	return builder.String()
 }

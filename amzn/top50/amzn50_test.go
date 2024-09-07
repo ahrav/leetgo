@@ -355,3 +355,54 @@ func BenchmarkMinMeetingRooms(b *testing.B) {
 		_ = MinMeetingRooms([][]int{{0, 30}, {5, 10}, {15, 20}, {25, 30}, {30, 35}})
 	}
 }
+
+func TestReorganizeString(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		expected string
+	}{
+		{
+			name:     "Single character",
+			s:        "a",
+			expected: "a",
+		},
+		{
+			name:     "Two characters",
+			s:        "aa",
+			expected: "",
+		},
+		{
+			name:     "Three characters",
+			s:        "aab",
+			expected: "aba",
+		},
+		{
+			name:     "Five characters",
+			s:        "aaabb",
+			expected: "ababa",
+		},
+		{
+			name:     "Six characters",
+			s:        "aaabbb",
+			expected: "ababab",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := ReorganizeString(tt.s)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkReorganizeString(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = ReorganizeString("aaabbb")
+	}
+}

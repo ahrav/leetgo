@@ -8174,3 +8174,30 @@ func BenchmarkEvalRPN(b *testing.B) {
 		EvalRPN(tokens)
 	}
 }
+
+func TestNthUglyNumber(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected int
+	}{
+		{"FirstUglyNumber", 1, 1},
+		{"TenthUglyNumber", 10, 12},
+		{"FiftiethUglyNumber", 50, 243},
+		{"HundredthUglyNumber", 100, 1536},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := NthUglyNumber(tt.n)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkNthUglyNumber(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		NthUglyNumber(1000)
+	}
+}

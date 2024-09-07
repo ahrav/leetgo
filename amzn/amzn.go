@@ -6140,3 +6140,34 @@ func ReverseKGroup(head *ListNode, k int) *ListNode {
 
 	return dummy.Next
 }
+
+// NthUglyNumber - https://leetcode.com/problems/ugly-number-ii/
+func NthUglyNumber(n int) int {
+	ugly := make([]int, n)
+	ugly[0] = 1
+
+	p2, p3, p5 := 0, 0, 0
+	next2, next3, next5 := 2, 3, 5
+
+	for i := 1; i < n; i++ {
+		nextUgly := min(next2, next3, next5)
+		ugly[i] = nextUgly
+
+		if nextUgly == next2 {
+			p2++
+			next2 = ugly[p2] * 2
+		}
+
+		if nextUgly == next3 {
+			p3++
+			next3 = ugly[p3] * 3
+		}
+
+		if nextUgly == next5 {
+			p5++
+			next5 = ugly[p5] * 5
+		}
+	}
+
+	return ugly[n-1]
+}

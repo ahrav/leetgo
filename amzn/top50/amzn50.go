@@ -110,3 +110,24 @@ func NumIslands(grid [][]byte) int {
 
 	return numIslands
 }
+
+// GroupAnagrams - https://leetcode.com/problems/group-anagrams/
+func GroupAnagrams(strs []string) [][]string {
+	freq := make(map[[26]int][]string)
+
+	for _, word := range strs {
+		var cnt [26]int
+		for _, char := range word {
+			cnt[char-'a']++
+		}
+
+		freq[cnt] = append(freq[cnt], word)
+	}
+
+	result := make([][]string, 0, len(freq))
+	for _, words := range freq {
+		result = append(result, words)
+	}
+
+	return result
+}

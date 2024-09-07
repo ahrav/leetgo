@@ -3,6 +3,8 @@ package top50
 import (
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -176,5 +178,55 @@ func BenchmarkNumIslands(b *testing.B) {
 			{'0', '0', '1', '0', '0'},
 			{'0', '0', '0', '1', '1'},
 		})
+	}
+}
+
+func TestGroupAnagrams(t *testing.T) {
+	tests := []struct {
+		name     string
+		strs     []string
+		expected [][]string
+	}{
+		{
+			name:     "Example 1",
+			strs:     []string{"eat", "tea", "tan", "ate", "nat", "bat"},
+			expected: [][]string{{"bat"}, {"nat", "tan"}, {"ate", "eat", "tea"}},
+		},
+		{
+			name:     "Example 2",
+			strs:     []string{""},
+			expected: [][]string{{""}},
+		},
+		{
+			name:     "Example 3",
+			strs:     []string{"a"},
+			expected: [][]string{{"a"}},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := GroupAnagrams(tt.strs)
+			sortGroups := cmpopts.SortSlices(func(a, b []string) bool {
+				return len(a) < len(b) || (len(a) == len(b) && a[0] < b[0])
+			})
+			sortStrings := cmpopts.SortSlices(func(a, b string) bool {
+				return a < b
+			})
+
+			if diff := cmp.Diff(tt.expected, actual, sortGroups, sortStrings); diff != "" {
+				t.Errorf("GroupAnagrams() mismatch (-want +got):\n%s", diff)
+			}
+		})
+	}
+}
+
+func BenchmarkGroupAnagrams(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = GroupAnagrams([]string{"eat", "tea", "tan", "ate", "nat", "bat"})
 	}
 }

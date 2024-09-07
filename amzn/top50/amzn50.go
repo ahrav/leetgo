@@ -78,3 +78,35 @@ func Trap(arr []int) int {
 
 	return water
 }
+
+// NumIslands - https://leetcode.com/problems/number-of-islands/
+func NumIslands(grid [][]byte) int {
+	rows, cols := len(grid), len(grid[0])
+
+	directions := [4][2]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
+
+	var dfs func(x, y int)
+	dfs = func(x, y int) {
+		if x < 0 || x >= rows || y < 0 || y >= cols || grid[x][y] == '0' {
+			return
+		}
+
+		grid[x][y] = '0'
+		for _, dir := range directions {
+			nr, nc := x+dir[0], y+dir[1]
+			dfs(nr, nc)
+		}
+	}
+
+	numIslands := 0
+	for i := range rows {
+		for j := range cols {
+			if grid[i][j] == '1' {
+				dfs(i, j)
+				numIslands++
+			}
+		}
+	}
+
+	return numIslands
+}

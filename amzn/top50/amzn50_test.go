@@ -118,3 +118,63 @@ func BenchmarkTrap(b *testing.B) {
 		_ = Trap(height)
 	}
 }
+
+func TestNumIslands(t *testing.T) {
+	tests := []struct {
+		name     string
+		grid     [][]byte
+		expected int
+	}{
+		{
+			name: "Example 1",
+			grid: [][]byte{
+				{'1', '1', '1', '1', '0'},
+				{'1', '1', '0', '1', '0'},
+				{'1', '1', '0', '0', '0'},
+				{'0', '0', '0', '0', '0'},
+			},
+			expected: 1,
+		},
+		{
+			name: "Example 2",
+			grid: [][]byte{
+				{'1', '1', '0', '0', '0'},
+				{'1', '1', '0', '0', '0'},
+				{'0', '0', '1', '0', '0'},
+				{'0', '0', '0', '1', '1'},
+			},
+			expected: 3,
+		},
+		{
+			name: "Example 3",
+			grid: [][]byte{
+				{'1', '0', '1', '1', '1'},
+				{'1', '0', '1', '0', '1'},
+				{'1', '1', '1', '0', '1'},
+			},
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			actual := NumIslands(tt.grid)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkNumIslands(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = NumIslands([][]byte{
+			{'1', '1', '0', '0', '0'},
+			{'1', '1', '0', '0', '0'},
+			{'0', '0', '1', '0', '0'},
+			{'0', '0', '0', '1', '1'},
+		})
+	}
+}

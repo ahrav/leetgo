@@ -1,6 +1,9 @@
 package top50
 
-import "strings"
+import (
+	"sort"
+	"strings"
+)
 
 // NumberToWords - https://leetcode.com/problems/integer-to-english-words/
 func NumberToWords(num int) string {
@@ -155,4 +158,39 @@ func MinimumSwaps(nums []int) int {
 	}
 
 	return totalSwaps - 1
+}
+
+func MinMeetingRooms(intervals [][]int) int {
+	n := len(intervals)
+	if n == 1 {
+		return 1
+	}
+
+	starts, ends := make([]int, n), make([]int, n)
+	for i := range n {
+		starts[i] = intervals[i][0]
+		ends[i] = intervals[i][1]
+	}
+
+	sort.Ints(starts)
+	sort.Ints(ends)
+
+	startPtr, endPtr := 0, 0
+	rooms, maxRooms := 0, 1
+
+	for startPtr < n {
+		if starts[startPtr] < ends[endPtr] {
+			rooms++
+			startPtr++
+		} else {
+			rooms--
+			endPtr++
+		}
+
+		if rooms > maxRooms {
+			maxRooms = rooms
+		}
+	}
+
+	return maxRooms
 }

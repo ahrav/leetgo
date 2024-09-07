@@ -6099,3 +6099,44 @@ func EvalRPN(tokens []string) int {
 
 	return stack[0]
 }
+
+// ReverseKGroup - https://leetcode.com/problems/reverse-nodes-in-k-group/
+func ReverseKGroup(head *ListNode, k int) *ListNode {
+	if head == nil || k == 1 {
+		return head
+	}
+
+	getKthNode := func(start *ListNode, k int) *ListNode {
+		for start != nil && k > 0 {
+			start = start.Next
+			k--
+		}
+		return start
+	}
+
+	dummy := &ListNode{Next: head}
+	prevGroup := dummy
+
+	for {
+		kthNode := getKthNode(prevGroup, k)
+		if kthNode == nil {
+			break
+		}
+
+		nextGroup := kthNode.Next
+
+		prev, curr := kthNode.Next, prevGroup.Next
+		for curr != nextGroup {
+			next := curr.Next
+			curr.Next = prev
+			prev = curr
+			curr = next
+		}
+
+		tmp := prevGroup.Next
+		prevGroup.Next = kthNode
+		prevGroup = tmp
+	}
+
+	return dummy.Next
+}

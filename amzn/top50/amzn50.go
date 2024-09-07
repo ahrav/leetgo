@@ -259,3 +259,58 @@ func ReorganizeString(s string) string {
 
 	return builder.String()
 }
+
+// OrangesRotting - https://leetcode.com/problems/rotting-oranges/
+func OrangesRotting(grid [][]int) int {
+	rows, cols := len(grid), len(grid[0])
+
+	var queue [][2]int
+	freshCnt := 0
+	for i := range rows {
+		for j := range cols {
+			if grid[i][j] == 1 {
+				freshCnt++
+			} else if grid[i][j] == 2 {
+				queue = append(queue, [2]int{i, j})
+			}
+		}
+	}
+
+	if freshCnt == 0 {
+		return 0
+	}
+
+	if len(queue) == 0 {
+		return -1
+	}
+
+	directions := [4][2]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
+
+	minutes := -1
+	for len(queue) > 0 {
+		level := len(queue)
+
+		for i := 0; i < level; i++ {
+			curr := queue[0]
+			queue = queue[1:]
+
+			for _, dir := range directions {
+				nr, nc := curr[0]+dir[0], curr[1]+dir[1]
+				if nr < 0 || nr >= rows || nc < 0 || nc >= cols || grid[nr][nc] == 0 {
+					continue
+				}
+				if grid[nr][nc] == 1 {
+					grid[nr][nc] = 2
+					freshCnt--
+					queue = append(queue, [2]int{nr, nc})
+				}
+			}
+		}
+		minutes++
+	}
+
+	if freshCnt == 0 {
+		return minutes
+	}
+	return -1
+}

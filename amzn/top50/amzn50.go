@@ -44,3 +44,37 @@ func NumberToWords(num int) string {
 
 	return strings.TrimSpace(strings.Join(result, " "))
 }
+
+// Trap - https://leetcode.com/problems/trapping-rain-water/
+func Trap(arr []int) int {
+	n := len(arr)
+	if n < 3 {
+		return 0
+	}
+
+	leftMax, rightMax := arr[0], arr[n-1]
+	left, right := 0, n-1
+
+	water := 0
+	for left < right {
+		if leftMax < rightMax {
+			left++
+
+			if arr[left] < leftMax {
+				water += leftMax - arr[left]
+			} else {
+				leftMax = arr[left]
+			}
+		} else {
+			right--
+
+			if arr[right] < rightMax {
+				water += rightMax - arr[right]
+			} else {
+				rightMax = arr[right]
+			}
+		}
+	}
+
+	return water
+}

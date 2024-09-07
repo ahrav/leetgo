@@ -131,3 +131,28 @@ func GroupAnagrams(strs []string) [][]string {
 
 	return result
 }
+
+// MinimumSwaps - https://leetcode.com/problems/minimum-adjacent-swaps-to-make-a-valid-array/
+func MinimumSwaps(nums []int) int {
+	n := len(nums)
+	if n == 1 {
+		return 0
+	}
+
+	minIdx, maxIdx := 0, 0
+	for i, num := range nums {
+		if num < nums[minIdx] {
+			minIdx = i
+		}
+		if num >= nums[maxIdx] {
+			maxIdx = i
+		}
+	}
+
+	totalSwaps := n - 1 - maxIdx + minIdx
+	if minIdx < maxIdx {
+		return totalSwaps
+	}
+
+	return totalSwaps - 1
+}

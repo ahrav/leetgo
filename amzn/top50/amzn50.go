@@ -346,3 +346,47 @@ func MaxSlidingWindow(nums []int, k int) []int {
 
 	return result
 }
+
+type ListNode struct {
+	Val    int
+	Next   *ListNode
+	Random *ListNode
+}
+
+// CopyRandomList - https://leetcode.com/problems/copy-list-with-random-pointer/
+func CopyRandomList(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+
+	dummy := &ListNode{Next: head}
+	curr := dummy
+
+	// Add a copy of each node inbetwen existing nodes.
+	for curr != nil {
+		copyNode := &ListNode{Val: curr.Val}
+		copyNode.Next = curr.Next
+		curr.Next = copyNode
+		curr = copyNode.Next
+	}
+
+	curr = head
+	// Set random pointers for new copied nodes using the random pointers from the original nodes.
+	for curr != nil {
+		if curr.Random != nil {
+			curr.Next.Random = curr.Random.Next
+		}
+		curr = curr.Next.Next
+	}
+
+	// Remove the original nodes and return the copies.
+	copyCurr, curr := dummy, head
+	for curr != nil {
+		copyCurr.Next = curr.Next
+		curr.Next = curr.Next.Next
+		copyCurr = copyCurr.Next
+		curr = curr.Next
+	}
+
+	return dummy.Next
+}

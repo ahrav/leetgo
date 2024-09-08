@@ -627,3 +627,33 @@ func BenchmarkLadderLength(b *testing.B) {
 		})
 	}
 }
+
+func TestSmallestDistancePair(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected int
+	}{
+		{"SmallestDistancePairWithMultiplePairs", []int{1, 3, 1}, 1, 0},
+		{"SmallestDistancePairWithSingleElement", []int{1}, 1, 0},
+		{"SmallestDistancePairWithLargeK", []int{1, 6, 1}, 3, 5},
+		{"SmallestDistancePairWithNegativeNumbers", []int{-1, -3, -1}, 1, 0},
+		{"SmallestDistancePairWithDuplicates", []int{1, 1, 1}, 2, 0},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := SmallestDistancePair(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkSmallestDistancePair(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		SmallestDistancePair([]int{1, 3, 1}, 1)
+	}
+}

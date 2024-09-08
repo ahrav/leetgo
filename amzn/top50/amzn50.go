@@ -437,3 +437,32 @@ func LadderLength(beginWord, endWord string, wordList []string) int {
 
 	return 0
 }
+
+// SmallestDistancePair - https://leetcode.com/problems/find-k-th-smallest-pair-distance/
+func SmallestDistancePair(nums []int, k int) int {
+	sort.Ints(nums)
+	n := len(nums)
+
+	countPairs := func(mid int) int {
+		count, j := 0, 0
+		for i := 0; i < n; i++ {
+			for j < n && nums[j]-nums[i] <= mid {
+				j++
+			}
+			count += j - i - 1
+		}
+		return count
+	}
+
+	left, right := 0, nums[n-1]-nums[0]
+	for left < right {
+		mid := left + (right-left)/2
+		if countPairs(mid) >= k {
+			right = mid
+		} else {
+			left = mid + 1
+		}
+	}
+
+	return left
+}

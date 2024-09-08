@@ -6171,3 +6171,31 @@ func NthUglyNumber(n int) int {
 
 	return ugly[n-1]
 }
+
+// Insert - https://leetcode.com/problems/insert-interval/
+func Insert(intervals [][]int, newInterval []int) [][]int {
+	n := len(intervals)
+
+	var result [][]int
+	idx := 0
+
+	for idx < n && intervals[idx][1] < newInterval[0] {
+		result = append(result, intervals[idx])
+		idx++
+	}
+
+	for idx < n && intervals[idx][0] <= newInterval[1] {
+		newInterval[0] = min(newInterval[0], intervals[idx][0])
+		newInterval[1] = max(newInterval[1], intervals[idx][1])
+		idx++
+	}
+
+	result = append(result, []int{newInterval[0], newInterval[1]})
+
+	for idx < n {
+		result = append(result, intervals[idx])
+		idx++
+	}
+
+	return result
+}

@@ -525,3 +525,105 @@ func BenchmarkMaxSlidingWindow(b *testing.B) {
 		MaxSlidingWindow(nums, k)
 	}
 }
+
+func TestLadderLength(t *testing.T) {
+	tests := []struct {
+		name     string
+		begin    string
+		end      string
+		wordList []string
+		expected int
+	}{
+		{
+			name:     "NoTransformationNeeded",
+			begin:    "hit",
+			end:      "hit",
+			wordList: []string{"hit"},
+			expected: 1,
+		},
+		{
+			name:     "SingleStepTransformation",
+			begin:    "hit",
+			end:      "hot",
+			wordList: []string{"hot"},
+			expected: 2,
+		},
+		{
+			name:     "MultipleStepsTransformation",
+			begin:    "hit",
+			end:      "cog",
+			wordList: []string{"hot", "dot", "dog", "lot", "log", "cog"},
+			expected: 5,
+		},
+		{
+			name:     "NoPossibleTransformation",
+			begin:    "hit",
+			end:      "cog",
+			wordList: []string{"hot", "dot", "dog", "lot", "log"},
+			expected: 0,
+		},
+		{
+			name:     "EmptyWordList",
+			begin:    "hit",
+			end:      "cog",
+			wordList: []string{},
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			actual := LadderLength(tt.begin, tt.end, tt.wordList)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
+func BenchmarkLadderLength(b *testing.B) {
+	tests := []struct {
+		name     string
+		begin    string
+		end      string
+		wordList []string
+	}{
+		{
+			name:     "NoTransformationNeeded",
+			begin:    "hit",
+			end:      "hit",
+			wordList: []string{"hit"},
+		},
+		{
+			name:     "SingleStepTransformation",
+			begin:    "hit",
+			end:      "hot",
+			wordList: []string{"hot"},
+		},
+		{
+			name:     "MultipleStepsTransformation",
+			begin:    "hit",
+			end:      "cog",
+			wordList: []string{"hot", "dot", "dog", "lot", "log", "cog"},
+		},
+		{
+			name:     "NoPossibleTransformation",
+			begin:    "hit",
+			end:      "cog",
+			wordList: []string{"hot", "dot", "dog", "lot", "log"},
+		},
+		{
+			name:     "EmptyWordList",
+			begin:    "hit",
+			end:      "cog",
+			wordList: []string{},
+		},
+	}
+
+	for _, tt := range tests {
+		b.Run(tt.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				_ = LadderLength(tt.begin, tt.end, tt.wordList)
+			}
+		})
+	}
+}

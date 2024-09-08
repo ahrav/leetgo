@@ -390,3 +390,50 @@ func CopyRandomList(head *ListNode) *ListNode {
 
 	return dummy.Next
 }
+
+// LadderLength - https://leetcode.com/problems/word-ladder/
+func LadderLength(beginWord, endWord string, wordList []string) int {
+	if beginWord == endWord {
+		return 1
+	}
+
+	wordSet := make(map[string]struct{}, len(wordList))
+	for _, word := range wordList {
+		wordSet[word] = struct{}{}
+	}
+
+	if _, ok := wordSet[endWord]; !ok {
+		return 0
+	}
+
+	fwdQueue := map[string]int{beginWord: 1}
+	bckQueue := map[string]int{endWord: 1}
+
+	for len(fwdQueue) > 0 && len(bckQueue) > 0 {
+		// Always explore the smaller number of options.
+		if len(fwdQueue) > len(bckQueue) {
+			fwdQueue, bckQueue = bckQueue, fwdQueue
+		}
+
+		nextQueue := make(map[string]int)
+		for word, depth := range fwdQueue {
+			for i := 0; i < len(word); i++ {
+				for c := 'a'; c <= 'z'; c++ {
+					newW := word[:i] + string(c) + word[i+1:]
+
+					if bckDepth, ok := bckQueue[newW]; ok {
+						return bckDepth + depth
+					}
+
+					if _, ok := wordSet[newW]; ok {
+						delete(wordSet, newW)
+						nextQueue[newW] = depth + 1
+					}
+				}
+			}
+		}
+		fwdQueue = nextQueue
+	}
+
+	return 0
+}

@@ -8263,3 +8263,88 @@ func BenchmarkInsertIntervals(b *testing.B) {
 		Insert(intervals, newInterval)
 	}
 }
+
+func TestUpdateMatrix(t *testing.T) {
+	tests := []struct {
+		name     string
+		mat      [][]int
+		expected [][]int
+	}{
+		{
+			name: "Single element zero",
+			mat: [][]int{
+				{0},
+			},
+			expected: [][]int{
+				{0},
+			},
+		},
+		{
+			name: "Single element one",
+			mat: [][]int{
+				{1},
+			},
+			expected: [][]int{
+				{math.MaxInt32},
+			},
+		},
+		{
+			name: "Multiple elements with zeros",
+			mat: [][]int{
+				{0, 0, 0},
+				{0, 1, 0},
+				{1, 1, 1},
+			},
+			expected: [][]int{
+				{0, 0, 0},
+				{0, 1, 0},
+				{1, 2, 1},
+			},
+		},
+		{
+			name: "Multiple elements without zeros",
+			mat: [][]int{
+				{1, 1, 1},
+				{1, 1, 1},
+				{1, 1, 1},
+			},
+			expected: [][]int{
+				{math.MaxInt32, math.MaxInt32, math.MaxInt32},
+				{math.MaxInt32, math.MaxInt32, math.MaxInt32},
+				{math.MaxInt32, math.MaxInt32, math.MaxInt32},
+			},
+		},
+		{
+			name: "Mixed elements",
+			mat: [][]int{
+				{0, 1, 1},
+				{1, 1, 1},
+				{1, 1, 0},
+			},
+			expected: [][]int{
+				{0, 1, 2},
+				{1, 2, 1},
+				{2, 1, 0},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := UpdateMatrix(tt.mat)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkUpdateMatrix(b *testing.B) {
+	mat := [][]int{
+		{0, 0, 0},
+		{0, 1, 0},
+		{1, 1, 1},
+	}
+	for i := 0; i < b.N; i++ {
+		UpdateMatrix(mat)
+	}
+}

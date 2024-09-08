@@ -6199,3 +6199,42 @@ func Insert(intervals [][]int, newInterval []int) [][]int {
 
 	return result
 }
+
+// UpdateMatrix - https://leetcode.com/problems/01-matrix/
+func UpdateMatrix(mat [][]int) [][]int {
+	rows, cols := len(mat), len(mat[0])
+
+	var queue [][2]int
+
+	for i := range rows {
+		for j := range mat[i] {
+			if mat[i][j] == 0 {
+				queue = append(queue, [2]int{i, j})
+			} else {
+				mat[i][j] = math.MaxInt32
+			}
+		}
+	}
+
+	directions := [4][2]int{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
+
+	for len(queue) > 0 {
+		curr := queue[0]
+		queue = queue[1:]
+
+		for _, dir := range directions {
+			nr, nc := curr[0]+dir[0], curr[1]+dir[1]
+
+			if nr < 0 || nr >= rows || nc < 0 || nc >= cols {
+				continue
+			}
+
+			if mat[nr][nc] > mat[curr[0]][curr[1]]+1 {
+				mat[nr][nc] = mat[curr[0]][curr[1]] + 1
+				queue = append(queue, [2]int{nr, nc})
+			}
+		}
+	}
+
+	return mat
+}

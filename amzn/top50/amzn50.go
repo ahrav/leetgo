@@ -553,3 +553,40 @@ func CanFinish(numCourses int, prerequisites [][]int) bool {
 
 	return true
 }
+
+// WordBreakII - https://leetcode.com/problems/word-break-ii/
+func WordBreakII(s string, wordDict []string) []string {
+	wordSet := make(map[string]struct{}, len(wordDict))
+	for _, word := range wordDict {
+		wordSet[word] = struct{}{}
+	}
+
+	memo := make(map[string][]string)
+
+	var backtrack func(s string) []string
+	backtrack = func(s string) []string {
+		if res, ok := memo[s]; ok {
+			return res
+		}
+
+		var result []string
+		if _, ok := wordSet[s]; ok {
+			result = append(result, s)
+		}
+
+		for i := 1; i < len(s); i++ {
+			prefix := s[:i]
+			if _, ok := wordSet[prefix]; ok {
+				suffix := s[i:]
+				for _, sentence := range backtrack(suffix) {
+					result = append(result, prefix+" "+sentence)
+				}
+			}
+		}
+
+		memo[s] = result
+		return result
+	}
+
+	return backtrack(s)
+}

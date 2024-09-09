@@ -590,3 +590,76 @@ func WordBreakII(s string, wordDict []string) []string {
 
 	return backtrack(s)
 }
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+// BoundaryOfBinaryTree - https://leetcode.com/problems/boundary-of-binary-tree/
+func BoundaryOfBinaryTree(root *TreeNode) []int {
+	boundary := []int{root.Val}
+
+	isLeaf := func(node *TreeNode) bool {
+		return node.Left == nil && node.Right == nil
+	}
+	if isLeaf(root) {
+		return boundary
+	}
+
+	var leftB, rightB, leaves func(node *TreeNode)
+
+	leftB = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+
+		if isLeaf(node) {
+			return
+		}
+
+		boundary = append(boundary, node.Val)
+		if node.Left != nil {
+			leftB(node.Left)
+		} else {
+			leftB(node.Right)
+		}
+	}
+
+	rightB = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+
+		if isLeaf(node) {
+			return
+		}
+
+		if node.Right != nil {
+			rightB(node.Right)
+		} else {
+			rightB(node.Left)
+		}
+		boundary = append(boundary, node.Val)
+	}
+
+	leaves = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+
+		if isLeaf(node) {
+			boundary = append(boundary, node.Val)
+		}
+
+		leaves(node.Left)
+		leaves(node.Right)
+	}
+
+	leftB(root.Left)
+	leaves(root)
+	rightB(root.Right)
+
+	return boundary
+}

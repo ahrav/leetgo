@@ -663,3 +663,40 @@ func BoundaryOfBinaryTree(root *TreeNode) []int {
 
 	return boundary
 }
+
+// FindAllConcatenatedWordsInADict - https://leetcode.com/problems/concatenated-words/
+func FindAllConcatenatedWordsInADict(words []string) []string {
+	n := len(words)
+	wordSet := make(map[string]struct{}, n)
+	for _, word := range words {
+		wordSet[word] = struct{}{}
+	}
+
+	canConcat := func(w string) bool {
+		n := len(w)
+		dp := make([]bool, n+1)
+		dp[0] = true
+
+		for i := 1; i <= n; i++ {
+			for j := 0; j < i; j++ {
+				if _, ok := wordSet[w[j:i]]; ok && dp[j] {
+					dp[i] = true
+					break
+				}
+			}
+		}
+
+		return dp[n]
+	}
+
+	var result []string
+	for _, word := range words {
+		delete(wordSet, word)
+		if canConcat(word) {
+			result = append(result, word)
+		}
+		wordSet[word] = struct{}{}
+	}
+
+	return result
+}

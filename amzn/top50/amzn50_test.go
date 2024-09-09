@@ -934,3 +934,53 @@ func BenchmarkBoundaryOfBinaryTree(b *testing.B) {
 		})
 	}
 }
+
+func TestFindAllConcatenatedWordsInADict(t *testing.T) {
+	tests := []struct {
+		name     string
+		words    []string
+		expected []string
+	}{
+		{
+			name:     "EmptyInput",
+			words:    []string{},
+			expected: []string{},
+		},
+		{
+			name:     "NoConcatenatedWords",
+			words:    []string{"cat", "dog", "mouse"},
+			expected: []string{},
+		},
+		{
+			name:     "SingleConcatenatedWord",
+			words:    []string{"cat", "dog", "catdog"},
+			expected: []string{"catdog"},
+		},
+		{
+			name:     "MultipleConcatenatedWords",
+			words:    []string{"cat", "dog", "catdog", "dogcat", "mouse", "catdogmouse"},
+			expected: []string{"catdog", "dogcat", "catdogmouse"},
+		},
+		{
+			name:     "NestedConcatenatedWords",
+			words:    []string{"cat", "dog", "catdog", "catdogcat", "catdogcatdog"},
+			expected: []string{"catdog", "catdogcat", "catdogcatdog"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := FindAllConcatenatedWordsInADict(tt.words)
+			assert.ElementsMatch(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkFindAllConcatenatedWordsInADict(b *testing.B) {
+	words := []string{"cat", "dog", "catdog", "dogcat", "mouse", "catdogmouse"}
+
+	for i := 0; i < b.N; i++ {
+		FindAllConcatenatedWordsInADict(words)
+	}
+}

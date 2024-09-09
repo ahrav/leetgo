@@ -700,3 +700,27 @@ func FindAllConcatenatedWordsInADict(words []string) []string {
 
 	return result
 }
+
+// SequentialDigits - https://leetcode.com/problems/sequential-digits/
+func SequentialDigits(low, high int) []int {
+	const maxLen = 9
+	digits := "123456789"
+
+	var result []int
+	for length := 2; length <= maxLen; length++ {
+		for j := 0; j+length <= maxLen; j++ {
+			num := digits[j : j+length]
+
+			seqDigits := 0
+			for _, d := range num {
+				seqDigits = seqDigits*10 + int(d-'0')
+			}
+
+			if seqDigits >= low && seqDigits <= high {
+				result = append(result, seqDigits)
+			}
+		}
+	}
+
+	return result
+}

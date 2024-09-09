@@ -466,3 +466,45 @@ func SmallestDistancePair(nums []int, k int) int {
 
 	return left
 }
+
+// PlatesBetweenCandles - https://leetcode.com/problems/plates-between-candles/
+func PlatesBetweenCandles(s string, queries [][]int) []int {
+	n := len(s)
+	if n == 0 {
+		return nil
+	}
+
+	prefix := make([]int, n+1)
+	prev, next := make([]int, n), make([]int, n)
+
+	lastCandle := -1
+	for i := 0; i < n; i++ {
+		prefix[i+1] = prefix[i]
+		if s[i] == '*' {
+			prefix[i+1]++
+		} else {
+			lastCandle = i
+		}
+		prev[i] = lastCandle
+	}
+
+	lastCandle = -1
+	for i := n - 1; i >= 0; i-- {
+		if s[i] == '|' {
+			lastCandle = i
+		}
+		next[i] = lastCandle
+	}
+
+	result := make([]int, len(queries))
+	for idx, query := range queries {
+		left, right := query[0], query[1]
+		start, end := next[left], prev[right]
+
+		if start != -1 && end != -1 && start < end {
+			result[idx] = prefix[end] - prefix[start]
+		}
+	}
+
+	return result
+}

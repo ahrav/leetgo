@@ -508,3 +508,48 @@ func PlatesBetweenCandles(s string, queries [][]int) []int {
 
 	return result
 }
+
+// CanFinish - https://leetcode.com/problems/course-schedule/
+func CanFinish(numCourses int, prerequisites [][]int) bool {
+	graph := make([][]int, numCourses)
+	for _, pair := range prerequisites {
+		course, req := pair[0], pair[1]
+		graph[req] = append(graph[req], course)
+	}
+
+	visited := make([]bool, numCourses)
+	recurStack := make([]bool, numCourses)
+
+	var hasCycle func(course int) bool
+	hasCycle = func(course int) bool {
+		if recurStack[course] {
+			return true
+		}
+
+		if visited[course] {
+			return false
+		}
+
+		recurStack[course] = true
+		visited[course] = true
+
+		for _, req := range graph[course] {
+			if hasCycle(req) {
+				return true
+			}
+		}
+
+		recurStack[course] = false
+		return false
+	}
+
+	for i := range numCourses {
+		if !visited[i] {
+			if hasCycle(i) {
+				return false
+			}
+		}
+	}
+
+	return true
+}

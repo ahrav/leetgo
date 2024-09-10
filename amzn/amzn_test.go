@@ -8348,3 +8348,52 @@ func BenchmarkUpdateMatrix(b *testing.B) {
 		UpdateMatrix(mat)
 	}
 }
+
+func TestEventualSafeNodes(t *testing.T) {
+	tests := []struct {
+		name     string
+		graph    [][]int
+		expected []int
+	}{
+		{
+			name:     "All nodes safe",
+			graph:    [][]int{{}, {}, {}, {}},
+			expected: []int{0, 1, 2, 3},
+		},
+		{
+			name:     "No nodes safe",
+			graph:    [][]int{{1}, {2}, {3}, {0}},
+			expected: []int{},
+		},
+		{
+			name:     "Some nodes safe",
+			graph:    [][]int{{1, 2}, {2, 3}, {5}, {0}, {5}, {}, {}},
+			expected: []int{2, 4, 5, 6},
+		},
+		{
+			name:     "Single node safe",
+			graph:    [][]int{{}},
+			expected: []int{0},
+		},
+		{
+			name:     "Single node not safe",
+			graph:    [][]int{{0}},
+			expected: []int{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := EventualSafeNodes(tt.graph)
+			assert.ElementsMatch(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkEventualSafeNodes(b *testing.B) {
+	graph := [][]int{{1, 2}, {2, 3}, {5}, {0}, {5}, {}, {}}
+	for i := 0; i < b.N; i++ {
+		EventualSafeNodes(graph)
+	}
+}

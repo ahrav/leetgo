@@ -6238,3 +6238,36 @@ func UpdateMatrix(mat [][]int) [][]int {
 
 	return mat
 }
+
+// EventualSafeNodes - https://leetcode.com/problems/find-eventual-safe-states/
+func EventualSafeNodes(graph [][]int) []int {
+	n := len(graph)
+	visitState := make([]int, n) // 0 : unvisited, 1: visiting, 2 :safe
+
+	var dfs func(node int) bool
+	dfs = func(node int) bool {
+		if state := visitState[node]; state > 0 {
+			return state == 2
+		}
+
+		visitState[node] = 1
+
+		for _, neighbor := range graph[node] {
+			if !dfs(neighbor) || visitState[neighbor] == 1 {
+				return false
+			}
+		}
+
+		visitState[node] = 2
+		return true
+	}
+
+	var result []int
+	for i := range n {
+		if dfs(i) {
+			result = append(result, i)
+		}
+	}
+
+	return result
+}

@@ -6296,3 +6296,75 @@ func CanPartition(nums []int) bool {
 
 	return dp[target]
 }
+
+// BuildTree - https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+func BuildTree(preorder []int, inorder []int) *TreeNode {
+	n := len(inorder)
+	inorderIdx := make(map[int]int, n)
+	for idx, val := range inorder {
+		inorderIdx[val] = idx
+	}
+
+	var buildTree func(preStart, preEnd, inStart, inEnd int) *TreeNode
+	buildTree = func(preStart, preEnd, inStart, inEnd int) *TreeNode {
+		if preStart > preEnd || inStart > inEnd {
+			return nil
+		}
+
+		rootV := preorder[preStart]
+		root := &TreeNode{Val: rootV}
+
+		inorderRootIdx := inorderIdx[rootV]
+		leftSubtreeSize := inorderRootIdx - inStart
+
+		root.Left = buildTree(preStart+1, preStart+leftSubtreeSize, inStart, inorderRootIdx-1)
+		root.Right = buildTree(preStart+1+leftSubtreeSize, preEnd, inorderRootIdx+1, inEnd)
+
+		return root
+	}
+
+	return buildTree(0, n-1, 0, n-1)
+}
+
+// FindMinHeightTrees - https://leetcode.com/problems/minimum-height-trees/
+func FindMinHeightTrees(n int, edges [][]int) []int {
+	if n == 1 {
+		return []int{0}
+	}
+
+	adjList := make([][]int, n)
+	inDegrees := make([]int, n)
+	for _, edge := range edges {
+		a, b := edge[0], edge[1]
+		adjList[a] = append(adjList[a], b)
+		adjList[b] = append(adjList[b], a)
+		inDegrees[a]++
+		inDegrees[b]++
+	}
+
+	var leaves []int
+	for i := range n {
+		if inDegrees[i] == 1 {
+			leaves = append(leaves, i)
+		}
+	}
+
+	remainingNodes := n
+	for remainingNodes > 2 {
+		remainingNodes -= len(leaves)
+		var newLeaves []int
+
+		for _, leaf := range leaves {
+			for _, neighbor := range adjList[leaf] {
+				inDegrees[neighbor]--
+				if inDegrees[neighbor] == 1 {
+					newLeaves = append(newLeaves, neighbor)
+				}
+			}
+		}
+
+		leaves = newLeaves
+	}
+
+	return leaves
+}

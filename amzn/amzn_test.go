@@ -8441,3 +8441,53 @@ func BenchmarkCanPartition(b *testing.B) {
 		CanPartition(nums)
 	}
 }
+
+func TestFindMinHeightTrees(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		edges    [][]int
+		expected []int
+	}{
+		{
+			name:     "Single node",
+			n:        1,
+			edges:    [][]int{},
+			expected: []int{0},
+		},
+		{
+			name:     "Line graph",
+			n:        4,
+			edges:    [][]int{{0, 1}, {1, 2}, {2, 3}},
+			expected: []int{1, 2},
+		},
+		{
+			name:     "Star graph",
+			n:        5,
+			edges:    [][]int{{0, 1}, {0, 2}, {0, 3}, {0, 4}},
+			expected: []int{0},
+		},
+		{
+			name:     "Complex graph",
+			n:        6,
+			edges:    [][]int{{0, 3}, {1, 3}, {2, 3}, {4, 3}, {5, 4}},
+			expected: []int{3, 4},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := FindMinHeightTrees(tt.n, tt.edges)
+			assert.ElementsMatch(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkFindMinHeightTrees(b *testing.B) {
+	n := 6
+	edges := [][]int{{0, 3}, {1, 3}, {2, 3}, {4, 3}, {5, 4}}
+	for i := 0; i < b.N; i++ {
+		FindMinHeightTrees(n, edges)
+	}
+}

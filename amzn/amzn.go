@@ -6368,3 +6368,28 @@ func FindMinHeightTrees(n int, edges [][]int) []int {
 
 	return leaves
 }
+
+// KthSmallest - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+func KthSmallest(root *TreeNode, k int) int {
+	var result, cnt int
+
+	var inorder func(node *TreeNode)
+	inorder = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+
+		inorder(node.Left)
+		cnt++
+
+		if cnt == k {
+			result = node.Val
+			return
+		}
+
+		inorder(root.Right)
+	}
+
+	inorder(root)
+	return result
+}

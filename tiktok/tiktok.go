@@ -24,3 +24,22 @@ func MinSubArrayLen(target int, nums []int) int {
 
 	return minWindow
 }
+
+// MaxProduct - https://leetcode.com/problems/maximum-product-subarray/?envType=study-plan-v2&envId=tiktok-spring-23-high-frequency
+func MaxProduct(nums []int) int {
+	n := len(nums)
+	minProd, maxProd, result := nums[0], nums[0], nums[0]
+
+	for i := 1; i < n; i++ {
+		if nums[i] < 0 {
+			minProd, maxProd = maxProd, minProd
+		}
+
+		minProd = min(nums[i], minProd*nums[i])
+		maxProd = max(nums[i], maxProd*nums[i])
+
+		result = max(result, maxProd)
+	}
+
+	return result
+}

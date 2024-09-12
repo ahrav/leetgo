@@ -1,6 +1,9 @@
 package tiktok
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
 
 // MinSubArrayLen - https://leetcode.com/problems/minimum-size-subarray-sum/?envType=study-plan-v2&envId=tiktok-spring-23-high-frequency
 func MinSubArrayLen(target int, nums []int) int {
@@ -42,4 +45,24 @@ func MaxProduct(nums []int) int {
 	}
 
 	return result
+}
+
+// FindNthDigit - https://leetcode.com/problems/nth-digit/?envType=study-plan-v2&envId=tiktok-spring-23-high-frequency
+func FindNthDigit(n int) int {
+	length := 1
+	count := 9
+	start := 1
+
+	for n > length*count {
+		n -= length * count
+		length++
+		count *= 10
+		start *= 10
+	}
+
+	num := start + (n-1)/length
+	digitIdx := (n - 1) % length
+
+	numStr := fmt.Sprintf("%d", num)
+	return int(numStr[digitIdx] - '0')
 }

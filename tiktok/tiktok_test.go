@@ -110,3 +110,57 @@ func BenchmarkMaxProduct(b *testing.B) {
 		MaxProduct(nums)
 	}
 }
+
+func TestFindNthDigit(t *testing.T) {
+	tests := []struct {
+		name     string
+		n        int
+		expected int
+	}{
+		{
+			name:     "Finds nth digit in single digit range",
+			n:        5,
+			expected: 5,
+		},
+		{
+			name:     "Finds nth digit at boundary of single digit range",
+			n:        9,
+			expected: 9,
+		},
+		{
+			name:     "Finds nth digit in double digit range",
+			n:        15,
+			expected: 2,
+		},
+		{
+			name:     "Finds nth digit at boundary of double digit range",
+			n:        20,
+			expected: 1,
+		},
+		{
+			name:     "Finds nth digit in triple digit range",
+			n:        189,
+			expected: 9,
+		},
+		{
+			name:     "Finds nth digit at boundary of triple digit range",
+			n:        190,
+			expected: 1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := FindNthDigit(tt.n)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkFindNthDigit(b *testing.B) {
+	n := 1000
+	for i := 0; i < b.N; i++ {
+		FindNthDigit(n)
+	}
+}

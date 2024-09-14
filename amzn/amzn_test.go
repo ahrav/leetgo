@@ -8523,3 +8523,34 @@ func BenchmarkLengthOfLongestSubstringKDistinct(b *testing.B) {
 		LengthOfLongestSubstringKDistinct(s, k)
 	}
 }
+
+func TestStoneGameII(t *testing.T) {
+	tests := []struct {
+		name     string
+		piles    []int
+		expected int
+	}{
+		{"single pile", []int{5}, 5},
+		{"two piles", []int{2, 7}, 9},
+		{"multiple piles", []int{2, 7, 9, 4, 4}, 10},
+		{"all equal piles", []int{4, 4, 4, 4}, 8},
+		{"increasing piles", []int{1, 2, 3, 4, 5, 6}, 10},
+		{"decreasing piles", []int{6, 5, 4, 3, 2, 1}, 12},
+		{"mixed piles", []int{3, 9, 1, 2}, 12},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := StoneGameII(tt.piles)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkStoneGameII(b *testing.B) {
+	piles := []int{2, 7, 9, 4, 4}
+	for i := 0; i < b.N; i++ {
+		StoneGameII(piles)
+	}
+}

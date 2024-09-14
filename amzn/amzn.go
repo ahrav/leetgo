@@ -6418,3 +6418,44 @@ func LengthOfLongestSubstringKDistinct(s string, k int) int {
 
 	return maxWindow
 }
+
+// StoneGameII - https://leetcode.com/problems/stone-game-ii/
+func StoneGameII(piles []int) int {
+	n := len(piles)
+
+	dp := make([][]int, n+1)
+	for i := range dp {
+		dp[i] = make([]int, n+1)
+	}
+
+	suffixSum := make([]int, n)
+	suffixSum[n-1] = piles[n-1]
+	for i := n - 2; i >= 0; i-- {
+		suffixSum[i] = suffixSum[i+1] + piles[i]
+	}
+
+	var dfs func(i, M int) int
+	dfs = func(i, M int) int {
+		if i >= n {
+			return 0
+		}
+
+		if val := dp[i][M]; val != 0 {
+			return val
+		}
+
+		if i+2*M >= n {
+			return suffixSum[i]
+		}
+
+		maxStones := 0
+		for x := 1; x <= 2*M; x++ {
+			maxStones = max(maxStones, suffixSum[i]-dfs(i+x, max(x, M)))
+		}
+
+		dp[i][M] = maxStones
+		return maxStones
+	}
+
+	return dfs(0, 1)
+}

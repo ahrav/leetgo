@@ -8491,3 +8491,35 @@ func BenchmarkFindMinHeightTrees(b *testing.B) {
 		FindMinHeightTrees(n, edges)
 	}
 }
+
+func TestLengthOfLongestSubstringWithKDistinctCharacters(t *testing.T) {
+	tests := []struct {
+		name     string
+		s        string
+		k        int
+		expected int
+	}{
+		{"SingleCharacterString", "a", 1, 1},
+		{"AllUniqueCharacters", "abcdef", 3, 3},
+		{"AllSameCharacters", "aaaaa", 1, 5},
+		{"MixedCharacters", "eceba", 2, 3},
+		{"MoreDistinctCharactersThanK", "aaabbcc", 2, 5},
+		{"KGreaterThanStringLength", "abc", 5, 3},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LengthOfLongestSubstringKDistinct(tt.s, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLengthOfLongestSubstringKDistinct(b *testing.B) {
+	s := "eceba"
+	k := 2
+	for i := 0; i < b.N; i++ {
+		LengthOfLongestSubstringKDistinct(s, k)
+	}
+}

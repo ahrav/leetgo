@@ -6393,3 +6393,28 @@ func KthSmallest(root *TreeNode, k int) int {
 	inorder(root)
 	return result
 }
+
+// LengthOfLongestSubstringKDistinct - https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/
+func LengthOfLongestSubstringKDistinct(s string, k int) int {
+	n := len(s)
+	charFreq := make(map[byte]int, k)
+
+	var left, maxWindow int
+	for right := 0; right < n; right++ {
+		charFreq[s[right]]++
+
+		for len(charFreq) > k {
+			charFreq[s[right]]--
+			if charFreq[s[right]] == 0 {
+				delete(charFreq, s[right])
+			}
+			left++
+		}
+
+		if window := right - left + 1; window > maxWindow {
+			maxWindow = window
+		}
+	}
+
+	return maxWindow
+}

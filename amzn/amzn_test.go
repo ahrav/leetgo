@@ -8554,3 +8554,96 @@ func BenchmarkStoneGameII(b *testing.B) {
 		StoneGameII(piles)
 	}
 }
+
+func TestSetZeroes(t *testing.T) {
+	tests := []struct {
+		name     string
+		matrix   [][]int
+		expected [][]int
+	}{
+		{
+			name: "MatrixWithNoZeroes",
+			matrix: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+			expected: [][]int{
+				{1, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+		},
+		{
+			name: "MatrixWithSingleZero",
+			matrix: [][]int{
+				{1, 2, 3},
+				{4, 0, 6},
+				{7, 8, 9},
+			},
+			expected: [][]int{
+				{1, 0, 3},
+				{0, 0, 0},
+				{7, 0, 9},
+			},
+		},
+		{
+			name: "MatrixWithMultipleZeroes",
+			matrix: [][]int{
+				{0, 2, 3},
+				{4, 5, 6},
+				{7, 8, 0},
+			},
+			expected: [][]int{
+				{0, 0, 0},
+				{0, 5, 0},
+				{0, 0, 0},
+			},
+		},
+		{
+			name: "MatrixWithZeroInFirstRowAndColumn",
+			matrix: [][]int{
+				{0, 2, 3},
+				{4, 5, 6},
+				{7, 8, 9},
+			},
+			expected: [][]int{
+				{0, 0, 0},
+				{0, 5, 6},
+				{0, 8, 9},
+			},
+		},
+		{
+			name: "MatrixWithAllZeroes",
+			matrix: [][]int{
+				{0, 0, 0},
+				{0, 0, 0},
+				{0, 0, 0},
+			},
+			expected: [][]int{
+				{0, 0, 0},
+				{0, 0, 0},
+				{0, 0, 0},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			SetZeroes(tt.matrix)
+			assert.Equal(t, tt.expected, tt.matrix)
+		})
+	}
+}
+
+func BenchmarkSetZeroes(b *testing.B) {
+	matrix := [][]int{
+		{1, 2, 3},
+		{4, 0, 6},
+		{7, 8, 9},
+	}
+	for i := 0; i < b.N; i++ {
+		SetZeroes(matrix)
+	}
+}

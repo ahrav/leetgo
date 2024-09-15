@@ -6459,3 +6459,42 @@ func StoneGameII(piles []int) int {
 
 	return dfs(0, 1)
 }
+
+// SetZeroes - https://leetcode.com/problems/set-matrix-zeroes/
+func SetZeroes(matrix [][]int) {
+	rows, cols := len(matrix), len(matrix[0])
+	rowZero := false
+
+	for i := range rows {
+		for j := range cols {
+			if matrix[i][j] == 0 {
+				matrix[0][j] = 0
+				if i == 0 {
+					rowZero = true
+				} else {
+					matrix[i][0] = 0
+				}
+			}
+		}
+	}
+
+	for i := 1; i < rows; i++ {
+		for j := 1; j < cols; j++ {
+			if matrix[i][0] == 0 || matrix[0][j] == 0 {
+				matrix[i][j] = 0
+			}
+		}
+	}
+
+	if matrix[0][0] == 0 {
+		for i := range rows {
+			matrix[i][0] = 0
+		}
+	}
+
+	if rowZero {
+		for i := range cols {
+			matrix[0][i] = 0
+		}
+	}
+}

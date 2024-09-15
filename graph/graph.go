@@ -305,3 +305,35 @@ func FindLadders(beginWord string, endWord string, wordList []string) [][]string
 
 	return result
 }
+
+type Node struct {
+	Val       int
+	Neighbors []*Node
+}
+
+// CloneGraph - https://leetcode.com/problems/clone-graph/
+func CloneGraph(node *Node) *Node {
+	if node == nil {
+		return nil
+	}
+
+	cloned := make(map[*Node]*Node)
+
+	var dfs func(n *Node) *Node
+	dfs = func(n *Node) *Node {
+		if clone, exists := cloned[n]; exists {
+			return clone
+		}
+
+		cpy := &Node{Val: n.Val}
+		cloned[n] = cpy
+
+		for _, neighbor := range n.Neighbors {
+			cpy.Neighbors = append(cpy.Neighbors, dfs(neighbor))
+		}
+
+		return cpy
+	}
+
+	return dfs(node)
+}

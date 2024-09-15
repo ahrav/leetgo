@@ -8647,3 +8647,53 @@ func BenchmarkSetZeroes(b *testing.B) {
 		SetZeroes(matrix)
 	}
 }
+
+func TestLengthOfLongestSubsequence(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		target   int
+		expected int
+	}{
+		{
+			name:     "SingleElement",
+			nums:     []int{5},
+			target:   5,
+			expected: 1,
+		},
+		{
+			name:     "MultipleElements",
+			nums:     []int{1, 2, 3, 4, 5},
+			target:   10,
+			expected: 4,
+		},
+		{
+			name:     "NoValidSubsequence",
+			nums:     []int{5, 6, 7},
+			target:   4,
+			expected: -1,
+		},
+		{
+			name:     "ExactMatch",
+			nums:     []int{1, 2, 3, 4},
+			target:   10,
+			expected: 4,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LengthOfLongestSubsequence(tt.nums, tt.target)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLengthOfLongestSubsequence(b *testing.B) {
+	nums := []int{1, 2, 3, 4, 5}
+	target := 10
+	for i := 0; i < b.N; i++ {
+		LengthOfLongestSubsequence(nums, target)
+	}
+}

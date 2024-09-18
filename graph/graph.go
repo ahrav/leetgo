@@ -2,6 +2,7 @@ package graph
 
 import (
 	"container/heap"
+	"math"
 	"sort"
 )
 
@@ -336,4 +337,51 @@ func CloneGraph(node *Node) *Node {
 	}
 
 	return dfs(node)
+}
+
+// NetworkDelayTime - https://leetcode.com/problems/network-delay-time/
+func NetworkDelayTime(times [][]int, n int, k int) int {
+	graph := make(map[int][]Edge, len(times))
+	for _, t := range times {
+		u, v, w := t[0], t[1], t[2]
+		graph[u] = append(graph[u], Edge{to: v, weight: w})
+	}
+
+	h := new(EdgeMinHeap)
+	heap.Init(h)
+	heap.Push(h, Edge{to: k, weight: 0})
+
+	distances := make(map[int]int, n)
+	for i := 1; i <= n; i++ {
+		distances[i] = math.MaxInt
+	}
+	distances[k] = 0
+
+	for h.Len() > 0 {
+		curr := heap.Pop(h).(Edge)
+
+		time, node := curr.weight, curr.to
+		if time > distances[node] {
+			continue
+		}
+
+		for _, edge := range graph[node] {
+			newTime := time + edge.weight
+			if newTime < distances[edge.to] {
+				distances[edge.to] = newTime
+				heap.Push(h, Edge{to: edge.to, weight: newTime})
+			}
+		}
+	}
+
+	maxTime := 0
+	for i := 1; i <= n; i++ {
+		if distances[i] == math.MaxInt {
+			return -1
+		}
+
+		maxTime = max(maxTime, distances[i])
+	}
+
+	return maxTime
 }

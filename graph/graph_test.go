@@ -384,3 +384,64 @@ func BenchmarkFindLadders(b *testing.B) {
 		})
 	}
 }
+
+func TestNetworkDelayTime(t *testing.T) {
+	tests := []struct {
+		name     string
+		times    [][]int
+		n, k     int
+		expected int
+	}{
+		{
+			name:     "NoEdges",
+			times:    [][]int{},
+			n:        4,
+			k:        1,
+			expected: -1,
+		},
+		{
+			name:     "SingleEdge",
+			times:    [][]int{{1, 2, 5}},
+			n:        2,
+			k:        1,
+			expected: 5,
+		},
+		{
+			name:     "MultipleEdges",
+			times:    [][]int{{1, 2, 1}, {2, 3, 2}, {1, 3, 4}},
+			n:        3,
+			k:        1,
+			expected: 3,
+		},
+		{
+			name:     "DisconnectedGraph",
+			times:    [][]int{{1, 2, 1}, {2, 3, 2}},
+			n:        4,
+			k:        1,
+			expected: -1,
+		},
+		{
+			name:     "AllNodesReachable",
+			times:    [][]int{{1, 2, 1}, {2, 3, 2}, {3, 4, 1}},
+			n:        4,
+			k:        1,
+			expected: 4,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := NetworkDelayTime(tt.times, tt.n, tt.k)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkNetworkDelayTime(b *testing.B) {
+	times := [][]int{{1, 2, 1}, {2, 3, 2}, {3, 4, 1}}
+	n, k := 4, 1
+	for i := 0; i < b.N; i++ {
+		NetworkDelayTime(times, n, k)
+	}
+}

@@ -63,3 +63,27 @@ func Merge(nums1 []int, m int, nums2 []int, n int) {
 		k--
 	}
 }
+
+// RemoveDuplicates - https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii
+func RemoveDuplicates(nums []int) int {
+	n := len(nums)
+	if n == 1 || n == 2 {
+		return n
+	}
+
+	lastIdx, prev, cnt := 1, nums[0], 1
+	for i := 1; i < n; i++ {
+		if nums[i] != prev {
+			nums[lastIdx] = nums[i]
+			lastIdx++
+			cnt = 1
+			prev = nums[i]
+		} else if cnt < 2 {
+			nums[lastIdx] = nums[i]
+			cnt++
+			lastIdx++
+		}
+	}
+
+	return lastIdx
+}

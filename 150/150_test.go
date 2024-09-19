@@ -158,3 +158,65 @@ func BenchmarkMerge(b *testing.B) {
 		Merge(nums1, 3, nums2, 3)
 	}
 }
+
+func TestRemoveDuplicates(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+		result   []int
+	}{
+		{
+			name:     "SingleElementArray",
+			nums:     []int{1},
+			expected: 1,
+			result:   []int{1},
+		},
+		{
+			name:     "TwoElementArrayNoDuplicates",
+			nums:     []int{1, 2},
+			expected: 2,
+			result:   []int{1, 2},
+		},
+		{
+			name:     "TwoElementArrayWithDuplicates",
+			nums:     []int{1, 1},
+			expected: 2,
+			result:   []int{1, 1},
+		},
+		{
+			name:     "MultipleDuplicates",
+			nums:     []int{1, 1, 1, 2, 2, 3},
+			expected: 5,
+			result:   []int{1, 1, 2, 2, 3},
+		},
+		{
+			name:     "NoDuplicates",
+			nums:     []int{1, 2, 3, 4, 5},
+			expected: 5,
+			result:   []int{1, 2, 3, 4, 5},
+		},
+		{
+			name:     "AllElementsSame",
+			nums:     []int{1, 1, 1, 1, 1},
+			expected: 2,
+			result:   []int{1, 1},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := RemoveDuplicates(tt.nums)
+			assert.Equal(t, tt.expected, result)
+			assert.Equal(t, tt.result, tt.nums[:result])
+		})
+	}
+}
+
+func BenchmarkRemoveDuplicates(b *testing.B) {
+	nums := []int{1, 1, 1, 2, 2, 3}
+	for i := 0; i < b.N; i++ {
+		_ = RemoveDuplicates(nums)
+	}
+}

@@ -8697,3 +8697,52 @@ func BenchmarkLengthOfLongestSubsequence(b *testing.B) {
 		LengthOfLongestSubsequence(nums, target)
 	}
 }
+
+func TestLargestNumber(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected string
+	}{
+		{
+			name:     "SingleDigit",
+			nums:     []int{5},
+			expected: "5",
+		},
+		{
+			name:     "MultipleDigits",
+			nums:     []int{3, 30, 34, 5, 9},
+			expected: "9534330",
+		},
+		{
+			name:     "AllZeros",
+			nums:     []int{0, 0, 0},
+			expected: "0",
+		},
+		{
+			name:     "LeadingZeros",
+			nums:     []int{0, 1, 0},
+			expected: "100",
+		},
+		{
+			name:     "SameDigits",
+			nums:     []int{111, 11, 1},
+			expected: "111111",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := LargestNumber(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkLargestNumber(b *testing.B) {
+	nums := []int{3, 30, 34, 5, 9}
+	for i := 0; i < b.N; i++ {
+		_ = LargestNumber(nums)
+	}
+}

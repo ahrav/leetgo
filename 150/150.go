@@ -87,3 +87,48 @@ func RemoveDuplicates(nums []int) int {
 
 	return lastIdx
 }
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+// ZigzagLevelOrder - https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+func ZigzagLevelOrder(root *TreeNode) [][]int {
+	if root == nil {
+		return nil
+	}
+
+	var result [][]int
+	queue := []*TreeNode{root}
+	leftToRight := true
+
+	for len(queue) > 0 {
+		level := len(queue)
+		levelQ := make([]int, level)
+
+		for i := range level {
+			node := queue[0]
+			queue = queue[1:]
+
+			if leftToRight {
+				levelQ[i] = node.Val
+			} else {
+				levelQ[level-i-1] = node.Val
+			}
+
+			if node.Left != nil {
+				queue = append(queue, node)
+			}
+			if node.Right != nil {
+				queue = append(queue, node)
+			}
+		}
+
+		leftToRight = !leftToRight
+		result = append(result, levelQ)
+	}
+
+	return result
+}

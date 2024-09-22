@@ -64,8 +64,8 @@ func Merge(nums1 []int, m int, nums2 []int, n int) {
 	}
 }
 
-// RemoveDuplicates - https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii
-func RemoveDuplicates(nums []int) int {
+// RemoveDuplicatesII - https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii
+func RemoveDuplicatesII(nums []int) int {
 	n := len(nums)
 	if n == 1 || n == 2 {
 		return n
@@ -142,5 +142,23 @@ func RemoveElement(nums []int, val int) int {
 			idx++
 		}
 	}
+	return idx
+}
+
+// RemoveDuplicatesI - https://leetcode.com/problems/remove-duplicates-from-sorted-array/?envType=study-plan-v2&envId=top-interview-150
+func RemoveDuplicatesI(nums []int) int {
+	n := len(nums)
+	if n == 1 {
+		return 1
+	}
+
+	idx := 1
+	for i := 1; i < n; i++ {
+		if nums[i] != nums[i-1] {
+			nums[idx] = nums[i]
+			idx++
+		}
+	}
+
 	return idx
 }

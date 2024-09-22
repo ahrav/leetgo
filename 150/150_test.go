@@ -159,7 +159,7 @@ func BenchmarkMerge(b *testing.B) {
 	}
 }
 
-func TestRemoveDuplicates(t *testing.T) {
+func TestRemoveDuplicatesII(t *testing.T) {
 	tests := []struct {
 		name     string
 		nums     []int
@@ -207,17 +207,17 @@ func TestRemoveDuplicates(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			result := RemoveDuplicates(tt.nums)
+			result := RemoveDuplicatesII(tt.nums)
 			assert.Equal(t, tt.expected, result)
 			assert.Equal(t, tt.result, tt.nums[:result])
 		})
 	}
 }
 
-func BenchmarkRemoveDuplicates(b *testing.B) {
+func BenchmarkRemoveDuplicatesII(b *testing.B) {
 	nums := []int{1, 1, 1, 2, 2, 3}
 	for i := 0; i < b.N; i++ {
-		_ = RemoveDuplicates(nums)
+		_ = RemoveDuplicatesII(nums)
 	}
 }
 
@@ -288,5 +288,55 @@ func BenchmarkRemoveElement(b *testing.B) {
 	val := 3
 	for i := 0; i < b.N; i++ {
 		_ = RemoveElement(nums, val)
+	}
+}
+
+func TestRemoveDuplicatesI(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+		result   []int
+	}{
+		{
+			name:     "SingleElementArrayNoDuplicates",
+			nums:     []int{1},
+			expected: 1,
+			result:   []int{1},
+		},
+		{
+			name:     "MultipleElementsNoDuplicates",
+			nums:     []int{1, 2, 3, 4, 5},
+			expected: 5,
+			result:   []int{1, 2, 3, 4, 5},
+		},
+		{
+			name:     "MultipleElementsWithDuplicates",
+			nums:     []int{1, 1, 2, 2, 3, 3},
+			expected: 3,
+			result:   []int{1, 2, 3},
+		},
+		{
+			name:     "AllElementsSame",
+			nums:     []int{1, 1, 1, 1, 1},
+			expected: 1,
+			result:   []int{1},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := RemoveDuplicatesI(tt.nums)
+			assert.Equal(t, tt.expected, result)
+			assert.Equal(t, tt.result, tt.nums[:result])
+		})
+	}
+}
+
+func BenchmarkRemoveDuplicatesI(b *testing.B) {
+	nums := []int{1, 1, 2, 2, 3, 3}
+	for i := 0; i < b.N; i++ {
+		_ = RemoveDuplicatesI(nums)
 	}
 }

@@ -462,3 +462,52 @@ func BenchmarkRotate(b *testing.B) {
 		Rotate(nums, k)
 	}
 }
+
+func TestMaxProfit(t *testing.T) {
+	tests := []struct {
+		name     string
+		prices   []int
+		expected int
+	}{
+		{
+			name:     "MaxProfitSingleDay",
+			prices:   []int{5},
+			expected: 0,
+		},
+		{
+			name:     "MaxProfitIncreasingPrices",
+			prices:   []int{1, 2, 3, 4, 5},
+			expected: 4,
+		},
+		{
+			name:     "MaxProfitDecreasingPrices",
+			prices:   []int{5, 4, 3, 2, 1},
+			expected: 0,
+		},
+		{
+			name:     "MaxProfitMixedPrices",
+			prices:   []int{7, 1, 5, 3, 6, 4},
+			expected: 5,
+		},
+		{
+			name:     "MaxProfitNoProfit",
+			prices:   []int{7, 6, 4, 3, 1},
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := MaxProfit(tt.prices)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMaxProfit(b *testing.B) {
+	prices := []int{7, 1, 5, 3, 6, 4}
+	for i := 0; i < b.N; i++ {
+		_ = MaxProfit(prices)
+	}
+}

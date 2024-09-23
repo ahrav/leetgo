@@ -394,3 +394,71 @@ func BenchmarkMajorityElement(b *testing.B) {
 		_ = MajorityElement(nums)
 	}
 }
+
+func TestRotate(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		k        int
+		expected []int
+	}{
+		{
+			name:     "RotateArrayByZero",
+			nums:     []int{1, 2, 3, 4, 5},
+			k:        0,
+			expected: []int{1, 2, 3, 4, 5},
+		},
+		{
+			name:     "RotateArrayByOne",
+			nums:     []int{1, 2, 3, 4, 5},
+			k:        1,
+			expected: []int{5, 1, 2, 3, 4},
+		},
+		{
+			name:     "RotateArrayByLength",
+			nums:     []int{1, 2, 3, 4, 5},
+			k:        5,
+			expected: []int{1, 2, 3, 4, 5},
+		},
+		{
+			name:     "RotateArrayByMoreThanLength",
+			nums:     []int{1, 2, 3, 4, 5},
+			k:        7,
+			expected: []int{4, 5, 1, 2, 3},
+		},
+		{
+			name:     "RotateArrayWithNegativeNumbers",
+			nums:     []int{-1, -100, 3, 99},
+			k:        2,
+			expected: []int{3, 99, -1, -100},
+		},
+		{
+			name:     "RotateArrayWithSingleElement",
+			nums:     []int{1},
+			k:        3,
+			expected: []int{1},
+		},
+		{
+			name:     "RotateEmptyArray",
+			nums:     []int{},
+			k:        3,
+			expected: []int{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			Rotate(tt.nums, tt.k)
+			assert.Equal(t, tt.expected, tt.nums)
+		})
+	}
+}
+
+func BenchmarkRotate(b *testing.B) {
+	nums := []int{1, 2, 3, 4, 5}
+	k := 3
+	for i := 0; i < b.N; i++ {
+		Rotate(nums, k)
+	}
+}

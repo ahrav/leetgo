@@ -181,3 +181,26 @@ func MajorityElement(nums []int) int {
 
 	return candidate
 }
+
+// Rotate - https://leetcode.com/problems/rotate-array/?envType=study-plan-v2&envId=top-interview-150
+func Rotate(nums []int, k int) {
+	n := len(nums)
+	if n < 2 {
+		return
+	}
+
+	d := k % n
+	if d == 0 {
+		return
+	}
+
+	rev := func(arr []int) {
+		for i, j := 0, len(arr)-1; i < j; i, j = i+1, j-1 {
+			arr[i], arr[j] = arr[j], arr[i]
+		}
+	}
+
+	rev(nums)
+	rev(nums[:d])
+	rev(nums[d:])
+}

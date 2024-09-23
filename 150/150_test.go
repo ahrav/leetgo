@@ -340,3 +340,57 @@ func BenchmarkRemoveDuplicatesI(b *testing.B) {
 		_ = RemoveDuplicatesI(nums)
 	}
 }
+
+func TestMajorityElement(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "SingleElement",
+			nums:     []int{1},
+			expected: 1,
+		},
+		{
+			name:     "AllSameElements",
+			nums:     []int{2, 2, 2, 2, 2},
+			expected: 2,
+		},
+		{
+			name:     "MajorityElementInMiddle",
+			nums:     []int{1, 2, 3, 2, 2, 2, 2},
+			expected: 2,
+		},
+		{
+			name:     "MajorityElementAtEnd",
+			nums:     []int{1, 1, 1, 2, 2, 2, 2},
+			expected: 2,
+		},
+		{
+			name:     "MixedElements",
+			nums:     []int{3, 3, 4, 2, 4, 4, 2, 4, 4},
+			expected: 4,
+		},
+		{
+			name:     "NoMajorityElement",
+			nums:     []int{1, 2, 3, 4, 5},
+			expected: 5,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := MajorityElement(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkMajorityElement(b *testing.B) {
+	nums := []int{3, 3, 4, 2, 4, 4, 2, 4, 4}
+	for i := 0; i < b.N; i++ {
+		_ = MajorityElement(nums)
+	}
+}

@@ -229,3 +229,18 @@ func MaxProfitII(prices []int) int {
 	}
 	return maxProfit
 }
+
+// CanJump - https://leetcode.com/problems/jump-game/?envType=study-plan-v2&envId=top-interview-150
+func CanJump(nums []int) bool {
+	n := len(nums)
+
+	maxReach := 0
+	for i := 0; i <= maxReach && i < n; i++ {
+		maxReach = max(maxReach, i+nums[i])
+		if maxReach >= n-1 {
+			return true
+		}
+	}
+
+	return false
+}

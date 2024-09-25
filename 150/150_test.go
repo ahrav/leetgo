@@ -565,3 +565,52 @@ func BenchmarkMaxProfitII(b *testing.B) {
 		_ = MaxProfitII(prices)
 	}
 }
+
+func TestCanJump(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected bool
+	}{
+		{
+			name:     "CanJumpSingleElement",
+			nums:     []int{0},
+			expected: true,
+		},
+		{
+			name:     "CanJumpAllZeros",
+			nums:     []int{0, 0, 0, 0},
+			expected: false,
+		},
+		{
+			name:     "CanJumpReachEnd",
+			nums:     []int{2, 3, 1, 1, 4},
+			expected: true,
+		},
+		{
+			name:     "CanJumpCannotReachEnd",
+			nums:     []int{3, 2, 1, 0, 4},
+			expected: false,
+		},
+		{
+			name:     "CanJumpEmptyArray",
+			nums:     []int{},
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := CanJump(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkCanJump(b *testing.B) {
+	nums := []int{2, 3, 1, 1, 4}
+	for i := 0; i < b.N; i++ {
+		_ = CanJump(nums)
+	}
+}

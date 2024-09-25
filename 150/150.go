@@ -244,3 +244,22 @@ func CanJump(nums []int) bool {
 
 	return false
 }
+
+// Jump - https://leetcode.com/problems/jump-game-ii/?envType=study-plan-v2&envId=top-interview-150
+func Jump(nums []int) int {
+	n := len(nums)
+
+	var jumps, currEnd, currFarthest int
+	for i := range n - 1 {
+		currFarthest = max(currFarthest, i+nums[i])
+
+		if i == currEnd {
+			jumps++
+			currEnd = currFarthest
+			if currEnd >= n-1 {
+				return jumps
+			}
+		}
+	}
+	return jumps
+}

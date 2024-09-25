@@ -614,3 +614,42 @@ func BenchmarkCanJump(b *testing.B) {
 		_ = CanJump(nums)
 	}
 }
+
+func TestJump(t *testing.T) {
+	tests := []struct {
+		name     string
+		nums     []int
+		expected int
+	}{
+		{
+			name:     "SingleJump",
+			nums:     []int{0},
+			expected: 0,
+		},
+		{
+			name:     "MultipleJumps",
+			nums:     []int{2, 3, 1, 1, 4},
+			expected: 2,
+		},
+		{
+			name:     "3 Jumps",
+			nums:     []int{1, 2, 3, 4, 5},
+			expected: 3,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := Jump(tt.nums)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkJump(b *testing.B) {
+	nums := []int{2, 3, 1, 1, 4}
+	for i := 0; i < b.N; i++ {
+		_ = Jump(nums)
+	}
+}

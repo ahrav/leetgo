@@ -263,3 +263,27 @@ func Jump(nums []int) int {
 	}
 	return jumps
 }
+
+// HIndex - https://leetcode.com/problems/h-index/?envType=study-plan-v2&envId=top-interview-150
+func HIndex(citations []int) int {
+	n := len(citations)
+
+	cnt := make([]int, n+1)
+	for _, c := range citations {
+		if c >= n {
+			cnt[n]++
+		} else {
+			cnt[c]++
+		}
+	}
+
+	total := 0
+	for h := n; h >= 0; h-- {
+		total += cnt[h]
+		if total >= h {
+			return h
+		}
+	}
+
+	return 0
+}

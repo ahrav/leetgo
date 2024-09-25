@@ -653,3 +653,52 @@ func BenchmarkJump(b *testing.B) {
 		_ = Jump(nums)
 	}
 }
+
+func TestHIndex(t *testing.T) {
+	tests := []struct {
+		name      string
+		citations []int
+		expected  int
+	}{
+		{
+			name:      "SinglePaper",
+			citations: []int{1},
+			expected:  1,
+		},
+		{
+			name:      "NoCitations",
+			citations: []int{0, 0, 0, 0},
+			expected:  0,
+		},
+		{
+			name:      "AllCitationsSame",
+			citations: []int{3, 3, 3, 3},
+			expected:  3,
+		},
+		{
+			name:      "MixedCitations",
+			citations: []int{3, 0, 6, 1, 5},
+			expected:  3,
+		},
+		{
+			name:      "EmptyArray",
+			citations: []int{},
+			expected:  0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := HIndex(tt.citations)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkHIndex(b *testing.B) {
+	citations := []int{3, 0, 6, 1, 5}
+	for i := 0; i < b.N; i++ {
+		_ = HIndex(citations)
+	}
+}

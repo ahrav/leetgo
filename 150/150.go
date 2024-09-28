@@ -287,3 +287,15 @@ func HIndex(citations []int) int {
 
 	return 0
 }
+
+// StrStr - https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/?envType=study-plan-v2&envId=top-interview-150
+func StrStr(haystack string, needle string) int {
+	n := len(needle)
+
+	for i := 0; i <= len(haystack)-n; i++ {
+		if haystack[i:i+n] == needle {
+			return i
+		}
+	}
+	return -1
+}

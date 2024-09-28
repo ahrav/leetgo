@@ -702,3 +702,71 @@ func BenchmarkHIndex(b *testing.B) {
 		_ = HIndex(citations)
 	}
 }
+
+func TestStrStr(t *testing.T) {
+	tests := []struct {
+		name     string
+		haystack string
+		needle   string
+		expected int
+	}{
+		{
+			name:     "StrStrNeedleAtStart",
+			haystack: "hello",
+			needle:   "he",
+			expected: 0,
+		},
+		{
+			name:     "StrStrNeedleAtEnd",
+			haystack: "hello",
+			needle:   "lo",
+			expected: 3,
+		},
+		{
+			name:     "StrStrNeedleInMiddle",
+			haystack: "hello",
+			needle:   "ll",
+			expected: 2,
+		},
+		{
+			name:     "StrStrNeedleNotFound",
+			haystack: "hello",
+			needle:   "world",
+			expected: -1,
+		},
+		{
+			name:     "StrStrEmptyNeedle",
+			haystack: "hello",
+			needle:   "",
+			expected: 0,
+		},
+		{
+			name:     "StrStrEmptyHaystack",
+			haystack: "",
+			needle:   "a",
+			expected: -1,
+		},
+		{
+			name:     "StrStrBothEmpty",
+			haystack: "",
+			needle:   "",
+			expected: 0,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			result := StrStr(tt.haystack, tt.needle)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func BenchmarkStrStr(b *testing.B) {
+	haystack := "hello"
+	needle := "ll"
+	for i := 0; i < b.N; i++ {
+		_ = StrStr(haystack, needle)
+	}
+}
